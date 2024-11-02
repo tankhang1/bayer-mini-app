@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.custom-round-bullet li::marker {
+    content: '○  '; /* Unicode for a hollow circle */
+    color: #000; /* Adjust the color if needed */
+    font-size: 0.6rem;
+  }
+.custom-square-bullet li::marker {
+content: '▪  '; /* Unicode for a square bullet */
+font-size: 1rem; /* Adjust the size if needed */
+color: #000; /* Bullet color */
+}
