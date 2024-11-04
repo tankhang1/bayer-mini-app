@@ -12,6 +12,9 @@ const AuthScreen = () => {
   const onNavPolicyScreen = () => {
     navigate("/policy-screen");
   };
+  const onNavPrivacyScreen = () => {
+    navigate("/privacy-screen");
+  };
   return (
     <div
       className="w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col py-10 gap-2 overflow-auto"
@@ -39,7 +42,7 @@ const AuthScreen = () => {
           <p
             className="text-red-600 text-xs underline font-semibold"
             role="button"
-            onClick={onNavPolicyScreen}
+            onClick={onNavPrivacyScreen}
           >
             Cam kết quyền riêng tư
           </p>
@@ -47,6 +50,7 @@ const AuthScreen = () => {
           <p
             className="text-red-600 text-xs underline font-semibold"
             role="button"
+            onClick={onNavPolicyScreen}
           >
             Điều khoản chương trình
           </p>

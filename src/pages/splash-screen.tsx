@@ -1,40 +1,42 @@
 import * as React from "react";
-import Background from "assets/background.jpg";
-import Content_1 from "assets/content_1.png";
-import Logo from "assets/logo.png";
-import Button_1 from "assets/button_1.png";
+import BannerZalo from "assets/baner-zalo.jpg";
+import { authorize, followOA, requestSendNotification } from "zmp-sdk";
+import { useNavigate } from "react-router-dom";
+
 const SplashScreen = () => {
+  const navigate = useNavigate();
+
+  const postZaloInfo = async () => {
+    const authorizeInfo = await authorize({
+      scopes: ["scope.userInfo", "scope.userPhonenumber"],
+    });
+    const authorizeLocation = await authorize({
+      scopes: ["scope.userLocation"],
+    });
+
+    await followOA({
+      id: "3393764570128346168",
+      showDialogConfirm: true,
+    })
+      .then(async (value) => {
+        navigate("/present");
+      })
+      .catch((reason) => console.log(reason));
+  };
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      postZaloInfo();
+    }, 700);
+  }, []);
   return (
     <div
       className="w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col py-10 gap-2 overflow-auto"
       style={{
-        backgroundImage: `url(${Background})`,
+        backgroundImage: `url(${BannerZalo})`,
         backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
       }}
-    >
-      <img src={Logo} className="w-20" />
-
-      <img src={Content_1} className="w-fit" />
-      <div
-        className="w-3/4 min-h-24 max-h-24  bg-no-repeat flex items-center justify-center text-xl text-white font-semibold"
-        style={{
-          backgroundImage: `url(${Button_1})`,
-          backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
-        }}
-        role="button"
-      >
-        Đồng ý
-      </div>
-      <div className="flex items-center gap-3">
-        <p className="text-red-600 text-sm" role="button">
-          Cam kết quyền riêng tư
-        </p>
-        <div className="w-[1px] h-6 bg-red-600" />
-        <p className="text-red-600 text-sm" role="button">
-          Điều khoản chương trình
-        </p>
-      </div>
-    </div>
+    ></div>
   );
 };
 export default SplashScreen;

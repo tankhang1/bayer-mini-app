@@ -1,8 +1,8 @@
 {
   "app": {
-    "title": "bayer-mini-app",
-    "headerColor": "#1843EF",
-    "textColor": "white",
+    "title": "Bayer Việt Nam",
+    "headerColor": "#fcfddc",
+    "textColor": "black",
     "leftButton": "back",
     "statusBar": "normal",
     "actionBarHidden": false,

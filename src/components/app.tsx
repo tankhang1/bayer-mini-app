@@ -6,6 +6,8 @@ import { store } from "redux/store";
 import SplashScreen from "pages/splash-screen";
 import AuthScreen from "pages/auth";
 import PolicyScreen from "pages/policy";
+import PresentScreen from "pages/present";
+import PrivacyScreen from "pages/privacy";
 const MyApp = () => {
   return (
     <Provider store={store}>
@@ -21,6 +23,14 @@ const MyApp = () => {
               <Route
                 path="/policy-screen"
                 element={<PolicyScreen></PolicyScreen>}
+              ></Route>
+              <Route
+                path="/privacy-screen"
+                element={<PrivacyScreen></PrivacyScreen>}
+              ></Route>
+              <Route
+                path="/present"
+                element={<PresentScreen></PresentScreen>}
               ></Route>
             </AnimationRoutes>
           </ZMPRouter>
