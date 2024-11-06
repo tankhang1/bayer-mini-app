@@ -12,6 +12,7 @@ const audio = new Audio(Sound);
 const PresentScreen = () => {
   const [type, setType] = useState<"option_1" | "option_2">("option_1");
   const [isVisible, setIsVisible] = useState(true);
+  const [openedModal, setOpenedModal] = useState(true);
   const navigate = useNavigate();
   const handleSwitch = (newType) => {
     // Trigger the fade-out animation before switching
@@ -25,6 +26,7 @@ const PresentScreen = () => {
     audio.play();
     setTimeout(() => {
       audio.pause();
+      setOpenedModal(true);
     }, 2000);
   };
   const navScan = () => {
@@ -32,8 +34,10 @@ const PresentScreen = () => {
   };
   // Effect to play sound when `type` changes
   useEffect(() => {
-    // audio.pause();
-    // if (type === "option_1") playSound();
+    audio.pause();
+    if (type === "option_1") {
+      playSound();
+    }
   }, [type]);
 
   return (
@@ -92,7 +96,7 @@ const PresentScreen = () => {
           Cơ hội 2
         </div>
       </div>
-      <Modal visible={true}>
+      <Modal visible={openedModal} onClose={() => setOpenedModal(false)}>
         <div className=" max-w-md mx-auto">
           <h2 className="text-2xl font-bold text-center text-red-600 mb-4">
             Xin chúc mừng!
