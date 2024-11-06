@@ -5,12 +5,14 @@ import Good_Luck from "assets/good_luck.png";
 import Speaker from "assets/speaker.png";
 import Button_1 from "assets/button_1.png";
 import Sound from "assets/clause.mp3";
+import { Modal } from "zmp-ui";
+import { useNavigate } from "react-router-dom";
 const audio = new Audio(Sound);
 
 const PresentScreen = () => {
   const [type, setType] = useState<"option_1" | "option_2">("option_1");
   const [isVisible, setIsVisible] = useState(true);
-
+  const navigate = useNavigate();
   const handleSwitch = (newType) => {
     // Trigger the fade-out animation before switching
     setIsVisible(false);
@@ -21,12 +23,17 @@ const PresentScreen = () => {
   };
   const playSound = () => {
     audio.play();
+    setTimeout(() => {
+      audio.pause();
+    }, 2000);
   };
-
+  const navScan = () => {
+    navigate("/scan-screen");
+  };
   // Effect to play sound when `type` changes
   useEffect(() => {
-    audio.pause();
-    if (type === "option_1") playSound();
+    // audio.pause();
+    // if (type === "option_1") playSound();
   }, [type]);
 
   return (
@@ -85,6 +92,28 @@ const PresentScreen = () => {
           Cơ hội 2
         </div>
       </div>
+      <Modal visible={true}>
+        <div className=" max-w-md mx-auto">
+          <h2 className="text-2xl font-bold text-center text-red-600 mb-4">
+            Xin chúc mừng!
+          </h2>
+          <p className="text-gray-700 text-justify mb-6">
+            Bạn đã trúng giải thưởng. Để xác thực thông tin và liên hệ nhận
+            thưởng, vui lòng nhấn vào nút xác thực bên dưới và hoàn thành các
+            bước xác nhận. Chúng tôi sẽ liên hệ với bạn sau khi quá trình xác
+            thực hoàn tất. Cảm ơn bạn đã tham gia và chúc bạn nhận được phần
+            thưởng sớm nhất!
+          </p>
+          <div className="text-center">
+            <button
+              className="bg-red-600 text-white font-semibold py-2 px-4 rounded hover:bg-red-700 transition duration-200"
+              onClick={navScan}
+            >
+              Xác Thực Ngay
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

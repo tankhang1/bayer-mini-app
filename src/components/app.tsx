@@ -8,6 +8,8 @@ import AuthScreen from "pages/auth";
 import PolicyScreen from "pages/policy";
 import PresentScreen from "pages/present";
 import PrivacyScreen from "pages/privacy";
+import ScanScreen from "pages/scan";
+import FinishScreen from "pages/finish";
 const MyApp = () => {
   return (
     <Provider store={store}>
@@ -29,8 +31,16 @@ const MyApp = () => {
                 element={<PrivacyScreen></PrivacyScreen>}
               ></Route>
               <Route
+                path="/scan-screen"
+                element={<ScanScreen></ScanScreen>}
+              ></Route>
+              <Route
                 path="/present"
                 element={<PresentScreen></PresentScreen>}
+              ></Route>
+              <Route
+                path="/finish"
+                element={<FinishScreen></FinishScreen>}
               ></Route>
             </AnimationRoutes>
           </ZMPRouter>
