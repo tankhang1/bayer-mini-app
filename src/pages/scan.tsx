@@ -58,10 +58,34 @@ const ScanScreen = () => {
           mirrored: false, // Ensures the video isn't flipped
         },
       });
-      startStreaming();
     }
-  }, []);
+    // Start the camera streaming whenever the component is mounted or navigated back to
+    startStreaming();
 
+    // Cleanup the camera on unmount
+    return () => {
+      cameraRef.current?.stop();
+    };
+  }, []); // Empty dependency array ensures this effect runs only once when the component is mounted
+  useEffect(() => {
+    // Detect when the window is focused or unfocused
+    const handleFocus = () => {
+      startStreaming();
+    };
+
+    const handleBlur = () => {
+      // Optional: Stop streaming when page is not in focus
+      cameraRef.current?.stop();
+    };
+
+    window.addEventListener("focus", handleFocus);
+    window.addEventListener("blur", handleBlur);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener("blur", handleBlur);
+    };
+  }, []);
   return (
     <Page className="w-full h-full">
       <Box className="w-full h-full">
@@ -104,7 +128,6 @@ const ScanScreen = () => {
         <button
           className="absolute z-30 bottom-12 right-5 bg-white p-2 rounded-full transform transition-transform duration-200 ease-in-out active:scale-90"
           onClick={() => {
-            console.log("navigate");
             navigate("/finish");
           }}
         >
