@@ -57,6 +57,11 @@ const PresentScreen = () => {
       phoneNumber: "19003209",
     });
   };
+  React.useEffect(() => {
+    setTimeout(() => {
+      setOpenPopupCoupon(true);
+    }, 1000);
+  }, []);
   return (
     <div
       className="w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col py-10 overflow-auto"
@@ -116,10 +121,8 @@ const PresentScreen = () => {
             thống để nhận quà.`}
           </p>
           <button
-            onClick={() => {
-              /* Chuyển đến trang xác thực hoặc trang cần thiết */
-            }}
-            className="px-4 py-2 bg-red-500 hover:bg-blue-600 text-white rounded-lg transition duration-200"
+            onClick={onNavScan}
+            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition duration-200"
           >
             Chuyển đến trang xác thực
           </button>
