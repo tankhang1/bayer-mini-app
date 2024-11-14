@@ -10,6 +10,7 @@ import PresentScreen from "pages/present";
 import PrivacyScreen from "pages/privacy";
 import ScanScreen from "pages/scan";
 import FinishScreen from "pages/finish";
+import PreviewScreen from "pages/preview";
 const MyApp = () => {
   return (
     <Provider store={store}>
@@ -37,6 +38,10 @@ const MyApp = () => {
               <Route
                 path="/present"
                 element={<PresentScreen></PresentScreen>}
+              ></Route>
+              <Route
+                path="/preview"
+                element={<PreviewScreen></PreviewScreen>}
               ></Route>
               <Route
                 path="/finish"

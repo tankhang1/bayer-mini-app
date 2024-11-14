@@ -1,9 +1,14 @@
 import * as React from "react";
 import Background from "assets/background.jpg";
-import Content_1 from "assets/content_1.png";
+import Content_3 from "assets/content_3.webp";
+import Content_2 from "assets/content_2.png";
+import Footer from "assets/footer.webp";
 import Logo from "assets/logo.png";
-import Button_1 from "assets/button_1.png";
+import Button_2 from "assets/button_2.png";
+import Hotline from "assets/hotline.webp";
 import { useNavigate } from "react-router-dom";
+import { openPhone } from "zmp-sdk";
+
 const AuthScreen = () => {
   const navigate = useNavigate();
   const onNavSplashScreen = () => {
@@ -15,9 +20,14 @@ const AuthScreen = () => {
   const onNavPrivacyScreen = () => {
     navigate("/privacy-screen");
   };
+  const onClickHotline = async () => {
+    await openPhone({
+      phoneNumber: "19003209",
+    });
+  };
   return (
     <div
-      className="w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col py-10 gap-2 overflow-auto"
+      className="w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col py-10 overflow-auto"
       style={{
         backgroundImage: `url(${Background})`,
         backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
@@ -25,36 +35,45 @@ const AuthScreen = () => {
     >
       <img src={Logo} className="w-20" />
 
-      <img src={Content_1} className="w-full" />
+      <img src={Content_2} className="w-full h-40 object-contain" />
+      <img src={Content_3} className="w-full h-52 object-contain" />
+
       <div className="flex justify-center items-center flex-col">
         <div
-          className="w-full min-h-24 max-h-24  bg-no-repeat flex items-center justify-center text-xl text-white font-semibold"
+          className="h-14 w-48 bg-no-repeat flex items-center justify-center text-xl text-white font-semibold"
           style={{
-            backgroundImage: `url(${Button_1})`,
+            backgroundImage: `url(${Button_2})`,
             backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
           }}
           role="button"
           onClick={onNavSplashScreen}
-        >
-          Đồng ý
-        </div>
-        <div className="flex items-center gap-3">
+        ></div>
+        <div className="flex items-center gap-3 mt-2">
           <p
-            className="text-red-600 text-xs underline font-semibold"
+            className="text-white text-xs underline font-semibold text-center"
             role="button"
             onClick={onNavPrivacyScreen}
           >
             Cam kết quyền riêng tư
           </p>
-          <div className="w-[1px] h-4 bg-red-600" />
+          <div className="w-[1px] h-4 bg-white  " />
           <p
-            className="text-red-600 text-xs underline font-semibold"
+            className="text-white text-xs underline font-semibold  text-center"
             role="button"
             onClick={onNavPolicyScreen}
           >
             Điều khoản chương trình
           </p>
         </div>
+      </div>
+      <div className="w-full absolute bottom-0">
+        <img src={Footer} className="w-full object-contain " />
+        <img
+          src={Hotline}
+          className=" w-36 absolute bottom-3 right-2 object-contain"
+          role="button"
+          onClick={onClickHotline}
+        />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React from "react";
-import Background_1 from "assets/background_1.jpg";
-import Slogan from "assets/slogan.png";
+import Background_1 from "assets/background.jpg";
+import Slogan from "assets/content_2.png";
 import Logo from "assets/logo.png";
 
 const PolicyScreen = () => {

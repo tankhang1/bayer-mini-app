@@ -6,15 +6,33 @@ import api, {
   PhotoFormat,
   PhotoFrame,
   PhotoQuality,
+  requestCameraPermission,
   ZMACamera,
 } from "zmp-sdk";
 import { useNavigate } from "react-router-dom";
-
+import Guide from "assets/guide.webp";
 const ScanScreen = () => {
   const navigate = useNavigate();
   const cameraRef = useRef<ZMACamera | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [data, setData] = useState("");
+  const [isPermitCamera, setIsPermitCamera] = useState(false);
+  const takePhoto = () => {
+    const result: PhotoFrame = cameraRef.current?.takePhoto({
+      quality: PhotoQuality.NORMAL,
+      format: PhotoFormat.JPEG,
+      minScreenshotHeight: 1000,
+    });
+    if (result) {
+      navigate("/preview", {
+        state: {
+          previewImage: result.data,
+        },
+      });
+    } else {
+      console.log("No data");
+    }
+  };
   const startStreaming = async () => {
     try {
       const camera = cameraRef.current;
@@ -23,9 +41,11 @@ const ScanScreen = () => {
       console.error("Failed to start camera stream:", error);
     }
   };
+
   const changeFlip = async () => {
     await cameraRef.current?.flip();
   };
+
   const handleChooseImage = async () => {
     try {
       const { filePaths, tempFiles } = await chooseImage({
@@ -37,6 +57,16 @@ const ScanScreen = () => {
       console.log("file", filePaths, tempFiles);
     } catch (error) {
       startStreaming();
+      console.log(error);
+    }
+  };
+
+  const onRequestCameraPermission = async () => {
+    try {
+      const result = await requestCameraPermission();
+
+      setIsPermitCamera(result.userAllow);
+    } catch (error) {
       // xử lý khi gọi api thất bại
       console.log(error);
     }
@@ -52,29 +82,26 @@ const ScanScreen = () => {
         videoElement: videoElement,
         mediaConstraints: {
           width: 1920, // High resolution for better quality
-          height: 1080, // Maintain a full-screen aspect ratio
+          height: 1300, // Maintain a full-screen aspect ratio
           facingMode: FacingMode.BACK,
           audio: false,
-          mirrored: false, // Ensures the video isn't flipped
+          mirrored: false,
         },
       });
     }
-    // Start the camera streaming whenever the component is mounted or navigated back to
     startStreaming();
 
-    // Cleanup the camera on unmount
     return () => {
       cameraRef.current?.stop();
     };
-  }, []); // Empty dependency array ensures this effect runs only once when the component is mounted
+  }, []);
+
   useEffect(() => {
-    // Detect when the window is focused or unfocused
     const handleFocus = () => {
       startStreaming();
     };
 
     const handleBlur = () => {
-      // Optional: Stop streaming when page is not in focus
       cameraRef.current?.stop();
     };
 
@@ -86,30 +113,39 @@ const ScanScreen = () => {
       window.removeEventListener("blur", handleBlur);
     };
   }, []);
+  useEffect(() => {
+    onRequestCameraPermission();
+  }, []);
   return (
     <Page className="w-full h-full">
       <Box className="w-full h-full">
         <video
           style={{
             width: "100vw",
-            height: "100vh",
+            height: "70vh",
             objectFit: "cover",
             backgroundColor: "transparent",
-          }} // Ensure full-screen without cropping
+          }}
           ref={videoRef}
           muted
           playsInline
-          webkit-playsinline="true" // Use this format to avoid the warning
+          webkit-playsinline="true"
         />
-        {data && (
-          <img
-            id="image"
-            src={data}
-            alt={""}
-            className="mb-2 absolute z-20 bottom-5 left-5 w-16 h-24 object-cover rounded-lg"
-          ></img>
-        )}
+
+        <div
+          className="absolute top-0 w-full px-3 pt-24 bg-drop"
+          style={{ height: "80vh" }}
+        >
+          <p className="text-white font-bold text-center">
+            Chụp hình phiếu trúng thưởng
+          </p>
+          <div
+            className="border-2 border-gray-200 rounded-2xl"
+            style={{ height: "45dvh" }}
+          />
+        </div>
       </Box>
+
       <div className="absolute z-20 top-6 right-5 flex items-center gap-2">
         <button
           className=" bg-gray-500 p-2 rounded-full transform transition-transform duration-200 ease-in-out active:scale-90"
@@ -123,34 +159,28 @@ const ScanScreen = () => {
         >
           <Icon icon="zi-gallery" size={28} style={{ color: "white" }} />
         </button>
-      </div>
-      {data && (
         <button
-          className="absolute z-30 bottom-12 right-5 bg-white p-2 rounded-full transform transition-transform duration-200 ease-in-out active:scale-90"
-          onClick={() => {
-            navigate("/finish");
-          }}
+          className=" bg-gray-500 p-2 rounded-full transform transition-transform duration-200 ease-in-out active:scale-90"
+          onClick={takePhoto}
         >
-          <Icon icon="zi-arrow-right" size={28} style={{ color: "black" }} />
+          <Icon icon="zi-camera" size={28} style={{ color: "white" }} />
         </button>
-      )}
-      <div className="absolute z-20 bottom-10 w-full flex justify-center">
-        <button
-          onClick={() => {
-            let result: PhotoFrame = cameraRef.current?.takePhoto({
-              quality: PhotoQuality.NORMAL,
-              format: PhotoFormat.JPEG,
-              minScreenshotHeight: 1000,
-            });
-            if (result) {
-              console.log(result);
-              setData(result.data);
-            } else {
-              console.log("No data");
-            }
-          }}
-          className="w-16 h-16 rounded-full bg-white transform transition-transform duration-200 ease-in-out active:scale-90"
-        ></button>
+      </div>
+
+      <div className="flex h-1/3 rounded-t-3xl py-4 px-4 w-full bg-white text-black absolute z-30 bottom-0 justify-between flex-col items-center">
+        <p className="text-black font-bold">Hướng dẫn chụp hình</p>{" "}
+        <div className="relative">
+          <button
+            className=" bg-gray-500 p-2 rounded-full transform transition-transform duration-200 ease-in-out active:scale-90 absolute -top-4 -right-7 animate-pulse"
+            onClick={takePhoto}
+          >
+            <Icon icon="zi-camera" size={28} style={{ color: "white" }} />
+          </button>
+          <img src={Guide} className="h-36" />
+        </div>
+        <p className="text-black font-medium text-sm">
+          Đưa camera gần và canh chỉnh để chụp rõ phiếu thưởng
+        </p>
       </div>
     </Page>
   );

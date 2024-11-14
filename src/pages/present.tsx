@@ -1,125 +1,131 @@
-import React, { useEffect, useState } from "react";
+import * as React from "react";
 import Background from "assets/background.jpg";
+import Content_2 from "assets/content_2.png";
 import Logo from "assets/logo.png";
-import Good_Luck from "assets/good_luck.png";
-import Speaker from "assets/speaker.png";
-import Button_1 from "assets/button_1.png";
-import Sound from "assets/clause.mp3";
-import { Modal } from "zmp-ui";
+import Driver from "assets/driver.webp";
+import Topup from "assets/topup.webp";
+import Fridge from "assets/fridge.webp";
+import Speaker from "assets/speaker.webp";
+import Oke from "assets/oke.webp";
+import Hotline from "assets/hotline.webp";
+import Reject from "assets/reject.webp";
 import { useNavigate } from "react-router-dom";
-const audio = new Audio(Sound);
 
+import Footer from "assets/footer.webp";
+import { Icon, Modal } from "zmp-ui";
+import { openPhone } from "zmp-sdk";
+const MapImage = new Map([
+  ["driver", Driver],
+  ["topup", Topup],
+  ["fridge", Fridge],
+  ["speaker", Speaker],
+  ["complete", Oke],
+  ["reject", Reject],
+]);
 const PresentScreen = () => {
-  const [type, setType] = useState<"option_1" | "option_2">("option_1");
-  const [isVisible, setIsVisible] = useState(true);
-  const [openedModal, setOpenedModal] = useState(true);
   const navigate = useNavigate();
-  const handleSwitch = (newType) => {
-    // Trigger the fade-out animation before switching
-    setIsVisible(false);
-    setTimeout(() => {
-      setType(newType);
-      setIsVisible(true); // Fade-in effect when new type appears
-    }, 200); // Match the duration of the fade-out animation
+  const [openPopupCoupon, setOpenPopupCoupon] = React.useState(false);
+  const [type, setType] = React.useState<
+    "driver" | "topup" | "fridge" | "speaker" | "complete" | "reject"
+  >("driver");
+
+  const onChangeType = () => {
+    if (type === "driver") {
+      setType("topup");
+    }
+    if (type === "topup") {
+      setType("fridge");
+    }
+    if (type === "fridge") {
+      setType("speaker");
+    }
+    if (type === "speaker") {
+      setType("complete");
+    }
+    if (type === "complete") {
+      setType("reject");
+    }
+    if (type === "reject") {
+      navigate("/scan-screen");
+    }
   };
-  const playSound = () => {
-    audio.play();
-    setTimeout(() => {
-      audio.pause();
-      setOpenedModal(true);
-    }, 2000);
-  };
-  const navScan = () => {
+  const onNavScan = () => {
     navigate("/scan-screen");
   };
-  // Effect to play sound when `type` changes
-  useEffect(() => {
-    audio.pause();
-    if (type === "option_1") {
-      playSound();
-    }
-  }, [type]);
-
+  const onClickHotline = async () => {
+    await openPhone({
+      phoneNumber: "19003209",
+    });
+  };
   return (
     <div
-      className="w-full h-dvh bg-cover bg-no-repeat px-3 flex items-center flex-col py-10 gap-2 overflow-hidden transition-all duration-75"
+      className="w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col py-10 overflow-auto"
       style={{
         backgroundImage: `url(${Background})`,
-        backgroundSize: "100% 100%",
+        backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
       }}
+      // role="button"
+      // onClick={onChangeType}
     >
-      <img src={Logo} className={`w-20 `} />
-      {type === "option_1" ? (
-        <img
-          src={Speaker}
-          className={`w-full ${
-            isVisible ? "zoom-in-animation" : "fade-out-animation"
-          }`}
-        />
-      ) : (
-        <img
-          src={Good_Luck}
-          className={`w-full ${
-            isVisible ? "zoom-in-animation" : "fade-out-animation"
-          }`}
-        />
+      <img src={Logo} className="w-20" />
+      <img src={Content_2} className="w-full h-40 object-contain" />
+      <img
+        src={MapImage.get(type)}
+        className={`w-full -mt-10 mb-2 ${
+          type === "complete" || type === "reject" ? "h-40 mt-0" : "h-64"
+        } object-contain `}
+        loading="eager"
+        decoding="auto"
+      />
+      {type !== "complete" && type !== "reject" && (
+        <p className="text-[#f5ecdd] text-xl font-bold text-center">{`Chúc mừng <bạn> với số điện <XXXXXXXX> thoại nhận được <Tên Quà> từ <Cơ Hội 1>`}</p>
       )}
-      {type === "option_1" ? (
-        <p
-          className={`text-2xl text-red-600 font-bold whitespace-pre-line text-center ${
-            isVisible ? "zoom-in-animation" : "fade-out-animation"
-          }`}
-        >
-          {`Cơ hội <0X>,\nchúc <bạn> may mắn lần sau!`}
-        </p>
-      ) : (
-        <p
-          className={`text-2xl text-red-600 font-bold whitespace-pre-line text-center ${
-            isVisible ? "zoom-in-animation" : "fade-out-animation"
-          }`}
-        >
-          {`Chúc mừng <bạn> trúng\nthưởng cơ hội <0X>`}
-        </p>
+      {type === "complete" && (
+        <p className="text-[#f5ecdd] text-xl font-extrabold text-center">{`Chúng tôi đã nhận thông tin và bằng chứng trúng giải của bạn. Tổng đài viên sẽ liên hệ sau!`}</p>
       )}
-      <div
-        className={`w-4/5 min-h-24 max-h-24 bg-no-repeat flex items-center justify-center text-xl text-white font-bold gap-5`}
-        style={{
-          backgroundImage: `url(${Button_1})`,
-          backgroundSize: "100% 100%",
-        }}
-      >
-        <div role="button" onClick={() => handleSwitch("option_1")}>
-          Cơ hội 1
-        </div>
-        <div className="w-[1px] h-8 bg-white" />
-        <div role="button" onClick={() => handleSwitch("option_2")}>
-          Cơ hội 2
-        </div>
+      {type === "reject" && (
+        <p className="text-[#f5ecdd] text-xl font-extrabold text-center">{`Chúng tôi chưa nhận được hình ảnh phiếu trúng thưởng vui lòng liên hệ tổng đài 19003209 để được hỗ trợ !`}</p>
+      )}
+      <div className="w-full absolute bottom-0">
+        <img src={Footer} className="w-full object-contain " />
+        <img
+          src={Hotline}
+          className=" w-36 absolute bottom-3 right-2 object-contain"
+          role="button"
+          onClick={onClickHotline}
+        />
       </div>
-      <Modal visible={openedModal} onClose={() => setOpenedModal(false)}>
-        <div className=" max-w-md mx-auto">
-          <h2 className="text-2xl font-bold text-center text-red-600 mb-4">
-            Xin chúc mừng!
+      {!openPopupCoupon && (
+        <button
+          className=" bg-white/30 p-2 rounded-full transform transition-transform duration-200 ease-in-out active:scale-90 absolute right-4 bottom-40 animate-bounce"
+          onClick={onNavScan}
+        >
+          <Icon icon="zi-camera" size={28} style={{ color: "white" }} />
+        </button>
+      )}
+      <Modal
+        visible={openPopupCoupon}
+        onClose={() => setOpenPopupCoupon(false)}
+      >
+        <div className="p-6 bg-white rounded-lg text-center">
+          <h2 className="text-2xl font-bold text-green-600 mb-4">
+            🎉 Chúc mừng! 🎉
           </h2>
-          <p className="text-gray-700 text-justify mb-6">
-            Bạn đã trúng giải thưởng. Để xác thực thông tin và liên hệ nhận
-            thưởng, vui lòng nhấn vào nút xác thực bên dưới và hoàn thành các
-            bước xác nhận. Chúng tôi sẽ liên hệ với bạn sau khi quá trình xác
-            thực hoàn tất. Cảm ơn bạn đã tham gia và chúc bạn nhận được phần
-            thưởng sớm nhất!
+          <p className="text-gray-700 mb-6 text-justify">
+            {`Chúc mừng <bạn> với số điện <XXXXXXXX> thoại nhận được <Tên Quà> từ <Cơ Hội 1> Vui lòng gửi hình ảnh xác thực đến hệ
+            thống để nhận quà.`}
           </p>
-          <div className="text-center">
-            <button
-              className="bg-red-600 text-white font-semibold py-2 px-4 rounded hover:bg-red-700 transition duration-200"
-              onClick={navScan}
-            >
-              Xác Thực Ngay
-            </button>
-          </div>
+          <button
+            onClick={() => {
+              /* Chuyển đến trang xác thực hoặc trang cần thiết */
+            }}
+            className="px-4 py-2 bg-red-500 hover:bg-blue-600 text-white rounded-lg transition duration-200"
+          >
+            Chuyển đến trang xác thực
+          </button>
         </div>
       </Modal>
     </div>
   );
 };
-
 export default PresentScreen;

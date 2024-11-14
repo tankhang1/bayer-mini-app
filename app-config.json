@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "Bayer Việt Nam",
-    "headerColor": "#fcfddc",
+    "headerColor": "#e9edf1",
     "textColor": "black",
     "leftButton": "back",
     "statusBar": "normal",

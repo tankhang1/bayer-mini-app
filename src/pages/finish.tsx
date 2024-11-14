@@ -1,8 +1,8 @@
 import * as React from "react";
 import Background from "assets/background.jpg";
-import Content_1 from "assets/content_1.png";
+import Content_2 from "assets/content_2.png";
 import Logo from "assets/logo.png";
-import Button_1 from "assets/button_1.png";
+import Oke from "assets/oke.webp";
 import { useNavigate } from "react-router-dom";
 const FinishScreen = () => {
   const navigate = useNavigate();
@@ -16,22 +16,16 @@ const FinishScreen = () => {
     >
       <img src={Logo} className="w-20" />
 
-      <img src={Content_1} className="w-full" />
-      <div className="flex justify-center items-center flex-col">
-        <div
-          className="w-full min-h-24 max-h-24  bg-no-repeat flex items-center px-5 justify-center text-xl text-white font-semibold"
-          style={{
-            backgroundImage: `url(${Button_1})`,
-            backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
-          }}
-          role="button"
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          Cảm ơn bạn đã tham gia
-        </div>
-      </div>
+      <img src={Content_2} className="w-full" />
+      <img
+        src={Oke}
+        className={`w-full mb-2 
+         h-44
+        object-contain `}
+        loading="eager"
+        decoding="auto"
+      />
+      <p className="text-[#f5ecdd] text-xl font-extrabold text-center">{`Chúng tôi đã nhận thông tin và bằng chứng trúng giải của bạn. Tổng đài viên sẽ liên hệ sau!`}</p>
     </div>
   );
 };
