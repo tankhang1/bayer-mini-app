@@ -1,7 +1,7 @@
 import * as React from "react";
-import Background from "assets/background.jpg";
+import Background from "assets/background_2.webp";
 import Logo from "assets/logo.png";
-import Content_2 from "assets/content_2.png";
+import Content_2 from "assets/content_2.webp";
 import Content_3 from "assets/content_3.webp";
 import Speaker from "assets/speaker_1.webp";
 import Topup from "assets/topup_1.webp";
@@ -24,14 +24,7 @@ const SplashScreen = () => {
       scopes: ["scope.userLocation"],
     });
 
-    await followOA({
-      id: "3393764570128346168",
-      showDialogConfirm: true,
-    })
-      .then(async (value) => {
-        navigate("/present");
-      })
-      .catch((reason) => console.log(reason));
+    navigate("/present");
   };
   const onClickHotline = async () => {
     await openPhone({
@@ -52,44 +45,35 @@ const SplashScreen = () => {
       }}
     >
       <img src={Logo} className="w-20" />
-      <img src={Content_2} className="w-[80%] h-40 object-contain" />
-      <div className="relative w-full h-full z-20 -mt-3">
+      <img src={Content_2} className="w-[90%] h-40 object-contain" />
+      <div className="relative w-full h-full z-20 -mt-6">
         <img
           src={Content_3}
-          className="w-56 h-56 object-contain absolute top-[90px] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          className="w-64 h-64 object-contain absolute top-[90px] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         />
         <img
           src={Topup}
-          className="w-32 h-32 object-contain absolute top-28 left-0"
+          className="w-36 h-36 object-contain absolute top-28 left-0"
           loading="eager"
           decoding="async"
         />
         <img
           src={Speaker}
-          className="w-36 h-36 object-contain absolute top-32 right-14"
+          className="w-44 h-44 object-contain absolute top-32 right-7"
           loading="eager"
           decoding="async"
         />
         <img
           src={Fridge}
-          className="w-48 h-48 object-contain absolute top-48 -left-2"
+          className="w-52 h-52 object-contain absolute top-52 -left-1"
           loading="eager"
           decoding="async"
         />
         <img
           src={Driver}
-          className="w-56 h-56 object-contain absolute  top-56 right-0"
+          className="w-60 h-60 object-contain absolute  top-64 right-0"
           loading="eager"
           decoding="async"
-        />
-      </div>
-      <div className="w-full absolute bottom-0">
-        <img src={Footer} className="w-full object-contain " />
-        <img
-          src={Hotline}
-          className=" w-36 absolute bottom-3 right-2 object-contain"
-          role="button"
-          onClick={onClickHotline}
         />
       </div>
     </div>

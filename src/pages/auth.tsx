@@ -1,7 +1,7 @@
 import * as React from "react";
-import Background from "assets/background.jpg";
+import Background from "assets/background.webp";
 import Content_3 from "assets/content_3.webp";
-import Content_2 from "assets/content_2.png";
+import Content_2 from "assets/content_2.webp";
 import Footer from "assets/footer.webp";
 import Logo from "assets/logo.png";
 import Button_2 from "assets/button_2.png";
@@ -35,12 +35,12 @@ const AuthScreen = () => {
     >
       <img src={Logo} className="w-20" />
 
-      <img src={Content_2} className="w-full h-40 object-contain" />
-      <img src={Content_3} className="w-full h-52 object-contain" />
+      <img src={Content_2} className="w-full h-40  object-contain" />
+      <img src={Content_3} className="w-full h-60 object-contain -mt-6" />
 
-      <div className="flex justify-center items-center flex-col">
+      <div className="flex justify-center items-center flex-col -mt-3">
         <div
-          className="h-14 w-48 bg-no-repeat flex items-center justify-center text-xl text-white font-semibold"
+          className="h-14 w-56 bg-no-repeat flex items-center justify-center text-xl text-white font-semibold"
           style={{
             backgroundImage: `url(${Button_2})`,
             backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
@@ -48,7 +48,7 @@ const AuthScreen = () => {
           role="button"
           onClick={onNavSplashScreen}
         ></div>
-        <div className="flex items-center gap-3 mt-2">
+        <div className="flex items-center gap-3 mt-3">
           <p
             className="text-white text-xs underline font-semibold text-center"
             role="button"
@@ -66,7 +66,7 @@ const AuthScreen = () => {
           </p>
         </div>
       </div>
-      <div className="w-full absolute bottom-0">
+      <div className="w-full max-h-28 absolute bottom-0">
         <img src={Footer} className="w-full object-contain " />
         <img
           src={Hotline}

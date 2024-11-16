@@ -1,6 +1,6 @@
 import * as React from "react";
-import Background from "assets/background.jpg";
-import Content_2 from "assets/content_2.png";
+import Background from "assets/background.webp";
+import Content_2 from "assets/content_2.webp";
 import Logo from "assets/logo.png";
 import Oke from "assets/oke.webp";
 import { useNavigate } from "react-router-dom";

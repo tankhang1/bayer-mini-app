@@ -1,6 +1,6 @@
 import * as React from "react";
-import Background from "assets/background.jpg";
-import Content_2 from "assets/content_2.png";
+import Background from "assets/background.webp";
+import Content_2 from "assets/content_2.webp";
 import Logo from "assets/logo.png";
 import Driver from "assets/driver.webp";
 import Topup from "assets/topup.webp";
@@ -83,7 +83,7 @@ const PresentScreen = () => {
         decoding="auto"
       />
       {type !== "complete" && type !== "reject" && (
-        <p className="text-[#f5ecdd] text-xl font-bold text-center">{`Chúc mừng <bạn> với số điện <XXXXXXXX> thoại nhận được <Tên Quà> từ <Cơ Hội 1>`}</p>
+        <p className="text-[#f5ecdd] text-xl font-bold text-center">{`Chúc mừng Lê Hoài Phong với số điện xxxx4825 thoại nhận được <Tên Quà> từ <Cơ Hội 1>`}</p>
       )}
       {type === "complete" && (
         <p className="text-[#f5ecdd] text-xl font-extrabold text-center">{`Chúng tôi đã nhận thông tin và bằng chứng trúng giải của bạn. Tổng đài viên sẽ liên hệ sau!`}</p>
@@ -91,7 +91,7 @@ const PresentScreen = () => {
       {type === "reject" && (
         <p className="text-[#f5ecdd] text-xl font-extrabold text-center">{`Chúng tôi chưa nhận được hình ảnh phiếu trúng thưởng vui lòng liên hệ tổng đài 19003209 để được hỗ trợ !`}</p>
       )}
-      <div className="w-full absolute bottom-0">
+      <div className="w-full max-h-28 absolute bottom-0">
         <img src={Footer} className="w-full object-contain " />
         <img
           src={Hotline}
@@ -117,14 +117,14 @@ const PresentScreen = () => {
             🎉 Chúc mừng! 🎉
           </h2>
           <p className="text-gray-700 mb-6 text-justify">
-            {`Chúc mừng <bạn> với số điện <XXXXXXXX> thoại nhận được <Tên Quà> từ <Cơ Hội 1> Vui lòng gửi hình ảnh xác thực đến hệ
+            {`Chúc mừng Lê Hoài Phong với số điện xxxx4825 thoại nhận được <Tên Quà> từ <Cơ Hội 1> Vui lòng gửi hình ảnh xác thực đến hệ
             thống để nhận quà.`}
           </p>
           <button
             onClick={onNavScan}
             className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition duration-200"
           >
-            Chuyển đến trang xác thực
+            Chụp hình phiếu trúng thưởng
           </button>
         </div>
       </Modal>
