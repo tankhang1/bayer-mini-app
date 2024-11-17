@@ -16,7 +16,10 @@ import appConfig from "../app-config.json";
 if (!window.APP_CONFIG) {
   window.APP_CONFIG = appConfig;
 }
+import dayjs from "dayjs";
+import "dayjs/locale/vi";
 
+dayjs.locale("vi"); // Set dayjs to use Vietnamese locale
 // Mount the app
 import App from "components/app";
 const root = createRoot(document.getElementById("app")!);

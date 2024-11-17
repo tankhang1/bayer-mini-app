@@ -7,15 +7,24 @@ import Speaker from "assets/speaker_1.webp";
 import Topup from "assets/topup_1.webp";
 import Driver from "assets/driver_1.webp";
 import Fridge from "assets/fridge_1.webp";
-import Oke from "assets/ok.webp";
+import Oke from "assets/oke.webp";
 import Reject from "assets/reject.webp";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "zmp-ui";
+import { closeApp } from "zmp-sdk";
 const FinishScreen = () => {
   const navigate = useNavigate();
   const [openFinishConfirm, setOpenFinishConfirm] = React.useState(false);
   const onNavScan = () => {
     navigate("/scan-screen");
+  };
+  const onExit = async () => {
+    try {
+      await closeApp({});
+    } catch (error) {
+      // xử lý khi gọi api thất bại
+      console.log(error);
+    }
   };
   React.useEffect(() => {
     setOpenFinishConfirm(true);
@@ -68,15 +77,17 @@ const FinishScreen = () => {
         modalStyle={{ padding: 0 }}
       >
         <div className="bg-white rounded-lg text-center flex flex-col justify-center items-center gap-4">
-          <img src={Reject} className="w-24 object-contain" />
+          <img src={Oke} className="w-24 object-contain" />
           <p className="text-gray-700 text-justify text-lg">
-            {`Chúng tôi chưa nhận bằng chứng trúng giải của Quý nhà nông. Vui lòng nhấn chụp lại!`}
+            {/* {`Chúng tôi chưa nhận bằng chứng trúng giải của Quý nhà nông. Vui lòng nhấn chụp lại!`} */}
+            Chúng tôi đã nhận thông tin. Và bằng chứng trúng giải của Quý nhà
+            nông. Tổng đài viên chương trình sẽ liên hệ sau!
           </p>
           <button
             className="px-4 py-3 bg-[#be0000]  w-3/5 text-white rounded-lg font-bold transition duration-200"
-            onClick={onNavScan}
+            onClick={onExit}
           >
-            Chụp lại ngay
+            Thoát
           </button>
         </div>
       </Modal>
