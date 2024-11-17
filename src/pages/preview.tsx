@@ -9,8 +9,8 @@ const PreviewScreen = () => {
   };
   return (
     <div className="w-full h-full">
-      <p className="text-white text-center text-lg absolute z-20  top-4 left-4 whitespace-pre-line ">
-        {`Kiểm tra ảnh trước khi gửi về chương trình`}
+      <p className="text-black font-bold text-center text-base absolute z-30 px-4 bg-green-300 py-3 left-1/2 top-[8%] transform -translate-x-1/2 -translate-y-1/2 rounded-lg">
+        Kiểm tra ảnh trước khi gửi về chương trình
       </p>
       <img src={state.previewImage} className="w-full h-dvh object-cover" />
       <div>

@@ -46,8 +46,8 @@ const PresentScreen = () => {
     });
   };
   React.useEffect(() => {
+    fr.play();
     setTimeout(() => {
-      fr.play();
       setOpenPopupCoupon(true);
     }, 1000);
   }, []);

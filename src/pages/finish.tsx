@@ -70,7 +70,7 @@ const FinishScreen = () => {
         <div className="bg-white rounded-lg text-center flex flex-col justify-center items-center gap-4">
           <img src={Reject} className="w-24 object-contain" />
           <p className="text-gray-700 text-justify text-lg">
-            {`Chúng tôi chưa nhận bằng chứng trúng giả của Quý nhà nông. Vui lòng nhấn chụp lại!`}
+            {`Chúng tôi chưa nhận bằng chứng trúng giải của Quý nhà nông. Vui lòng nhấn chụp lại!`}
           </p>
           <button
             className="px-4 py-3 bg-[#be0000]  w-3/5 text-white rounded-lg font-bold transition duration-200"

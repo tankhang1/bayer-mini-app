@@ -173,7 +173,7 @@ const ScanScreen = () => {
           className=" bg-gray-500 p-2 rounded-full my-2"
           onClick={takePhoto}
         >
-          <Icon icon="zi-camera" size={28} style={{ color: "white" }} />
+          <Icon icon="zi-camera" size={36} style={{ color: "white" }} />
         </button>
         <div className="h-full overflow-y-auto gap-3 flex w-full flex-col px-3">
           <p className="text-black font-bold text-center text-lg bg-green-300 py-3">
