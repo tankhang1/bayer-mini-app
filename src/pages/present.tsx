@@ -14,6 +14,10 @@ import { useNavigate } from "react-router-dom";
 import Footer from "assets/footer.webp";
 import { Icon, Modal } from "zmp-ui";
 import { openPhone } from "zmp-sdk";
+import ConsolationPrize from "assets/consolation_prize.mp3";
+import FirstPrize from "assets/first_prize.mp3";
+import SecondPrize from "assets/second_prize.mp3";
+import ThirdPrize from "assets/third_prize.mp3";
 const MapImage = new Map([
   ["driver", Driver],
   ["topup", Topup],
@@ -22,6 +26,10 @@ const MapImage = new Map([
   ["complete", Oke],
   ["reject", Reject],
 ]);
+const co = new Audio(ConsolationPrize);
+const fr = new Audio(FirstPrize);
+const se = new Audio(SecondPrize);
+const th = new Audio(ThirdPrize);
 const PresentScreen = () => {
   const navigate = useNavigate();
   const [openPopupCoupon, setOpenPopupCoupon] = React.useState(false);
@@ -29,26 +37,6 @@ const PresentScreen = () => {
     "driver" | "topup" | "fridge" | "speaker" | "complete" | "reject"
   >("driver");
 
-  const onChangeType = () => {
-    if (type === "driver") {
-      setType("topup");
-    }
-    if (type === "topup") {
-      setType("fridge");
-    }
-    if (type === "fridge") {
-      setType("speaker");
-    }
-    if (type === "speaker") {
-      setType("complete");
-    }
-    if (type === "complete") {
-      setType("reject");
-    }
-    if (type === "reject") {
-      navigate("/scan-screen");
-    }
-  };
   const onNavScan = () => {
     navigate("/scan-screen");
   };
@@ -59,9 +47,11 @@ const PresentScreen = () => {
   };
   React.useEffect(() => {
     setTimeout(() => {
+      fr.play();
       setOpenPopupCoupon(true);
     }, 1000);
   }, []);
+
   return (
     <div
       className="w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col py-10 overflow-auto"
@@ -110,21 +100,23 @@ const PresentScreen = () => {
       )}
       <Modal
         visible={openPopupCoupon}
-        onClose={() => setOpenPopupCoupon(false)}
+        onClose={() => {
+          fr.pause();
+          setOpenPopupCoupon(false);
+        }}
       >
         <div className="p-6 bg-white rounded-lg text-center">
           <h2 className="text-2xl font-bold text-green-600 mb-4">
             🎉 Chúc mừng! 🎉
           </h2>
           <p className="text-gray-700 mb-6 text-justify">
-            {`Chúc mừng Lê Hoài Phong với số điện xxxx4825 thoại nhận được <Tên Quà> từ <Cơ Hội 1> Vui lòng gửi hình ảnh xác thực đến hệ
-            thống để nhận quà.`}
+            {`Chúc mừng Lê Hoài Phong với số điện xxxx4825 thoại nhận được <Tên Quà>. Vui lòng nhấn "Gửi phiếu cào" để xác thực và nhận quà`}
           </p>
           <button
             onClick={onNavScan}
             className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition duration-200"
           >
-            Chụp hình phiếu trúng thưởng
+            Gửi hình phiếu cào
           </button>
         </div>
       </Modal>

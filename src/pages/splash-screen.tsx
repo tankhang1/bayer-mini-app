@@ -23,14 +23,9 @@ const SplashScreen = () => {
     const authorizeLocation = await authorize({
       scopes: ["scope.userLocation"],
     });
+    if (authorizeInfo && authorizeLocation) navigate("/present");
+  };
 
-    navigate("/present");
-  };
-  const onClickHotline = async () => {
-    await openPhone({
-      phoneNumber: "19003209",
-    });
-  };
   React.useEffect(() => {
     setTimeout(() => {
       postZaloInfo();
@@ -38,40 +33,40 @@ const SplashScreen = () => {
   }, []);
   return (
     <div
-      className="w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col py-5 overflow-auto"
+      className="w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col overflow-auto"
       style={{
         backgroundImage: `url(${Background})`,
         backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
       }}
     >
-      <img src={Logo} className="w-20" />
-      <img src={Content_2} className="w-[90%] h-40 object-contain" />
+      <img src={Logo} className="w-20 my-5" />
+      <img src={Content_2} className="w-[100%] h-40 object-contain" />
       <div className="relative w-full h-full z-20 -mt-6">
         <img
           src={Content_3}
-          className="w-64 h-64 object-contain absolute top-[90px] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          className="w-72 h-64 object-contain absolute top-[90px] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         />
         <img
           src={Topup}
-          className="w-36 h-36 object-contain absolute top-28 left-0"
+          className="w-36 h-36 object-contain absolute top-[25%]  left-[10%]"
           loading="eager"
           decoding="async"
         />
         <img
           src={Speaker}
-          className="w-44 h-44 object-contain absolute top-32 right-7"
+          className="w-44 h-44 object-contain absolute top-[30%] right-7"
           loading="eager"
           decoding="async"
         />
         <img
           src={Fridge}
-          className="w-52 h-52 object-contain absolute top-52 -left-1"
+          className="w-52 h-52 object-contain absolute bottom-[15%] -left-7"
           loading="eager"
           decoding="async"
         />
         <img
           src={Driver}
-          className="w-60 h-60 object-contain absolute  top-64 right-0"
+          className="w-60 h-60 object-contain absolute  bottom-[0%] right-0"
           loading="eager"
           decoding="async"
         />

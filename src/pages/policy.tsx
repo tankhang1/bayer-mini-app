@@ -2,8 +2,14 @@ import React from "react";
 import Background_1 from "assets/background.webp";
 import Slogan from "assets/content_2.webp";
 import Logo from "assets/logo.png";
+import { Icon } from "zmp-ui";
+import { useNavigate } from "react-router-dom";
 
 const PolicyScreen = () => {
+  const navigate = useNavigate();
+  const onNavBack = () => {
+    navigate(-1);
+  };
   return (
     <div
       className="w-full h-dvh bg-cover bg-no-repeat px-3 flex items-center flex-col py-10 gap-2 overflow-auto"
@@ -15,7 +21,7 @@ const PolicyScreen = () => {
       <img src={Logo} className="w-20" />
 
       <img src={Slogan} className="w-fit" />
-      <div className="p-6  text-gray-800">
+      <div className="p-6  text-white">
         <h1 className="text-2xl font-black text-center text-red-600 mb-4">
           Thể lệ chương trình
         </h1>
@@ -144,6 +150,14 @@ const PolicyScreen = () => {
             tổng đài chương trình 19001992 của YIS liên hệ.
           </p>
         </div>
+      </div>
+      <div
+        className="py-3 w-56 bg-no-repeat flex items-center justify-center text-lg  text-white font-bold bg-[#be0000] rounded-3xl gap-2"
+        role="button"
+        onClick={onNavBack}
+      >
+        <Icon icon="zi-arrow-left" />
+        Quay lại
       </div>
     </div>
   );

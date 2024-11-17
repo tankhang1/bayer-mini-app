@@ -10,7 +10,9 @@ import api, {
   ZMACamera,
 } from "zmp-sdk";
 import { useNavigate } from "react-router-dom";
-import Guide from "assets/guide.webp";
+import GuideAudio from "assets/guide.mp3";
+const guide = new Audio(GuideAudio);
+
 const ScanScreen = () => {
   const navigate = useNavigate();
   const cameraRef = useRef<ZMACamera | null>(null);
@@ -24,6 +26,7 @@ const ScanScreen = () => {
       minScreenshotHeight: 1000,
     });
     if (result) {
+      guide.pause();
       navigate("/preview", {
         state: {
           previewImage: result.data,
@@ -114,6 +117,7 @@ const ScanScreen = () => {
     };
   }, []);
   useEffect(() => {
+    guide.play();
     onRequestCameraPermission();
   }, []);
   return (
@@ -122,7 +126,7 @@ const ScanScreen = () => {
         <video
           style={{
             width: "100vw",
-            height: "70vh",
+            height: "60vh",
             objectFit: "cover",
             backgroundColor: "transparent",
           }}
@@ -132,16 +136,13 @@ const ScanScreen = () => {
           webkit-playsinline="true"
         />
 
-        <div
-          className="absolute top-0 w-full px-3 pt-24 bg-drop"
-          style={{ height: "80vh" }}
-        >
+        <div className="absolute top-0 w-full px-3 pt-24 bg-drop">
           <p className="text-white font-bold text-center">
             Chụp hình phiếu trúng thưởng
           </p>
           <div
             className="border-2 border-gray-200 rounded-2xl"
-            style={{ height: "45dvh" }}
+            style={{ height: "35dvh" }}
           />
         </div>
       </Box>
@@ -167,20 +168,34 @@ const ScanScreen = () => {
         </button>
       </div>
 
-      <div className="flex h-1/3 rounded-t-3xl py-4 px-4 w-full bg-white text-black absolute z-30 bottom-0 justify-between flex-col items-center">
-        <p className="text-black font-bold">Hướng dẫn chụp hình</p>{" "}
-        <div className="relative">
-          <button
-            className=" bg-gray-500 p-2 rounded-full transform transition-transform duration-200 ease-in-out active:scale-90 absolute -top-4 -right-7 animate-pulse"
-            onClick={takePhoto}
-          >
-            <Icon icon="zi-camera" size={28} style={{ color: "white" }} />
-          </button>
-          <img src={Guide} className="h-36" />
+      <div className="flex h-[45%] rounded-t-3xl py-4 w-full bg-white text-black absolute z-30 bottom-0 justify-between flex-col items-center">
+        <button
+          className=" bg-gray-500 p-2 rounded-full my-2"
+          onClick={takePhoto}
+        >
+          <Icon icon="zi-camera" size={28} style={{ color: "white" }} />
+        </button>
+        <div className="h-full overflow-y-auto gap-3 flex w-full flex-col px-3">
+          <p className="text-black font-bold text-center text-lg bg-green-300 py-3">
+            Hướng dẫn chụp hình
+          </p>
+          <p className="text-black font-medium text-sm">
+            <span className="font-bold">Bước 1:</span> Đưa camera gần và canh
+            chỉnh phiếu trúng giải vào trong phạp vi ô vuông màu trắng.
+          </p>
+          <p className="text-black font-medium text-sm">
+            <span className="font-bold">Bước 2:</span> Nhấn vào biểu tượng
+            “camera” chụp rõ nét phiếu trúng thưởng
+          </p>
+          <p className="text-black font-medium text-sm">
+            <span className="font-bold">Bước 3:</span> Kiểm tra hình và nhấn
+            phím “Xác nhận” để gửi hình bằng chứng trúng giải
+          </p>
+          <p className="text-black font-medium text-sm">
+            Gọi tổng đài chương trình khi cần hỗ trợ{" "}
+            <span className="font-bold">19003209</span>
+          </p>
         </div>
-        <p className="text-black font-medium text-sm">
-          Đưa camera gần và canh chỉnh để chụp rõ phiếu thưởng
-        </p>
       </div>
     </Page>
   );
