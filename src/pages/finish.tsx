@@ -80,8 +80,8 @@ const FinishScreen = () => {
           <img src={Oke} className="w-24 object-contain" />
           <p className="text-gray-700 text-justify text-lg">
             {/* {`Chúng tôi chưa nhận bằng chứng trúng giải của Quý nhà nông. Vui lòng nhấn chụp lại!`} */}
-            Chúng tôi đã nhận thông tin. Và bằng chứng trúng giải của Quý nhà
-            nông. Tổng đài viên chương trình sẽ liên hệ sau!
+            Chúng tôi đã nhận thông tin và bằng chứng trúng giải. Tổng đài viên
+            19003209 sẽ liên lạc lại quý nhà nông khi cần!
           </p>
           <button
             className="px-4 py-3 bg-[#be0000]  w-3/5 text-white rounded-lg font-bold transition duration-200"

@@ -73,7 +73,7 @@ const PresentScreen = () => {
         decoding="auto"
       />
       {type !== "complete" && type !== "reject" && (
-        <p className="text-[#f5ecdd] text-xl font-bold text-center">{`Chúc mừng Lê Hoài Phong với số điện xxxx4825 thoại nhận được <Tên Quà> từ <Cơ Hội 1>`}</p>
+        <p className="text-[#f5ecdd] text-xl font-bold text-center">{`Chúc mừng Lê Hoài Phong với số điện thoại xxxx4825 nhận được <Tên Quà> từ <Cơ Hội 1>`}</p>
       )}
       {type === "complete" && (
         <p className="text-[#f5ecdd] text-xl font-extrabold text-center">{`Chúng tôi đã nhận thông tin và bằng chứng trúng giải của bạn. Tổng đài viên sẽ liên hệ sau!`}</p>
@@ -105,16 +105,16 @@ const PresentScreen = () => {
           setOpenPopupCoupon(false);
         }}
       >
-        <div className="p-6 bg-white rounded-lg text-center">
+        <div className="p-0 -mt-2 bg-white rounded-lg text-center">
           <h2 className="text-2xl font-bold text-green-600 mb-4">
             🎉 Chúc mừng! 🎉
           </h2>
-          <p className="text-gray-700 mb-6 text-justify">
-            {`Chúc mừng Lê Hoài Phong với số điện xxxx4825 thoại nhận được <Tên Quà>. Vui lòng nhấn "Gửi phiếu cào" để xác thực và nhận quà`}
+          <p className="text-gray-700 mb-6 text-justify text-xl">
+            {`Chúc mừng Lê Hoài Phong với số điện thoại xxxx4825 nhận được <Tên Quà>. Vui lòng nhấn "Gửi phiếu cào" để xác thực và nhận quà`}
           </p>
           <button
             onClick={onNavScan}
-            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition duration-200"
+            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition duration-200 text-lg"
           >
             Gửi hình phiếu cào
           </button>

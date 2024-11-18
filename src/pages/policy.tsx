@@ -29,7 +29,7 @@ const PolicyScreen = () => {
           <div className="mb-4">
             <h2 className="font-bold text-xl">1. Điều khoản và điều kiện:</h2>
             <p className="text-lg">
-              Bằng cách ký tên dưới đây, tôi xác nhận rằng:
+              Bằng cách nhấn vào nút “Đồng ý” tôi xác nhận rằng:
             </p>
             <ul className="list-disc pl-6 text-base custom-round-bullet">
               <li>Tôi đồng ý cung cấp thông tin cá nhân cho chương trình.</li>
