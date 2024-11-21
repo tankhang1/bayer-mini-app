@@ -4,7 +4,6 @@ import Content_3 from "assets/Nativo.png";
 import Content_2 from "assets/content_2.webp";
 import Footer from "assets/footer.webp";
 import Logo from "assets/logo.png";
-import Button_2 from "assets/button_2.png";
 import Hotline from "assets/hotline.webp";
 import { useNavigate } from "react-router-dom";
 import { openPhone } from "zmp-sdk";
@@ -35,8 +34,8 @@ const AuthScreen = () => {
     >
       <img src={Logo} className="w-20 my-5" />
 
-      <img src={Content_2} className="w-full h-40  object-contain" />
-      <img src={Content_3} className="w-full object-contain -mt-6" />
+      <img src={Content_2} className="w-full max-h-40 object-contain -mt-3" />
+      <img src={Content_3} className="w-full object-contain -mt-10" />
 
       <div className="flex justify-center items-center flex-col -mt-3">
         <div

@@ -1,16 +1,14 @@
 import * as React from "react";
-import Background from "assets/background_2.webp";
+import Background from "assets/background_2.png";
 import Logo from "assets/logo.png";
 import Content_2 from "assets/content_2.webp";
-import Content_3 from "assets/content_3.webp";
-import Speaker from "assets/speaker_1.webp";
-import Topup from "assets/topup_1.webp";
-import Driver from "assets/driver_1.webp";
-import Footer from "assets/footer.webp";
-import Fridge from "assets/fridge_1.webp";
-import Hotline from "assets/hotline.webp";
+import Content_3 from "assets/content_3.png";
+import Speaker from "assets/speaker_1.png";
+import Topup from "assets/topup_1.png";
+import Driver from "assets/driver_1.png";
+import Fridge from "assets/fridge_1.png";
 
-import { authorize, followOA, openPhone } from "zmp-sdk";
+import { authorize } from "zmp-sdk";
 import { useNavigate } from "react-router-dom";
 
 const SplashScreen = () => {
