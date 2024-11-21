@@ -67,18 +67,7 @@ const AuthScreen = () => {
         </div>
       </div>
       <div className="h-full" />
-      <img
-        src={Background_tmp}
-        className="h-0 w-0 hidden"
-        loading="lazy"
-        decoding="async"
-      />
-      <img
-        src={Content_3_tmp}
-        className="h-0 w-0 hidden"
-        loading="lazy"
-        decoding="async"
-      />
+
       <div className="w-full max-h-28 absolute bottom-0">
         <img src={Footer} className="w-full object-contain " />
         <img

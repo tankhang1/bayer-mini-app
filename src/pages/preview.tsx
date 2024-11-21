@@ -8,6 +8,9 @@ const PreviewScreen = () => {
   const onNavFinish = () => {
     navigate("/finish");
   };
+  const onNavBack = () => {
+    navigate(-1);
+  };
   return (
     <div className="w-full h-full">
       <img src={state.previewImage} className="w-full h-dvh object-cover" />
@@ -37,11 +40,19 @@ const PreviewScreen = () => {
         </div>
       </div>
 
-      <div
-        className="text-left absolute z-20 py-3 px-4 rounded-full bottom-[10%] right-4 text-white bg-[#be0000] font-bold left-1/2 transform -translate-x-1/2 flex justify-center items-center text-xl"
-        onClick={onNavFinish}
-      >
-        Xác nhận
+      <div className="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 w-3/4 justify-center items-center flex flex-col gap-2">
+        <div
+          className="text-left w-full py-3 px-4 rounded-full text-white bg-[#be0000] font-bold flex justify-center items-center text-xl"
+          onClick={onNavFinish}
+        >
+          Xác nhận
+        </div>
+        <div
+          className="text-left w-full py-3 px-4 rounded-full text-[#be0000] bg-white font-bold flex justify-center items-center text-xl"
+          onClick={onNavBack}
+        >
+          Chụp lại
+        </div>
       </div>
     </div>
   );

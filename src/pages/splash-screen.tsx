@@ -52,13 +52,13 @@ const SplashScreen = () => {
         />
         <img
           src={Speaker}
-          className="w-44 h-44 object-contain absolute top-[30%] right-7"
+          className="w-32 h-32 object-contain absolute top-[35%] right-[10%]"
           loading="eager"
           decoding="async"
         />
         <img
           src={Fridge}
-          className="w-52 h-52 object-contain absolute bottom-[15%] -left-7"
+          className="w-44 h-44 object-contain absolute bottom-[18%] -left-0"
           loading="eager"
           decoding="async"
         />

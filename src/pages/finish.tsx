@@ -76,12 +76,13 @@ const FinishScreen = () => {
         }}
         modalStyle={{ padding: 0 }}
       >
-        <div className="bg-white rounded-lg text-center flex flex-col justify-center items-center gap-4">
-          <img src={Oke} className="w-24 object-contain" />
-          <p className="text-gray-700 text-justify text-lg">
+        <div className="bg-white rounded-lg text-center flex flex-col justify-center items-center gap-4 -mt-3">
+          <img src={Oke} className="w-20 object-contain" />
+          <p className="text-gray-700 text-left text-lg">
             {/* {`Chúng tôi chưa nhận bằng chứng trúng giải của Quý nhà nông. Vui lòng nhấn chụp lại!`} */}
-            Chúng tôi đã nhận thông tin và bằng chứng trúng giải. Tổng đài viên
-            19003209 sẽ liên lạc lại quý nhà nông khi cần!
+            Thông tin và bằng chứng trúng giải của quý nhà nông đã được tiếp
+            nhận. Tổng đài viên 19003209 sẽ chủ động liên hệ khi cần thiết để hỗ
+            trợ tốt nhất
           </p>
           <button
             className="px-4 py-3 bg-[#be0000]  w-3/5 text-white rounded-lg font-bold transition duration-200"
