@@ -1,6 +1,9 @@
 import * as React from "react";
+import Background_tmp from "assets/background_2.png";
 import Background from "assets/background.webp";
 import Content_3 from "assets/Nativo.png";
+import Content_3_tmp from "assets/content_3.png";
+
 import Content_2 from "assets/content_2.webp";
 import Footer from "assets/footer.webp";
 import Logo from "assets/logo.png";
@@ -64,7 +67,18 @@ const AuthScreen = () => {
         </div>
       </div>
       <div className="h-full" />
-
+      <img
+        src={Background_tmp}
+        className="h-0 w-0 hidden"
+        loading="lazy"
+        decoding="async"
+      />
+      <img
+        src={Content_3_tmp}
+        className="h-0 w-0 hidden"
+        loading="lazy"
+        decoding="async"
+      />
       <div className="w-full max-h-28 absolute bottom-0">
         <img src={Footer} className="w-full object-contain " />
         <img
