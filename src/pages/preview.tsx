@@ -15,7 +15,7 @@ const PreviewScreen = () => {
     <div className="w-full h-full">
       <img src={state.previewImage} className="w-full h-dvh object-cover" />
       <div className="absolute top-5 left-4 flex gap-1 flex-col">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 font-roboto">
           <p className="text-white text-left z-20 whitespace-pre-line text-5xl">
             {dayjs(new Date()).format("HH:mm")}
           </p>
@@ -30,7 +30,7 @@ const PreviewScreen = () => {
           </div>
         </div>
         <p className="text-white">44 Tân Phong, Q7, HCM</p>
-        <div className="bg-gradient-to-r via-white/5 from-white/40 to-transparent p-2 flex flex-col gap-1 rounded-md">
+        <div className="bg-gradient-to-r via-white/5 from-white/40 to-transparent p-2 flex flex-col gap-1 rounded-md font-roboto">
           <p className="text-white text-left z-20 whitespace-pre-line">
             Tên khách hàng: Lê Hoài Phong
           </p>
@@ -40,15 +40,15 @@ const PreviewScreen = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 w-3/4 justify-center items-center flex flex-col gap-2">
+      <div className="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 w-2/4 justify-center items-center flex flex-col gap-2">
         <div
-          className="text-left w-full py-3 px-4 rounded-full text-white bg-[#be0000] font-bold flex justify-center items-center text-xl"
+          className="text-left w-full py-3 px-4 rounded-full text-white bg-[#be0000] font-bold flex justify-center items-center text-xl font-roboto"
           onClick={onNavFinish}
         >
           Xác nhận
         </div>
         <div
-          className="text-left w-full py-3 px-4 rounded-full text-[#be0000] bg-white font-bold flex justify-center items-center text-xl"
+          className="text-left w-full py-3 px-4 rounded-full text-[#be0000] bg-white font-bold flex justify-center items-center text-xl font-roboto"
           onClick={onNavBack}
         >
           Chụp lại

@@ -175,7 +175,7 @@ const ScanScreen = () => {
         >
           <Icon icon="zi-camera" size={36} style={{ color: "white" }} />
         </button>
-        <div className="h-full overflow-y-auto gap-3 flex w-full flex-col px-3">
+        <div className="h-full overflow-y-auto gap-3 flex w-full flex-col px-3 font-roboto">
           <p className="text-black font-bold text-center text-lg bg-green-300 py-3">
             Hướng dẫn chụp hình
           </p>

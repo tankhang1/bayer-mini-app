@@ -38,11 +38,11 @@ const AuthScreen = () => {
       <img src={Logo} className="w-20 my-5" />
 
       <img src={Content_2} className="w-full max-h-40 object-contain -mt-3" />
-      <img src={Content_3} className="w-full object-contain -mt-10" />
+      <img src={Content_3} className="w-full object-contain" />
 
-      <div className="flex justify-center items-center flex-col -mt-3">
+      <div className="flex justify-center items-center flex-col">
         <div
-          className="py-3 w-56 bg-no-repeat flex items-center justify-center text-lg  text-white font-bold bg-[#be0000] rounded-3xl"
+          className="py-3 w-56 bg-no-repeat flex items-center justify-center text-lg  text-white font-bold bg-[#be0000] rounded-3xl font-roboto"
           role="button"
           onClick={onNavSplashScreen}
         >
@@ -50,7 +50,7 @@ const AuthScreen = () => {
         </div>
         <div className="flex items-center gap-3 mt-3">
           <p
-            className="text-white text-xs underline font-semibold text-center"
+            className="text-white text-xs underline font-semibold text-center font-roboto"
             role="button"
             onClick={onNavPrivacyScreen}
           >
@@ -58,7 +58,7 @@ const AuthScreen = () => {
           </p>
           <div className="w-[1px] h-4 bg-white  " />
           <p
-            className="text-white text-xs underline font-semibold  text-center"
+            className="text-white text-xs underline font-semibold  text-center font-roboto"
             role="button"
             onClick={onNavPolicyScreen}
           >
