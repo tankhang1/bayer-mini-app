@@ -11,6 +11,9 @@ import PrivacyScreen from "pages/privacy";
 import ScanScreen from "pages/scan";
 import FinishScreen from "pages/finish";
 import PreviewScreen from "pages/preview";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const MyApp = () => {
   return (
     <Provider store={store}>
@@ -50,6 +53,7 @@ const MyApp = () => {
             </AnimationRoutes>
           </ZMPRouter>
         </SnackbarProvider>
+        <ToastContainer />
       </App>
     </Provider>
   );

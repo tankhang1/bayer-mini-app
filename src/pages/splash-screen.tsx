@@ -8,9 +8,10 @@ import Topup from "assets/topup_1.png";
 import Driver from "assets/driver_1.png";
 import Road from "assets/road.png";
 import Fridge from "assets/fridge_1.png";
-
+import Reject from "assets/reject.webp";
 import {
   authorize,
+  closeApp,
   getAccessToken,
   getDeviceId,
   getDeviceIdAsync,
@@ -19,68 +20,95 @@ import {
   getUserInfo,
 } from "zmp-sdk";
 import { useNavigate } from "react-router-dom";
+import { Button, Modal } from "zmp-ui";
+import { toast } from "react-toastify";
+import { useUpdateZaloInfoMutation } from "redux/api/zalo/zalo.api";
 
 const SplashScreen = () => {
   const navigate = useNavigate();
-
+  const [openModalReject, setOpenModalReject] = React.useState(false);
+  const [openExceededMaximumRequest, setOpenExceededMaximumRequest] =
+    React.useState(false);
+  const [updateZaloInfo, { isLoading: isLoadingUpdateZalo }] =
+    useUpdateZaloInfoMutation();
   const postZaloInfo = async () => {
-    let zaloInfo = {
-      access_token: "",
-      avatar: "",
-      code: "test",
-      code_get_location: "",
-      code_get_phone: "",
-      code_hash: "",
-      followed_oa: false,
-      is_sensitive: false,
-      name: "",
-      zalo_app_id: "",
-      zalo_device_id: "abc",
-    };
-    const accessToken = await getAccessToken();
-    zaloInfo.access_token = accessToken;
-    const authorizeInfo = await authorize({
-      scopes: ["scope.userInfo", "scope.userPhonenumber"],
-    });
-    const authorizeLocation = await authorize({
-      scopes: ["scope.userLocation"],
-    });
-    const deviceId = await getDeviceIdAsync();
-    zaloInfo = {
-      ...zaloInfo,
-      zalo_device_id: deviceId,
-    };
-    if (authorizeInfo["scope.userInfo"]) {
-      const userInfo = await getUserInfo();
-      if (userInfo) {
-        zaloInfo = {
-          ...zaloInfo,
-          followed_oa: userInfo.userInfo.followedOA || false,
-          avatar: userInfo.userInfo.avatar,
-          name: userInfo.userInfo.name,
-          is_sensitive: userInfo.userInfo.isSensitive ?? false,
-        };
+    try {
+      let zaloInfo = {
+        access_token: "",
+        avatar: "",
+        code: "",
+        code_get_location: "",
+        code_get_phone: "",
+        code_hash: "",
+        followed_oa: false,
+        is_sensitive: false,
+        name: "",
+        zalo_app_id: "",
+        zalo_device_id: "961875647980920338",
+      };
+      const accessToken = await getAccessToken();
+      zaloInfo.access_token = accessToken;
+      const authorizeInfo = await authorize({
+        scopes: ["scope.userInfo", "scope.userPhonenumber"],
+      });
+      const authorizeLocation = await authorize({
+        scopes: ["scope.userLocation"],
+      });
+      const deviceId = await getDeviceIdAsync();
+      zaloInfo = {
+        ...zaloInfo,
+        zalo_device_id: deviceId,
+      };
+      if (authorizeInfo["scope.userInfo"]) {
+        const userInfo = await getUserInfo();
+        if (userInfo) {
+          zaloInfo = {
+            ...zaloInfo,
+            followed_oa: userInfo.userInfo.followedOA || false,
+            avatar: userInfo.userInfo.avatar,
+            name: userInfo.userInfo.name,
+            is_sensitive: userInfo.userInfo.isSensitive ?? false,
+          };
+        }
+      }
+
+      if (authorizeInfo["scope.userPhonenumber"]) {
+        await getPhoneNumber().then((value) => {
+          zaloInfo = {
+            ...zaloInfo,
+            code_get_phone: value.token || "",
+          };
+        });
+      }
+      if (authorizeLocation["scope.userLocation"]) {
+        await getLocation().then((value) => {
+          zaloInfo = {
+            ...zaloInfo,
+            code_get_location: value.token || "",
+          };
+        });
+      }
+      if (zaloInfo) {
+        await updateZaloInfo(zaloInfo)
+          .unwrap()
+          .then(() => navigate("/present"))
+          .catch(() => {});
+      }
+    } catch (error) {
+      //@ts-expect-error no check
+      if (error?.code === -203) {
+        setOpenExceededMaximumRequest(true);
+      } else {
+        setOpenModalReject(true);
       }
     }
-
-    if (authorizeInfo["scope.userPhonenumber"]) {
-      await getPhoneNumber().then((value) => {
-        zaloInfo = {
-          ...zaloInfo,
-          code_get_phone: value.token || "",
-        };
-      });
-    }
-    if (authorizeLocation["scope.userLocation"]) {
-      await getLocation().then((value) => {
-        zaloInfo = {
-          ...zaloInfo,
-          code_get_location: value.token || "",
-        };
-      });
-    }
-    console.log(zaloInfo);
     // if (authorizeInfo && authorizeLocation) navigate("/present");
+  };
+  const onCloseApp = async () => {
+    await closeApp({
+      fail: () =>
+        toast.info("Vui lòng nhấn dấu 'X' trên cùng bên trái để tắt ứng dụng"),
+    });
   };
 
   React.useEffect(() => {
@@ -134,6 +162,63 @@ const SplashScreen = () => {
         loading="eager"
         decoding="async"
       />
+      <Modal
+        visible={openModalReject}
+        onClose={() => setOpenModalReject(false)}
+        title={(<img src={Reject} className="w-20 h-20 mx-auto" />) as any}
+      >
+        <p className="whitespace-pre-line">
+          {`Ứng dụng Bayer Việt Nam cần quyền truy cập vào thông tin cá nhân (họ tên, số điện thoại, vị trí) để: 
+          1) Xác minh tính hợp lệ của người tham gia chương trình. 
+          2) Hỗ trợ gửi thông báo trúng thưởng và thực hiện trao giải thưởng một cách chính xác. 
+          Việc cấp quyền giúp chúng tôi đảm bảo quyền lợi của bạn và tối ưu hóa trải nghiệm khi tham gia chương trình. Bayer cam kết bảo mật thông tin và sử dụng theo đúng mục đích được công bố."`}
+        </p>
+        <div className="flex items-center justify-between gap-2 mt-2">
+          <Button
+            className="w-full"
+            onClick={() => {
+              postZaloInfo();
+              setOpenModalReject(false);
+            }}
+          >
+            Xin quyền
+          </Button>
+          <Button
+            variant="secondary"
+            className="!bg-red-400 !text-white w-full"
+            onClick={() => {
+              setOpenModalReject(false);
+              navigate(-1);
+              onCloseApp();
+            }}
+          >
+            Từ chối
+          </Button>
+        </div>
+      </Modal>
+      <Modal
+        visible={openExceededMaximumRequest}
+        onClose={() => setOpenExceededMaximumRequest(false)}
+        title={(<img src={Reject} className="w-20 h-20 mx-auto" />) as any}
+      >
+        <p className="whitespace-pre-line">
+          Bạn đã gửi quá số lần yêu cầu cho phép. Hệ thống chỉ cho phép tối đa 5
+          yêu cầu, nhưng bạn đã gửi 6 yêu cầu. Vui lòng thoát app và quét lại.
+        </p>
+        <div className="flex items-center justify-between gap-2 mt-2">
+          <Button
+            variant="secondary"
+            className="!bg-red-400 !text-white w-full"
+            onClick={() => {
+              setOpenModalReject(false);
+              navigate(-1);
+              onCloseApp();
+            }}
+          >
+            Xác nhận
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };

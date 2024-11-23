@@ -1,12 +1,24 @@
 import dayjs from "dayjs";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useConfirmIqrMutation } from "redux/api/iqr/iqr.api";
+import { Button } from "zmp-ui";
 
 const PreviewScreen = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const onNavFinish = () => {
-    navigate("/finish");
+  const [confirmIqr, { isLoading: isLoadingConfirmIqr }] =
+    useConfirmIqrMutation();
+  const onNavFinish = async () => {
+    await confirmIqr({
+      code: "",
+      zalo_device_id: "",
+    })
+      .unwrap()
+      .then(() => {
+        navigate("/finish");
+      })
+      .catch(() => {});
   };
   const onNavBack = () => {
     navigate(-1);
@@ -41,18 +53,19 @@ const PreviewScreen = () => {
       </div>
 
       <div className="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 w-2/4 justify-center items-center flex flex-col gap-2">
-        <div
-          className="text-left w-full py-3 px-4 rounded-full text-white bg-[#be0000] font-bold flex justify-center items-center text-xl font-roboto"
+        <Button
+          className=" w-full py-3 px-4 !text-white !bg-[#be0000] !font-bold !text-xl !font-roboto"
           onClick={onNavFinish}
+          loading={isLoadingConfirmIqr}
         >
           Xác nhận
-        </div>
-        <div
-          className="text-left w-full py-3 px-4 rounded-full text-[#be0000] bg-white font-bold flex justify-center items-center text-xl font-roboto"
+        </Button>
+        <Button
+          className="w-full py-3 px-4 !text-[#be0000] !bg-white !font-bold !text-xl !font-roboto"
           onClick={onNavBack}
         >
           Chụp lại
-        </div>
+        </Button>
       </div>
     </div>
   );

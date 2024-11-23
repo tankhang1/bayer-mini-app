@@ -10,9 +10,21 @@ import Logo from "assets/logo.png";
 import Hotline from "assets/hotline.webp";
 import { useNavigate } from "react-router-dom";
 import { openPhone } from "zmp-sdk";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { useCheckIqrMutation } from "redux/api/iqr/iqr.api";
+import { Button, Spinner } from "zmp-ui";
+import { RootState } from "redux/store";
+import { useGetAccessTokenMutation } from "redux/api/auth/auth.api";
+import { ACCOUNT } from "constants";
 
 const AuthScreen = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { deviceId } = useSelector((state: RootState) => state.app);
+  const [checkIqr, { isLoading: isLoadingCheckIqr }] = useCheckIqrMutation();
+  const [getAccessToken, { isLoading: isLoadingAccessToken }] =
+    useGetAccessTokenMutation();
   const onNavSplashScreen = () => {
     navigate("/splash-screen");
   };
@@ -25,8 +37,40 @@ const AuthScreen = () => {
   const onClickHotline = async () => {
     await openPhone({
       phoneNumber: "19003209",
+    }).catch((e) => {
+      toast.error(
+        "Không thể mở thông tin số hotline, vui lòng thực hiện thủ công"
+      );
     });
   };
+
+  const onCheckIqr = async () => {
+    await checkIqr({
+      code: "",
+      zalo_device_id: deviceId,
+    })
+      .unwrap()
+      .then(() => {})
+      .catch(() => {});
+  };
+  const onGetAccessToken = async () => {
+    await getAccessToken(ACCOUNT)
+      .unwrap()
+      .then(() => {})
+      .catch(() => {});
+  };
+  const onGetParams = async () => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const token = urlParams.get("t");
+    onCheckIqr();
+  };
+
+  React.useEffect(() => {
+    onGetAccessToken();
+    onGetParams();
+  }, []);
+
   return (
     <div
       className="w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col overflow-auto"
@@ -41,13 +85,13 @@ const AuthScreen = () => {
       <img src={Content_3} className="w-full object-contain" />
 
       <div className="flex justify-center items-center flex-col">
-        <div
-          className="py-3 w-56 bg-no-repeat flex items-center justify-center text-lg  text-white font-bold bg-[#be0000] rounded-3xl font-roboto"
-          role="button"
+        <Button
+          className="py-3 w-56 !text-lg  text-white !font-bold !bg-[#be0000] !font-roboto"
+          // loading={isLoadingCheckIqr || isLoadingAccessToken}
           onClick={onNavSplashScreen}
         >
           Đồng ý
-        </div>
+        </Button>
         <div className="flex items-center gap-3 mt-3">
           <p
             className="text-white text-xs underline font-semibold text-center font-roboto"

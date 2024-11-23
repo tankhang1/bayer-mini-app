@@ -12,12 +12,13 @@ import Reject from "assets/reject.webp";
 import { useNavigate } from "react-router-dom";
 
 import Footer from "assets/footer.webp";
-import { Icon, Modal } from "zmp-ui";
+import { Icon, Modal, Spinner } from "zmp-ui";
 import { openPhone } from "zmp-sdk";
 import ConsolationPrize from "assets/consolation_prize.mp3";
 import FirstPrize from "assets/first_prize.mp3";
 import SecondPrize from "assets/second_prize.mp3";
 import ThirdPrize from "assets/third_prize.mp3";
+import { useUsingIqrMutation } from "redux/api/iqr/iqr.api";
 const MapImage = new Map([
   ["driver", Driver],
   ["topup", Topup],
@@ -32,6 +33,7 @@ const se = new Audio(SecondPrize);
 const th = new Audio(ThirdPrize);
 const PresentScreen = () => {
   const navigate = useNavigate();
+  const [useIqr, { isLoading: isLoadingUseIqr }] = useUsingIqrMutation();
   const [openPopupCoupon, setOpenPopupCoupon] = React.useState(false);
   const [type, setType] = React.useState<
     "driver" | "topup" | "fridge" | "speaker" | "complete" | "reject"
@@ -45,11 +47,19 @@ const PresentScreen = () => {
       phoneNumber: "19003209",
     });
   };
+  const onUseIqr = async () => {
+    await useIqr({
+      code: "",
+      zalo_device_id: "",
+    })
+      .unwrap()
+      .then(() => {
+        fr.play();
+      })
+      .catch(() => {});
+  };
   React.useEffect(() => {
-    fr.play();
-    setTimeout(() => {
-      setOpenPopupCoupon(true);
-    }, 1000);
+    onUseIqr();
   }, []);
 
   return (
@@ -64,14 +74,18 @@ const PresentScreen = () => {
     >
       <img src={Logo} className="w-20" />
       <img src={Content_2} className="w-full h-40 object-contain" />
-      <img
-        src={MapImage.get(type)}
-        className={`w-full -mt-10 mb-2 ${
-          type === "complete" || type === "reject" ? "h-40 mt-0" : "h-64"
-        } object-contain `}
-        loading="eager"
-        decoding="auto"
-      />
+      {isLoadingUseIqr ? (
+        <Spinner />
+      ) : (
+        <img
+          src={MapImage.get(type)}
+          className={`w-full -mt-10 mb-2 ${
+            type === "complete" || type === "reject" ? "h-40 mt-0" : "h-64"
+          } object-contain `}
+          loading="eager"
+          decoding="auto"
+        />
+      )}
       {type !== "complete" && type !== "reject" && (
         <p className="text-[#f5ecdd] font-roboto text-xl font-bold text-center">{`Chúc mừng Lê Hoài Phong với số điện thoại xxxx4825 nhận được <Tên Quà> từ <Cơ Hội 1>`}</p>
       )}
