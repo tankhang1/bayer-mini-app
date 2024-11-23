@@ -1,27 +1,86 @@
 import * as React from "react";
-import Background from "assets/background_2.png";
+import Background from "assets/background.webp";
 import Logo from "assets/logo.png";
 import Content_2 from "assets/content_2.webp";
 import Content_3 from "assets/content_3.png";
 import Speaker from "assets/speaker_1.png";
 import Topup from "assets/topup_1.png";
 import Driver from "assets/driver_1.png";
+import Road from "assets/road.png";
 import Fridge from "assets/fridge_1.png";
 
-import { authorize } from "zmp-sdk";
+import {
+  authorize,
+  getAccessToken,
+  getDeviceId,
+  getDeviceIdAsync,
+  getLocation,
+  getPhoneNumber,
+  getUserInfo,
+} from "zmp-sdk";
 import { useNavigate } from "react-router-dom";
 
 const SplashScreen = () => {
   const navigate = useNavigate();
 
   const postZaloInfo = async () => {
+    let zaloInfo = {
+      access_token: "",
+      avatar: "",
+      code: "test",
+      code_get_location: "",
+      code_get_phone: "",
+      code_hash: "",
+      followed_oa: false,
+      is_sensitive: false,
+      name: "",
+      zalo_app_id: "",
+      zalo_device_id: "abc",
+    };
+    const accessToken = await getAccessToken();
+    zaloInfo.access_token = accessToken;
     const authorizeInfo = await authorize({
       scopes: ["scope.userInfo", "scope.userPhonenumber"],
     });
     const authorizeLocation = await authorize({
       scopes: ["scope.userLocation"],
     });
-    if (authorizeInfo && authorizeLocation) navigate("/present");
+    const deviceId = await getDeviceIdAsync();
+    zaloInfo = {
+      ...zaloInfo,
+      zalo_device_id: deviceId,
+    };
+    if (authorizeInfo["scope.userInfo"]) {
+      const userInfo = await getUserInfo();
+      if (userInfo) {
+        zaloInfo = {
+          ...zaloInfo,
+          followed_oa: userInfo.userInfo.followedOA || false,
+          avatar: userInfo.userInfo.avatar,
+          name: userInfo.userInfo.name,
+          is_sensitive: userInfo.userInfo.isSensitive ?? false,
+        };
+      }
+    }
+
+    if (authorizeInfo["scope.userPhonenumber"]) {
+      await getPhoneNumber().then((value) => {
+        zaloInfo = {
+          ...zaloInfo,
+          code_get_phone: value.token || "",
+        };
+      });
+    }
+    if (authorizeLocation["scope.userLocation"]) {
+      await getLocation().then((value) => {
+        zaloInfo = {
+          ...zaloInfo,
+          code_get_location: value.token || "",
+        };
+      });
+    }
+    console.log(zaloInfo);
+    // if (authorizeInfo && authorizeLocation) navigate("/present");
   };
 
   React.useEffect(() => {
@@ -69,6 +128,12 @@ const SplashScreen = () => {
           decoding="async"
         />
       </div>
+      <img
+        src={Road}
+        className="w-full object-contain absolute !bottom-0 right-0"
+        loading="eager"
+        decoding="async"
+      />
     </div>
   );
 };

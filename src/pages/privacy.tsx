@@ -55,7 +55,7 @@ const PrivacyScreen = () => {
           <h1 className="text-2xl font-black text-center text-red-600 mb-4">
             THỂ LỆ CHƯƠNG TRÌNH KHUYẾN MÃI
           </h1>
-          <h4 className="text-xl font-black text-left mb-4">
+          <h4 className="text-xl font-black text-center mb-4">
             Nativo 75 WG, Vayego 200SC “Cào Nhanh Tay, Trúng Quà Ngay”
           </h4>
           <div className="mb-4">
@@ -69,7 +69,7 @@ const PrivacyScreen = () => {
             <h2 className="font-bold text-xl">2. Thời gian áp dụng: </h2>
 
             <p className="text-lg">
-              Từ ngày 15/12/2024 đến hết ngày 30/04/2025.
+              Từ ngày 1/12/2024 đến hết ngày 31/03/2025.{" "}
             </p>
           </div>
           <div className="mb-4">
@@ -119,7 +119,7 @@ const PrivacyScreen = () => {
               <li>6 Giải Nhì: Tủ lạnh Sharp Inverter 362 lít SJ-FX420VG-BK </li>
               <li>12 Giải Ba: Loa JBL Partybox 110</li>
               <li>
-                317,138 Giải Khuyến Khích: Nạp tiền điện thoại trị giá 10.000
+                317,116 Giải Khuyến Khích: Nạp tiền điện thoại trị giá 10.000
                 đồng.
               </li>
             </ul>
@@ -131,7 +131,7 @@ const PrivacyScreen = () => {
               <li>9 Giải Nhì: Tủ lạnh Sharp Inverter 362 lít SJ-FX420VG-BK </li>
               <li>18 Giải Ba: Loa JBL Partybox 110</li>
               <li>
-                135,940 Giải Khuyến Khích: Nạp tiền điện thoại trị giá 10.000
+                135,907 Giải Khuyến Khích: Nạp tiền điện thoại trị giá 10.000
                 đồng.
               </li>
             </ul>
@@ -155,30 +155,48 @@ const PrivacyScreen = () => {
                 dụng cho các giải Nhất, Nhì, Ba và khuyến kích).
               </li>
               <li>
-                Bước 3: Theo hướng dẫn hệ thống và chụp hình ảnh phiếu cào trúng
-                giải gửi về chương trình và nhận tin nhắn thương hiệu xác thực
-                trúng giải qua tin nhắn thương hiệu “Bayer VN”
+                Bước 3: Sử dụng ứng dụng Zalo, tiến hành quét mã Qr trên phiếu
+                trúng thưởng và làm theo hướng dẫn hệ thống: “Đồng ý” thể lệ và
+                điều kiện khi tham gia chương trình; cho phép chia sẽ thông tin
+                số điện thoại, địa chỉ tỉnh của Quý nhà nông. Tiếp theo, hệ
+                thống tự động xác nhận kết quả trúng thưởng của Quý nhà nông
+                nhận được và yêu cầu Quý nhà nông tiến hành chụp hình ảnh phiếu
+                cào trúng giải gửi về chương trình. Sau khi thực hiện gửi hình
+                bằng chứng trúng giải. Quý nhà nông trúng giải sẽ nhận được tin
+                nhắn thương hiệu “Bayer VN” xác thực trúng giải qua số điện
+                thoại đã chia sẽ trước đó.
+                <p className="whitespace-pre-line">
+                  {`Với nội dung: “Chuong trinh Nativo & Vayego, Cao Nhanh Tay-Trung Qua Ngay, xac nhan MASO <1234G6789> nhan duoc CH1: <Tên phần quà> Chi tiet goi 19003209.
+Riêng với, các giải nhất, nhì, ba, trong vòng 24h kể từ gửi bằng chứng trúng giải, khách hàng sẽ được trổng đài chương trình liên hệ và xác thực các thông tin như:
+-	Họ tên người trúng giải
+-	Địa chỉ trao giải
+-	Và thông báo dự kiến thời gian tiến hành trao giải
+`}
+                </p>
               </li>
             </ul>
+
             <p className="text-lg font-bold">Cơ hội 2:</p>
             <ul className="list-disc pl-6 text-base custom-round-bullet">
               <li>
                 Đối với các phiếu không trúng cơ hội 1, Quý nhà nông có thêm một
-                cơ hội tham gia cơ hội 2 với 2 bước tương tự cơ hội 1
+                cơ hội tham gia ở Cơ hội 2, với trình tự các bước tham gia tương
+                tự ở Cơ hội 1
               </li>
               <li>
-                Bước 1: Quét mã QR để tham gia chương trình với cơ hội 2. Thực
-                hiện theo hướng dẫn để hoàn tất đăng ký.
+                Bước 1: Sử dụng ứng dụng Zalo, tiến hành quét mã QR để tham gia
+                chương trình. Thực hiện theo hướng dẫn và hoàn tất các bước
+                giống như ở cơ hội 1.
               </li>
               <li>
-                Bước 2: Đón chờ xem kết quả may mắn của cơ hội 2 trong 1 giây.
-                Nếu trúng giải thưởng Quý nhà nông thực hiện thao tác tiếp ở
-                Bước 3.
+                Bước 2: Đón chờ xem kết quả may mắn của cơ hội 2 được chạy ngẫu
+                nhiên trong 2 giây. Nếu trúng giải thưởng Quý nhà nông thực hiện
+                thao tác tiếp ở Bước 3.{" "}
               </li>
-              <li>
-                Bước 3: Theo hướng dẫn hệ thống và chụp hình ảnh phiếu cào trúng
-                giải gửi về chương trình và nhận tin nhắn thương hiệu xác thực
-                trúng giải qua tin nhắn thương hiệu “Bayer VN”
+              <li className="whitespace-pre-line">
+                {`Bước 3: Theo hướng dẫn hệ thống và chụp hình ảnh phiếu cào trúng giải gửi về chương trình và nhận tin nhắn thương hiệu xác thực trúng giải qua tin nhắn thương hiệu “Bayer VN”             
+Với nội dung: “Chuong trinh Nativo & Vayego, Cao Nhanh Tay-Trung Qua Ngay, xac nhan MASO <1234G6789> nhan duoc CH2: <Tên phần quà> Chi tiet goi 19003209.
+`}
               </li>
             </ul>
           </div>
@@ -260,7 +278,7 @@ const PrivacyScreen = () => {
                 </span>
               </li>
             </ul>
-            <p className="text-lg">Mọi thắc mắc, vui lòng liên hệ:</p>
+            <p className="text-lg">Chúc quý khách hàng may mắn!</p>
           </div>
         </div>
         <div
