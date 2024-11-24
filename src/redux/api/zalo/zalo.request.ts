@@ -13,5 +13,5 @@ export type TZaloREQ = {
 };
 
 export type TZaloCheckREQ = {
-  i: string;
+  zalo_device_id: string;
 };

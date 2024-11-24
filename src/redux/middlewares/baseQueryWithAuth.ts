@@ -11,7 +11,7 @@ export const baseQueryWithAuth = async (
   // Await the base URL from async storage
   // Use fetchBaseQuery with the retrieved baseUrl
   const token = store.getState().app.token;
-  console.log("token", token);
+
   const baseQueryFn = fetchBaseQuery({
     baseUrl: BASE_URL || "", // Provide a fallback in case baseUrl is undefined
     prepareHeaders: (headers) => {

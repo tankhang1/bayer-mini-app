@@ -1,25 +1,55 @@
 import dayjs from "dayjs";
+import { generateUUID } from "hooks/generateUUID";
+import { uploadBase64Image, uploadBlob } from "hooks/uploadFile";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useConfirmIqrMutation } from "redux/api/iqr/iqr.api";
+import { RootState } from "redux/store";
 import { Button } from "zmp-ui";
 
 const PreviewScreen = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const { code, deviceId, phone, name } = useSelector(
+    (state: RootState) => state.app
+  );
+  const [isLoadingUpload, setIsLoadingUpload] = useState(false);
   const [confirmIqr, { isLoading: isLoadingConfirmIqr }] =
     useConfirmIqrMutation();
-  const [isLoadingUploadImage, setIsLoadingUploadImage] = useState(false);
   const onNavFinish = async () => {
+    const imageUUID = generateUUID();
+    console.log(
+      "Image UUID",
+      imageUUID,
+      `https://reactive.yis.vn/${imageUUID}.jpg`
+    );
+    setIsLoadingUpload(true);
+    if (state.type === "base64") {
+      await uploadBase64Image(state.previewImage, imageUUID);
+    } else {
+      await uploadBlob(state.previewImage, imageUUID);
+    }
+    setIsLoadingUpload(false);
     await confirmIqr({
-      code: "",
-      zalo_device_id: "",
+      code: code,
+      zalo_device_id: deviceId,
+      image_confirm: `https://reactive.yis.vn/${imageUUID}.jpg`,
     })
       .unwrap()
-      .then(() => {
-        navigate("/finish");
+      .then((value) => {
+        navigate("/finish", {
+          state: {
+            status: value.status,
+          },
+        });
       })
-      .catch(() => {});
+      .catch(() => {
+        toast.error(
+          "Hệ thống đang bị gián đoạn. Vui lòng liên hệ 19003209 để được hỗ trợ. Xin lỗi quý khách hàng vì sự bất tiện này"
+        );
+      });
   };
   const onNavBack = () => {
     navigate(-1);
@@ -42,13 +72,12 @@ const PreviewScreen = () => {
             </p>
           </div>
         </div>
-        <p className="text-white">44 Tân Phong, Q7, HCM</p>
         <div className="bg-gradient-to-r via-white/5 from-white/40 to-transparent p-2 flex flex-col gap-1 rounded-md font-roboto">
           <p className="text-white text-left z-20 whitespace-pre-line">
-            Tên khách hàng: Lê Hoài Phong
+            Tên khách hàng: {name}
           </p>
           <p className="text-white text-left z-20 whitespace-pre-line">
-            Số điện thoại: xxxx4825
+            Số điện thoại: {phone}
           </p>
         </div>
       </div>
@@ -57,7 +86,7 @@ const PreviewScreen = () => {
         <Button
           className=" w-full py-3 px-4 !text-white !bg-[#be0000] !font-bold !text-xl !font-roboto"
           onClick={onNavFinish}
-          loading={isLoadingUploadImage || isLoadingConfirmIqr}
+          loading={isLoadingUpload || isLoadingConfirmIqr}
         >
           Xác nhận
         </Button>

@@ -14,24 +14,24 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
   useCheckIqrMutation,
-  useConfirmIqrMutation,
   useUsingIqrMutation,
 } from "redux/api/iqr/iqr.api";
-import { Button, Modal, Spinner } from "zmp-ui";
+import { Button, Modal } from "zmp-ui";
 import { useGetAccessTokenMutation } from "redux/api/auth/auth.api";
-import { ACCOUNT, BASE_URL } from "constants";
+import { ACCOUNT } from "constants";
 import {
   updateAward,
   updateCode,
   updateDeviceId,
+  updateInfo,
+  updateStatus,
   updateToken,
 } from "redux/slices/appSlice";
 import Reject from "assets/reject.webp";
-import { useZaloCheckDeviceIdMutation } from "redux/api/zalo/zalo.noauth.api";
-import axios from "axios";
 import { RootState } from "redux/store";
 import { TBaseRES } from "types";
-import { TIqrRES, TUsingIqrRES } from "redux/api/iqr/iqr.response";
+import { TUsingIqrRES } from "redux/api/iqr/iqr.response";
+import { useZaloCheckDeviceIdMutation } from "redux/api/zalo/zalo.api";
 
 const AuthScreen = () => {
   const navigate = useNavigate();
@@ -123,13 +123,12 @@ const AuthScreen = () => {
       });
     }
     if (value.status === -5) {
-      setOpenErrorPopup(true);
-      setMessageError({
-        ...value,
-        type: "api",
-        isExit: true,
-        btnLabel: "Thoát",
-      });
+      if (isDeviceIdExist) {
+        dispatch(updateAward(value.data));
+        navigate("/present");
+      } else {
+        navigate("/splash-screen");
+      }
     }
     if (value.status === 0) {
       if (isDeviceIdExist) {
@@ -140,6 +139,7 @@ const AuthScreen = () => {
       }
     }
     if (value.status === 1) {
+      dispatch(updateAward(value.data));
       setOpenErrorPopup(true);
       setMessageError({
         ...value,
@@ -150,9 +150,11 @@ const AuthScreen = () => {
       });
     }
     if (value.status === 2) {
+      dispatch(updateAward(value.data));
       navigate("/present");
     }
     if (value.status === 3) {
+      dispatch(updateAward(value.data));
       setOpenErrorPopup(true);
       setMessageError({
         ...value,
@@ -163,6 +165,7 @@ const AuthScreen = () => {
       });
     }
     if (value.status === 4) {
+      dispatch(updateAward(value.data));
       navigate("/present");
     }
   };
@@ -173,6 +176,7 @@ const AuthScreen = () => {
     })
       .unwrap()
       .then((value) => {
+        dispatch(updateStatus(value.status));
         onMapError(value);
       })
       .catch((error) => {
@@ -200,12 +204,10 @@ const AuthScreen = () => {
       });
   };
   const onGetParams = async () => {
-    // const queryString = window.location.search;
-    const queryString =
-      "https://zalo.me/s/961875647980920338/?env=DEVELOPMENT&version=zdev-38705cd9&code=NY8TFV9AM";
+    const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const code = urlParams.get("code");
-    console.log(code);
+    const code = urlParams.get("campaign");
+    console.log(code, deviceId);
     dispatch(updateCode(code || ""));
     onCheckIqr(deviceId, code || "");
   };
@@ -214,11 +216,19 @@ const AuthScreen = () => {
       .then(async (deviceId) => {
         dispatch(updateDeviceId(deviceId));
         await checkDeviceId({
-          i: deviceId,
+          zalo_device_id: deviceId,
         })
           .unwrap()
           .then((value) => {
-            if (value) setIsDeviceIdExist(true);
+            if (value.data !== null)
+              dispatch(
+                updateInfo({
+                  name: value.data.name,
+                  phone: value.data.phone,
+                  deviceId: value.data.zalo_device_id,
+                })
+              );
+            if (value.status === 0) setIsDeviceIdExist(true);
             else setIsDeviceIdExist(false);
           })
           .catch(() => {
@@ -256,6 +266,7 @@ const AuthScreen = () => {
     })
       .unwrap()
       .then((value) => {
+        dispatch(updateStatus(value.status));
         onMapError(value);
       })
       .catch((error) => {
@@ -272,10 +283,14 @@ const AuthScreen = () => {
   };
   React.useEffect(() => {
     onGetAccessToken();
-    onGetDeviceId();
   }, []);
   React.useEffect(() => {
-    if (deviceId && token) {
+    if (token) {
+      onGetDeviceId();
+    }
+  }, [token]);
+  React.useEffect(() => {
+    if (token && deviceId) {
       onGetParams();
     }
   }, [token, deviceId]);

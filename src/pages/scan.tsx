@@ -30,6 +30,7 @@ const ScanScreen = () => {
       navigate("/preview", {
         state: {
           previewImage: result.data,
+          type: "base64",
         },
       });
     } else {
@@ -56,8 +57,13 @@ const ScanScreen = () => {
         cameraType: "back",
         count: 1,
       });
-      startStreaming();
-      console.log("file", filePaths, tempFiles);
+      guide.pause();
+      navigate("/preview", {
+        state: {
+          previewImage: filePaths[0],
+          type: "blob",
+        },
+      });
     } catch (error) {
       startStreaming();
       console.log(error);
@@ -154,12 +160,12 @@ const ScanScreen = () => {
         >
           <Icon icon="zi-auto" size={28} style={{ color: "white" }} />
         </button>
-        <button
+        {/* <button
           className=" bg-gray-500 p-2 rounded-full transform transition-transform duration-200 ease-in-out active:scale-90"
           onClick={handleChooseImage}
         >
           <Icon icon="zi-gallery" size={28} style={{ color: "white" }} />
-        </button>
+        </button> */}
         <button
           className=" bg-gray-500 p-2 rounded-full transform transition-transform duration-200 ease-in-out active:scale-90"
           onClick={takePhoto}

@@ -9,11 +9,12 @@ import Driver from "assets/driver_1.png";
 import Fridge from "assets/fridge_1.png";
 import Oke from "assets/oke.webp";
 import Reject from "assets/reject.webp";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Modal } from "zmp-ui";
 import { closeApp } from "zmp-sdk";
 const FinishScreen = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [openFinishConfirm, setOpenFinishConfirm] = React.useState(false);
   const onNavScan = () => {
     navigate("/scan-screen");
@@ -77,12 +78,16 @@ const FinishScreen = () => {
         modalStyle={{ padding: 0 }}
       >
         <div className="bg-white rounded-lg text-center flex flex-col justify-center items-center gap-4 -mt-3">
-          <img src={Oke} className="w-20 object-contain" />
+          <img
+            src={state.status == 4 || state.status === 2 ? Oke : Reject}
+            className="w-20 object-contain"
+          />
           <p className="text-gray-700 text-left text-lg">
-            {/* {`Chúng tôi chưa nhận bằng chứng trúng giải của Quý nhà nông. Vui lòng nhấn chụp lại!`} */}
-            Thông tin và bằng chứng trúng giải của quý nhà nông đã được tiếp
+            {state.status == 4 || state.status === 2
+              ? `Thông tin và bằng chứng trúng giải của quý nhà nông đã được tiếp
             nhận. Tổng đài viên 19003209 sẽ chủ động liên hệ khi cần thiết để hỗ
-            trợ tốt nhất
+            trợ tốt nhất`
+              : `Chúng tôi chưa nhận bằng chứng trúng giải của Quý nhà nông. Vui lòng nhấn chụp lại!`}
           </p>
           <button
             className="px-4 py-3 bg-[#be0000]  w-3/5 text-white rounded-lg font-bold transition duration-200"

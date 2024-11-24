@@ -6,6 +6,9 @@ type TApp = {
   code: string;
   award1: string;
   award2: string;
+  phone: string;
+  name: string;
+  status: number;
 };
 const initalValues: TApp = {
   deviceId: "",
@@ -13,6 +16,9 @@ const initalValues: TApp = {
   code: "",
   award1: "",
   award2: "",
+  name: "",
+  phone: "",
+  status: -1,
 };
 const appSlice = createSlice({
   name: "appSlice",
@@ -34,8 +40,25 @@ const appSlice = createSlice({
       state.award1 = action.payload.award1;
       state.award2 = action.payload.award2;
     },
+    updateStatus: (state, action: PayloadAction<number>) => {
+      state.status = action.payload;
+    },
+    updateInfo: (
+      state,
+      action: PayloadAction<{ phone: string; name: string; deviceId: string }>
+    ) => {
+      state.phone = action.payload.phone;
+      state.name = action.payload.name;
+      state.deviceId = action.payload.deviceId;
+    },
   },
 });
-export const { updateDeviceId, updateToken, updateCode, updateAward } =
-  appSlice.actions;
+export const {
+  updateDeviceId,
+  updateToken,
+  updateCode,
+  updateAward,
+  updateInfo,
+  updateStatus,
+} = appSlice.actions;
 export default appSlice.reducer;

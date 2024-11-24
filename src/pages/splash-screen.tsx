@@ -28,7 +28,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "redux/store";
 import { TBaseRES } from "types";
 import { TUsingIqrRES } from "redux/api/iqr/iqr.response";
-import { updateAward } from "redux/slices/appSlice";
+import { updateAward, updateInfo, updateStatus } from "redux/slices/appSlice";
 
 const SplashScreen = () => {
   const navigate = useNavigate();
@@ -95,12 +95,7 @@ const SplashScreen = () => {
       });
     }
     if (value.status === -5) {
-      dispatch(
-        updateAward({
-          award1: "",
-          award2: "",
-        })
-      );
+      dispatch(updateAward(value.data));
       navigate("/present");
     }
     if (value.status === 0) {
@@ -108,6 +103,7 @@ const SplashScreen = () => {
       navigate("/present");
     }
     if (value.status === 1) {
+      dispatch(updateAward(value.data));
       setOpenErrorPopup(true);
       setMessageError({
         ...value,
@@ -118,9 +114,11 @@ const SplashScreen = () => {
       });
     }
     if (value.status === 2) {
+      dispatch(updateAward(value.data));
       navigate("/present");
     }
     if (value.status === 3) {
+      dispatch(updateAward(value.data));
       setOpenErrorPopup(true);
       setMessageError({
         ...value,
@@ -131,6 +129,7 @@ const SplashScreen = () => {
       });
     }
     if (value.status === 4) {
+      dispatch(updateAward(value.data));
       navigate("/present");
     }
   };
@@ -141,6 +140,7 @@ const SplashScreen = () => {
     })
       .unwrap()
       .then((value) => {
+        dispatch(updateStatus(value.status));
         onMapError(value);
       })
       .catch((error) => {
@@ -215,7 +215,14 @@ const SplashScreen = () => {
       if (zaloInfo) {
         await updateZaloInfo(zaloInfo)
           .unwrap()
-          .then(async () => {
+          .then(async (value) => {
+            dispatch(
+              updateInfo({
+                name: value.data.name,
+                phone: value.data.phone,
+                deviceId: value.data.zalo_device_id,
+              })
+            );
             await onUsingIqr();
           })
           .catch(() => {

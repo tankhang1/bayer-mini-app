@@ -1,7 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithAuth } from "redux/middlewares/baseQueryWithAuth";
 import { TZaloCheckREQ, TZaloREQ } from "./zalo.request";
-import { TZaloRES } from "./zalo.response";
+import { TZaloCheckRES, TZaloRES } from "./zalo.response";
 
 export const zaloApi = createApi({
   reducerPath: "zaloApi",
@@ -15,7 +15,15 @@ export const zaloApi = createApi({
         body,
       }),
     }),
+    zaloCheckDeviceId: builder.mutation<TZaloCheckRES, TZaloCheckREQ>({
+      query: (body) => ({
+        url: "/zalo/check",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useUpdateZaloInfoMutation } = zaloApi;
+export const { useUpdateZaloInfoMutation, useZaloCheckDeviceIdMutation } =
+  zaloApi;
