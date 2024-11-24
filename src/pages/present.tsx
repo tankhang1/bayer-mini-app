@@ -19,25 +19,34 @@ import FirstPrize from "assets/first_prize.mp3";
 import SecondPrize from "assets/second_prize.mp3";
 import ThirdPrize from "assets/third_prize.mp3";
 import { useUsingIqrMutation } from "redux/api/iqr/iqr.api";
-const MapImage = new Map([
-  ["driver", Driver],
-  ["topup", Topup],
-  ["fridge", Fridge],
-  ["speaker", Speaker],
-  ["complete", Oke],
-  ["reject", Reject],
-]);
+import { useSelector } from "react-redux";
+import { RootState } from "redux/store";
+import { TAward } from "redux/api/iqr/iqr.response";
 const co = new Audio(ConsolationPrize);
 const fr = new Audio(FirstPrize);
 const se = new Audio(SecondPrize);
 const th = new Audio(ThirdPrize);
+const MapImage = new Map([
+  ["xemay", Driver],
+  ["topup", Topup],
+  ["tulanh", Fridge],
+  ["loaJBL", Speaker],
+  ["complete", Oke],
+  ["reject", Reject],
+]);
+const MapAudio = new Map([
+  ["xemay", fr],
+  ["topup", co],
+  ["tulanh", se],
+  ["loaJBL", th],
+  ["", co],
+]);
+
 const PresentScreen = () => {
   const navigate = useNavigate();
-  const [useIqr, { isLoading: isLoadingUseIqr }] = useUsingIqrMutation();
+  const { award1, award2 } = useSelector((state: RootState) => state.app);
   const [openPopupCoupon, setOpenPopupCoupon] = React.useState(false);
-  const [type, setType] = React.useState<
-    "driver" | "topup" | "fridge" | "speaker" | "complete" | "reject"
-  >("driver");
+  const [type, setType] = React.useState<TAward>("");
 
   const onNavScan = () => {
     navigate("/scan-screen");
@@ -47,20 +56,21 @@ const PresentScreen = () => {
       phoneNumber: "19003209",
     });
   };
-  const onUseIqr = async () => {
-    await useIqr({
-      code: "",
-      zalo_device_id: "",
-    })
-      .unwrap()
-      .then(() => {
-        fr.play();
-      })
-      .catch(() => {});
-  };
+
   React.useEffect(() => {
-    onUseIqr();
-  }, []);
+    if (award1) {
+      MapAudio.get(award1)?.play();
+      setType(award1 as TAward);
+    } else {
+      if (award2) {
+        MapAudio.get(award2)?.play();
+        setType(award2 as TAward);
+      } else {
+        MapAudio.get("")?.play();
+        setType("");
+      }
+    }
+  }, [award1, award2]);
 
   return (
     <div
@@ -74,26 +84,22 @@ const PresentScreen = () => {
     >
       <img src={Logo} className="w-20" />
       <img src={Content_2} className="w-full h-40 object-contain" />
-      {isLoadingUseIqr ? (
-        <Spinner />
-      ) : (
-        <img
-          src={MapImage.get(type)}
-          className={`w-full -mt-10 mb-2 ${
-            type === "complete" || type === "reject" ? "h-40 mt-0" : "h-64"
-          } object-contain `}
-          loading="eager"
-          decoding="auto"
-        />
-      )}
-      {type !== "complete" && type !== "reject" && (
+
+      <img
+        src={MapImage.get(type)}
+        className={`w-full -mt-10 mb-2 ${
+          type === "" ? "h-40 mt-0" : "h-64"
+        } object-contain `}
+        loading="eager"
+        decoding="auto"
+      />
+
+      {type !== "" && (
         <p className="text-[#f5ecdd] font-roboto text-xl font-bold text-center">{`Chúc mừng Lê Hoài Phong với số điện thoại xxxx4825 nhận được <Tên Quà> từ <Cơ Hội 1>`}</p>
       )}
-      {type === "complete" && (
-        <p className="text-[#f5ecdd] font-roboto text-xl font-extrabold text-center">{`Chúng tôi đã nhận thông tin và bằng chứng trúng giải của bạn. Tổng đài viên sẽ liên hệ sau!`}</p>
-      )}
-      {type === "reject" && (
-        <p className="text-[#f5ecdd] font-roboto text-xl font-extrabold text-center">{`Chúng tôi chưa nhận được hình ảnh phiếu trúng thưởng vui lòng liên hệ tổng đài 19003209 để được hỗ trợ !`}</p>
+
+      {type === "" && (
+        <p className="text-[#f5ecdd] font-roboto text-xl font-extrabold text-center">{`Chúc bạn may mắn lần sau`}</p>
       )}
       <div className="w-full max-h-28 absolute bottom-0">
         <img src={Footer} className="w-full object-contain " />

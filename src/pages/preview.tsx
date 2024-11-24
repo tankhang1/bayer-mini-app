@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useConfirmIqrMutation } from "redux/api/iqr/iqr.api";
 import { Button } from "zmp-ui";
@@ -9,6 +9,7 @@ const PreviewScreen = () => {
   const { state } = useLocation();
   const [confirmIqr, { isLoading: isLoadingConfirmIqr }] =
     useConfirmIqrMutation();
+  const [isLoadingUploadImage, setIsLoadingUploadImage] = useState(false);
   const onNavFinish = async () => {
     await confirmIqr({
       code: "",
@@ -56,7 +57,7 @@ const PreviewScreen = () => {
         <Button
           className=" w-full py-3 px-4 !text-white !bg-[#be0000] !font-bold !text-xl !font-roboto"
           onClick={onNavFinish}
-          loading={isLoadingConfirmIqr}
+          loading={isLoadingUploadImage || isLoadingConfirmIqr}
         >
           Xác nhận
         </Button>

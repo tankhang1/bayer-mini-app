@@ -1,5 +1,6 @@
 import { FetchArgs, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "constants";
+import { store } from "redux/store";
 
 // Define the type for your baseQuery function
 export const baseQueryWithAuth = async (
@@ -9,8 +10,16 @@ export const baseQueryWithAuth = async (
 ) => {
   // Await the base URL from async storage
   // Use fetchBaseQuery with the retrieved baseUrl
+  const token = store.getState().app.token;
+  console.log("token", token);
   const baseQueryFn = fetchBaseQuery({
     baseUrl: BASE_URL || "", // Provide a fallback in case baseUrl is undefined
+    prepareHeaders: (headers) => {
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
   });
 
   return baseQueryFn(args, api, extraOptions);

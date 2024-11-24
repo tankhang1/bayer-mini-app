@@ -1,1 +1,3 @@
-export type TAuthRES = {};
+export type TAuthRES = {
+  token: string;
+};

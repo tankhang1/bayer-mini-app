@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithAuth } from "redux/middlewares/baseQueryWithAuth";
-import { TZaloREQ } from "./zalo.request";
+import { TZaloCheckREQ, TZaloREQ } from "./zalo.request";
 import { TZaloRES } from "./zalo.response";
 
 export const zaloApi = createApi({

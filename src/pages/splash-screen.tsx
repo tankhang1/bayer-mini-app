@@ -20,17 +20,141 @@ import {
   getUserInfo,
 } from "zmp-sdk";
 import { useNavigate } from "react-router-dom";
-import { Button, Modal } from "zmp-ui";
+import { Button, Modal, Spinner } from "zmp-ui";
 import { toast } from "react-toastify";
 import { useUpdateZaloInfoMutation } from "redux/api/zalo/zalo.api";
+import { useUsingIqrMutation } from "redux/api/iqr/iqr.api";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "redux/store";
+import { TBaseRES } from "types";
+import { TUsingIqrRES } from "redux/api/iqr/iqr.response";
+import { updateAward } from "redux/slices/appSlice";
 
 const SplashScreen = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { deviceId, code } = useSelector((state: RootState) => state.app);
   const [openModalReject, setOpenModalReject] = React.useState(false);
   const [openExceededMaximumRequest, setOpenExceededMaximumRequest] =
     React.useState(false);
   const [updateZaloInfo, { isLoading: isLoadingUpdateZalo }] =
     useUpdateZaloInfoMutation();
+  const [usingIqr, { isLoading: isUsingIqr }] = useUsingIqrMutation();
+  const [messageError, setMessageError] = React.useState<
+    Partial<{
+      type: "system" | "api";
+      isExit: boolean;
+      btnLabel: string;
+      message: string;
+      navLink: string;
+    }>
+  >({
+    type: "system",
+    message: "",
+    isExit: false,
+    btnLabel: "Xác nhận",
+  });
+  const [openErrorPopup, setOpenErrorPopup] = React.useState(false);
+  const onMapError = (value: TBaseRES<TUsingIqrRES>) => {
+    if (value.status === -99) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "api",
+        isExit: true,
+        btnLabel: "Thoát",
+      });
+    }
+    if (value.status === -1) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "api",
+        isExit: false,
+        btnLabel: "Xác nhận",
+      });
+    }
+    if (value.status === -2) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "api",
+        isExit: true,
+        btnLabel: "Thoát",
+      });
+    }
+    if (value.status === -3) {
+    }
+    if (value.status === -4) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "api",
+        isExit: true,
+        btnLabel: "Thoát",
+      });
+    }
+    if (value.status === -5) {
+      dispatch(
+        updateAward({
+          award1: "",
+          award2: "",
+        })
+      );
+      navigate("/present");
+    }
+    if (value.status === 0) {
+      dispatch(updateAward(value.data));
+      navigate("/present");
+    }
+    if (value.status === 1) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "api",
+        isExit: false,
+        btnLabel: "Chụp phiếu trúng thưởng",
+        navLink: "/scan-screen",
+      });
+    }
+    if (value.status === 2) {
+      navigate("/present");
+    }
+    if (value.status === 3) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "api",
+        isExit: false,
+        btnLabel: "Chụp lại phiếu trúng thưởng",
+        navLink: "/scan-screen",
+      });
+    }
+    if (value.status === 4) {
+      navigate("/present");
+    }
+  };
+  const onUsingIqr = async () => {
+    await usingIqr({
+      code: code,
+      zalo_device_id: deviceId,
+    })
+      .unwrap()
+      .then((value) => {
+        onMapError(value);
+      })
+      .catch((error) => {
+        setOpenErrorPopup(true);
+        setMessageError({
+          type: "api",
+          message:
+            error?.message ||
+            "Đã có lỗi xảy ra, vui lòng liên hệ 19003209 để được hỗ trợ",
+          isExit: true,
+          btnLabel: "Thoát",
+        });
+      });
+  };
   const postZaloInfo = async () => {
     try {
       let zaloInfo = {
@@ -91,8 +215,14 @@ const SplashScreen = () => {
       if (zaloInfo) {
         await updateZaloInfo(zaloInfo)
           .unwrap()
-          .then(() => navigate("/present"))
-          .catch(() => {});
+          .then(async () => {
+            await onUsingIqr();
+          })
+          .catch(() => {
+            toast.error(
+              "Đã có lỗi xảy ra, vui lòng liên hệ 19003209 để được hỗ trợ"
+            );
+          });
       }
     } catch (error) {
       //@ts-expect-error no check
@@ -102,15 +232,30 @@ const SplashScreen = () => {
         setOpenModalReject(true);
       }
     }
-    // if (authorizeInfo && authorizeLocation) navigate("/present");
   };
+
   const onCloseApp = async () => {
     await closeApp({
       fail: () =>
         toast.info("Vui lòng nhấn dấu 'X' trên cùng bên trái để tắt ứng dụng"),
     });
   };
-
+  const onPopupErrorClick = async () => {
+    setOpenErrorPopup(false);
+    if (messageError.isExit) {
+      await closeApp({
+        success() {},
+        fail: () =>
+          toast.info(
+            "Vui lòng nhấn dấu 'X' trên cùng bên trái để tắt ứng dụng"
+          ),
+      });
+    } else {
+      if (messageError.navLink) {
+        navigate(messageError.navLink);
+      }
+    }
+  };
   React.useEffect(() => {
     setTimeout(() => {
       postZaloInfo();
@@ -216,6 +361,41 @@ const SplashScreen = () => {
             }}
           >
             Xác nhận
+          </Button>
+        </div>
+      </Modal>
+      <Modal visible={isLoadingUpdateZalo || isUsingIqr}>
+        <div className="flex flex-col justify-center items-center">
+          <Spinner />
+          <p className="text-center">
+            Hệ thống đang xử lí, vui lòng chờ trong giây lát....
+          </p>
+        </div>
+      </Modal>
+      <Modal
+        visible={openErrorPopup}
+        onClose={() => setOpenErrorPopup(false)}
+        title={(<img src={Reject} className="w-20 h-20 mx-auto" />) as any}
+      >
+        {messageError.type === "system" ? (
+          <p className="text-lg">{messageError.message}</p>
+        ) : (
+          messageError.message && (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: messageError.message,
+              }}
+            />
+          )
+        )}
+
+        <div className="flex items-center justify-between gap-2 mt-2">
+          <Button
+            variant="secondary"
+            className="!bg-red-400 !text-white w-full"
+            onClick={onPopupErrorClick}
+          >
+            {messageError.btnLabel || "Xác nhận"}
           </Button>
         </div>
       </Modal>

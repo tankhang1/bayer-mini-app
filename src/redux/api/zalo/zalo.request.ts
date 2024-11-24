@@ -11,3 +11,7 @@ export type TZaloREQ = {
   zalo_app_id: string;
   zalo_device_id: string;
 };
+
+export type TZaloCheckREQ = {
+  i: string;
+};

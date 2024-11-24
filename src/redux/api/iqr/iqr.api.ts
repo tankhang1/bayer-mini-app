@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithAuth } from "redux/middlewares/baseQueryWithAuth";
-import { TIqrRES } from "./iqr.response";
+import { TIqrRES, TUsingIqrRES } from "./iqr.response";
 import { TIqrREQ } from "./iqr.request";
 import { TBaseRES } from "types";
 
@@ -9,21 +9,21 @@ export const iqrApi = createApi({
   baseQuery: baseQueryWithAuth,
   tagTypes: [],
   endpoints: (builder) => ({
-    usingIqr: builder.mutation<TBaseRES<TIqrRES>, TIqrREQ>({
+    usingIqr: builder.mutation<TBaseRES<TUsingIqrRES>, TIqrREQ>({
       query: (body) => ({
         url: "/zalo/e/process/code",
         method: "POST",
         body,
       }),
     }),
-    checkIqr: builder.mutation<TBaseRES<TIqrRES>, TIqrREQ>({
+    checkIqr: builder.mutation<TBaseRES<TUsingIqrRES>, TIqrREQ>({
       query: (body) => ({
         url: "/zalo/e/process/check",
         method: "POST",
         body,
       }),
     }),
-    confirmIqr: builder.mutation<TBaseRES<TIqrRES>, TIqrREQ>({
+    confirmIqr: builder.mutation<TBaseRES<TUsingIqrRES>, TIqrREQ>({
       query: (body) => ({
         url: "/zalo/e/process/confirm",
         method: "POST",
