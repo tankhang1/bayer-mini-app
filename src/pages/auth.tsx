@@ -4,7 +4,7 @@ import Background from "assets/background.webp";
 import Content_3 from "assets/Nativo.png";
 import Content_3_tmp from "assets/content_3.png";
 
-import Content_2 from "assets/content_2.webp";
+import Content_2 from "assets/content_2.png";
 import Footer from "assets/footer.webp";
 import Logo from "assets/logo.png";
 import Hotline from "assets/hotline.webp";

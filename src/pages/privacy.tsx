@@ -1,6 +1,6 @@
 import React from "react";
 import Background_1 from "assets/background.webp";
-import Slogan from "assets/content_2.webp";
+import Slogan from "assets/content_2.png";
 import Logo from "assets/logo.png";
 import { Icon } from "zmp-ui";
 import { useNavigate } from "react-router-dom";
