@@ -16,7 +16,7 @@ import {
   useCheckIqrMutation,
   useUsingIqrMutation,
 } from "redux/api/iqr/iqr.api";
-import { Button, Modal } from "zmp-ui";
+import { Button, Input, Modal } from "zmp-ui";
 import { useGetAccessTokenMutation } from "redux/api/auth/auth.api";
 import { ACCOUNT } from "constants";
 import {
@@ -46,6 +46,9 @@ const AuthScreen = () => {
     useZaloCheckDeviceIdMutation();
   const [getAccessToken, { isLoading: isLoadingAccessToken }] =
     useGetAccessTokenMutation();
+  const [isLink, setIsLink] = React.useState(true);
+  const [isFocused, setIsFocused] = React.useState(false);
+  const [iqrCode, setIqrCode] = React.useState("");
   const [openErrorPopup, setOpenErrorPopup] = React.useState(false);
   const [messageError, setMessageError] = React.useState<
     Partial<{
@@ -61,9 +64,18 @@ const AuthScreen = () => {
     isExit: false,
     btnLabel: "Xác nhận",
   });
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
   const onSubmit = async () => {
     if (isDeviceIdExist) {
       await onUsingIqr();
+    } else {
+      navigate("/splash-screen");
+    }
+  };
+  const onSubmitCode = async () => {
+    if (isDeviceIdExist) {
+      dispatch(updateCode(iqrCode || ""));
+      await onUsingIqr(iqrCode, deviceId);
     } else {
       navigate("/splash-screen");
     }
@@ -207,9 +219,13 @@ const AuthScreen = () => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const code = urlParams.get("campaign");
-    console.log(code, deviceId);
-    dispatch(updateCode(code || ""));
-    onCheckIqr(deviceId, code || "");
+    if (code) {
+      setIsLink(true);
+      dispatch(updateCode(code || ""));
+      onCheckIqr(deviceId, code || "");
+    } else {
+      setIsLink(false);
+    }
   };
   const onGetDeviceId = async () => {
     await getDeviceIdAsync()
@@ -259,10 +275,10 @@ const AuthScreen = () => {
       }
     }
   };
-  const onUsingIqr = async () => {
+  const onUsingIqr = async (tmp_code?: string, tmp_deviceId?: string) => {
     await usingIqr({
-      code: code,
-      zalo_device_id: deviceId,
+      code: tmp_code || code,
+      zalo_device_id: tmp_deviceId || deviceId,
     })
       .unwrap()
       .then((value) => {
@@ -296,7 +312,10 @@ const AuthScreen = () => {
   }, [token, deviceId]);
   return (
     <div
-      className="w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col overflow-auto"
+      ref={containerRef}
+      className={`w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col overflow-auto transition-all duration-300 ${
+        isFocused && "pb-32"
+      }`}
       style={{
         backgroundImage: `url(${Background})`,
         backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
@@ -304,51 +323,99 @@ const AuthScreen = () => {
     >
       <img src={Logo} className="w-20 my-5" />
 
-      <img src={Content_2} className="w-full max-h-40 object-contain -mt-3" />
-      <img src={Content_3} className="w-full object-contain" />
-
-      <div className="flex justify-center items-center flex-col">
-        <Button
-          className="py-3 w-56 !text-lg  text-white !font-bold !bg-[#be0000] !font-roboto"
-          loading={
-            isLoadingCheckIqr ||
-            isLoadingAccessToken ||
-            isLoadingCheckDeviceId ||
-            isUsingIqr
-          }
-          onClick={onSubmit}
-        >
-          Đồng ý
-        </Button>
-        <div className="flex items-center gap-3 mt-3">
-          <p
-            className="text-white text-xs underline font-semibold text-center font-roboto"
-            role="button"
-            onClick={onNavPrivacyScreen}
-          >
-            Thể lệ tham gia
-          </p>
-          <div className="w-[1px] h-4 bg-white  " />
-          <p
-            className="text-white text-xs underline font-semibold  text-center font-roboto"
-            role="button"
-            onClick={onNavPolicyScreen}
-          >
-            Cam kết quyền riêng tư
-          </p>
+      <img src={Content_2} className="w-full max-h-40 object-contain" />
+      <img src={Content_3} className={`w-full object-contain`} />
+      {!isLink && (
+        <div className="w-dvw flex flex-col gap-5 justify-center items-center">
+          <input
+            className="py-5 mx-auto px-4 !w-3/4 !rounded-full"
+            placeholder="Nhập mã trúng thưởng"
+            onFocus={() => {
+              setIsFocused(true);
+            }}
+            onBlur={() => setIsFocused(false)}
+            defaultValue={iqrCode}
+            onChange={(e) => setIqrCode(e.target.value)}
+          />
+          <div className="flex justify-center items-center flex-col">
+            <Button
+              className="py-3 w-56 !text-lg  text-white !font-bold !bg-[#be0000] !font-roboto"
+              loading={
+                isLoadingCheckIqr ||
+                isLoadingAccessToken ||
+                isLoadingCheckDeviceId ||
+                isUsingIqr
+              }
+              onClick={onSubmitCode}
+            >
+              Đồng ý
+            </Button>
+            <div className="flex items-center gap-3 mt-3">
+              <p
+                className="text-white text-xs underline font-semibold text-center font-roboto"
+                role="button"
+                onClick={onNavPrivacyScreen}
+              >
+                Thể lệ tham gia
+              </p>
+              <div className="w-[1px] h-4 bg-white  " />
+              <p
+                className="text-white text-xs underline font-semibold  text-center font-roboto"
+                role="button"
+                onClick={onNavPolicyScreen}
+              >
+                Cam kết quyền riêng tư
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+      {isLink && (
+        <div className="flex justify-center items-center flex-col">
+          <Button
+            className="py-3 w-56 !text-lg  text-white !font-bold !bg-[#be0000] !font-roboto"
+            loading={
+              isLoadingCheckIqr ||
+              isLoadingAccessToken ||
+              isLoadingCheckDeviceId ||
+              isUsingIqr
+            }
+            onClick={onSubmit}
+          >
+            Đồng ý
+          </Button>
+          <div className="flex items-center gap-3 mt-3">
+            <p
+              className="text-white text-xs underline font-semibold text-center font-roboto"
+              role="button"
+              onClick={onNavPrivacyScreen}
+            >
+              Thể lệ tham gia
+            </p>
+            <div className="w-[1px] h-4 bg-white  " />
+            <p
+              className="text-white text-xs underline font-semibold  text-center font-roboto"
+              role="button"
+              onClick={onNavPolicyScreen}
+            >
+              Cam kết quyền riêng tư
+            </p>
+          </div>
+        </div>
+      )}
       <div className="h-full" />
 
-      <div className="w-full max-h-28 absolute bottom-0">
-        <img src={Footer} className="w-full object-contain " />
-        <img
-          src={Hotline}
-          className=" w-36 absolute bottom-3 right-2 object-contain"
-          role="button"
-          onClick={onClickHotline}
-        />
-      </div>
+      {isLink && (
+        <div className="w-full max-h-28 absolute bottom-0">
+          <img src={Footer} className="w-full object-contain " />
+          <img
+            src={Hotline}
+            className=" w-36 absolute bottom-3 right-2 object-contain"
+            role="button"
+            onClick={onClickHotline}
+          />
+        </div>
+      )}
       <Modal
         visible={openErrorPopup}
         onClose={() => setOpenErrorPopup(false)}
