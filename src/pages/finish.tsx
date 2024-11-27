@@ -93,7 +93,7 @@ const FinishScreen = () => {
             className="px-4 py-3 bg-[#be0000]  w-3/5 text-white rounded-lg font-bold transition duration-200"
             onClick={onExit}
           >
-            Thoát
+            Quyét mã khác
           </button>
         </div>
       </Modal>
