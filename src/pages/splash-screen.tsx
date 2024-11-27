@@ -62,7 +62,7 @@ const SplashScreen = () => {
         ...value,
         type: "api",
         isExit: true,
-        btnLabel: "Thoát",
+        btnLabel: "Quyét mã khác",
       });
     }
     if (value.status === -1) {
@@ -80,7 +80,7 @@ const SplashScreen = () => {
         ...value,
         type: "api",
         isExit: true,
-        btnLabel: "Thoát",
+        btnLabel: "Quyét mã khác",
       });
     }
     if (value.status === -3) {
@@ -91,7 +91,7 @@ const SplashScreen = () => {
         ...value,
         type: "api",
         isExit: true,
-        btnLabel: "Thoát",
+        btnLabel: "Quyét mã khác",
       });
     }
     if (value.status === -5) {
@@ -151,7 +151,7 @@ const SplashScreen = () => {
             error?.message ||
             "Đã có lỗi xảy ra, vui lòng liên hệ 19003209 để được hỗ trợ",
           isExit: true,
-          btnLabel: "Thoát",
+          btnLabel: "Quyét mã khác",
         });
       });
   };
