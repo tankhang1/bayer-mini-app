@@ -12,8 +12,8 @@ import Reject from "assets/reject.webp";
 import { useNavigate } from "react-router-dom";
 
 import Footer from "assets/footer.webp";
-import { Icon, Modal } from "zmp-ui";
-import { openPhone } from "zmp-sdk";
+import { Button, Icon, Modal } from "zmp-ui";
+import { closeApp, openPhone } from "zmp-sdk";
 import ConsolationPrize from "assets/consolation_prize.mp3";
 import FirstPrize from "assets/first_prize.mp3";
 import SecondPrize from "assets/second_prize.mp3";
@@ -22,6 +22,7 @@ import GoodLuck from "assets/good_luck.mp3";
 import { useSelector } from "react-redux";
 import { RootState } from "redux/store";
 import { TAward } from "redux/api/iqr/iqr.response";
+import { toast } from "react-toastify";
 const co = new Audio(ConsolationPrize);
 const fr = new Audio(FirstPrize);
 const se = new Audio(SecondPrize);
@@ -66,6 +67,14 @@ const PresentScreen = () => {
     });
   };
 
+  const onExit = async () => {
+    try {
+      await closeApp({});
+    } catch (error) {
+      // xử lý khi gọi api thất bại
+      toast.info("Vui lòng nhấn dấu X góc phải màn hình để thoát ứng dụng");
+    }
+  };
   React.useEffect(() => {
     if (award1) {
       MapAudio.get(award1)?.play();
@@ -120,6 +129,14 @@ const PresentScreen = () => {
           <p className="text-[#f5ecdd] font-roboto text-3xl uppercase font-extrabold text-center whitespace-pre-line">{`Chúc bạn\nmay mắn lần sau`}</p>
           <p className="text-[#f5ecdd] font-roboto text-xl font-extrabold text-center whitespace-pre-line">{`Hãy mua Nativo hoặc Vayego\nđể có cơ hội trúng thưởng!`}</p>
         </div>
+      )}
+      {type === "" && (
+        <Button
+          className="py-3 w-56 !text-lg  text-white !font-bold !bg-[#be0000] !font-roboto !mt-6"
+          onClick={onExit}
+        >
+          Quyét mã khác
+        </Button>
       )}
       <div className="w-full max-h-28 absolute bottom-0">
         <img src={Footer} className="w-full object-contain " />
