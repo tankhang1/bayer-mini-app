@@ -51,7 +51,13 @@ img{
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: 'helveticaneue';
+  src: url('./assets/fonts/helveticaneue.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'helveticaneue', sans-serif;
 }

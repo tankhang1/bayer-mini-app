@@ -5,7 +5,7 @@ export type TZaloRES = {
   data: {
     phone: string;
     name: string;
-    zalo_device_id: string;
+    zalo_user_id: string;
   };
 };
 
@@ -16,7 +16,7 @@ export type TZaloCheckRES = {
   data: {
     phone: string;
     name: string;
-    zalo_device_id: string;
+    zalo_user_id: string;
   };
   button: number;
 };

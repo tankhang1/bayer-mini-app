@@ -12,18 +12,24 @@ export const zaloApi = createApi({
       query: (body) => ({
         url: "/zalo/update",
         method: "POST",
-        body,
+        body: {
+          ...body,
+          zalo_device_id: "",
+        },
       }),
     }),
-    zaloCheckDeviceId: builder.mutation<TZaloCheckRES, TZaloCheckREQ>({
+    zaloCheckUserIdId: builder.mutation<TZaloCheckRES, TZaloCheckREQ>({
       query: (body) => ({
         url: "/zalo/check",
         method: "POST",
-        body,
+        body: {
+          ...body,
+          zalo_device_id: "",
+        },
       }),
     }),
   }),
 });
 
-export const { useUpdateZaloInfoMutation, useZaloCheckDeviceIdMutation } =
+export const { useUpdateZaloInfoMutation, useZaloCheckUserIdIdMutation } =
   zaloApi;

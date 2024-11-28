@@ -9,9 +9,9 @@ export type TZaloREQ = {
   is_sensitive: boolean;
   name: string;
   zalo_app_id: string;
-  zalo_device_id: string;
+  zalo_user_id: string;
 };
 
 export type TZaloCheckREQ = {
-  zalo_device_id: string;
+  zalo_user_id: string;
 };

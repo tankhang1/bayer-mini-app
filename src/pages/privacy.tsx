@@ -11,40 +11,14 @@ const PrivacyScreen = () => {
   const onNavBack = () => {
     navigate(-1);
   };
-  const openUrlProgram = async () => {
-    try {
-      await openWebview({
-        url: "https://bit.ly/CaoNhanhTay",
-        config: {
-          style: "bottomSheet",
-          leftButton: "back",
-        },
-      });
-    } catch (error) {
-      // xử lý khi gọi api thất bại
-      console.log(error);
-    }
-  };
-  const openUrlProgram2 = async () => {
-    try {
-      await openWebview({
-        url: "https://bayerkhoahoccaytrong.com/dong-hanh-ng/cao-nhanh-tay/",
-        config: {
-          style: "bottomSheet",
-          leftButton: "back",
-        },
-      });
-    } catch (error) {
-      // xử lý khi gọi api thất bại
-      console.log(error);
-    }
-  };
+
   return (
     <div
       className="w-full h-dvh bg-cover bg-no-repeat px-3 flex items-center flex-col py-10 gap-2"
       style={{
         backgroundImage: `url(${Background_1})`,
         backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
+        fontFamily: "helveticaneue",
       }}
     >
       <img src={Logo} className="w-20" />
@@ -216,13 +190,7 @@ Với nội dung: “Chuong trinh Nativo & Vayego, Cao Nhanh Tay-Trung Qua Ngay,
               <li>
                 Giải thưởng của giải Nhất, Nhì, Ba sẽ được trao trong vòng 30
                 ngày kể từ ngày công bố kết quả trên trang web Bayer Khoa Học
-                Cây Trồng{" "}
-                <span
-                  onClick={openUrlProgram}
-                  className="text-blue-400 underline"
-                >
-                  https://bit.ly/CaoNhanhTay
-                </span>
+                Cây Trồng https://bit.ly/CaoNhanhTay
               </li>
               <li>
                 Giải khuyến khích – Nạp tiền điện thoại 10,000 đ, Quý nhà nông
@@ -249,13 +217,8 @@ Với nội dung: “Chuong trinh Nativo & Vayego, Cao Nhanh Tay-Trung Qua Ngay,
               <li>
                 Trong mọi trường hợp, quyết định của Bayer Việt Nam là cuối cùng
                 trong mọi trường hợp. Kết quả Quý nhà nông trúng giải được công
-                bố tại trang web Bayer Khoa học cây trồng{" "}
-                <span
-                  onClick={openUrlProgram2}
-                  className="text-blue-400 underline"
-                >
-                  https://bayerkhoahoccaytrong.com/dong-hanh-ng/cao-nhanh-tay/
-                </span>
+                bố tại trang web Bayer Khoa học cây trồng
+                https://bayerkhoahoccaytrong.com/dong-hanh-ng/cao-nhanh-tay/
               </li>
               <li>
                 Ban tổ chức cam kết bảo mật thông tin cá nhân của khách hàng và
@@ -268,15 +231,7 @@ Với nội dung: “Chuong trinh Nativo & Vayego, Cao Nhanh Tay-Trung Qua Ngay,
             <p className="text-lg">Mọi thắc mắc, vui lòng liên hệ:</p>
             <ul className="list-disc pl-6 text-base custom-round-bullet">
               <li>Hotline: 19003209</li>
-              <li>
-                Website công bố kết quả:{" "}
-                <span
-                  onClick={openUrlProgram}
-                  className="text-blue-400 underline"
-                >
-                  https://bit.ly/CaoNhanhTay
-                </span>
-              </li>
+              <li>Website công bố kết quả: https://bit.ly/CaoNhanhTay</li>
             </ul>
             <p className="text-lg">Chúc quý khách hàng may mắn!</p>
           </div>

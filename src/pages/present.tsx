@@ -7,11 +7,11 @@ import Topup from "assets/topup.png";
 import Fridge from "assets/fridge.png";
 import Speaker from "assets/speaker.png";
 import Oke from "assets/oke.webp";
-import Hotline from "assets/hotline.webp";
+import Hotline from "assets/hotline.png";
 import Reject from "assets/reject.webp";
 import { useNavigate } from "react-router-dom";
 
-import Footer from "assets/footer.webp";
+import Footer from "assets/footer.png";
 import { Button, Icon, Modal } from "zmp-ui";
 import { closeApp, openPhone } from "zmp-sdk";
 import ConsolationPrize from "assets/consolation_prize.mp3";
@@ -19,6 +19,9 @@ import FirstPrize from "assets/first_prize.mp3";
 import SecondPrize from "assets/second_prize.mp3";
 import ThirdPrize from "assets/third_prize.mp3";
 import GoodLuck from "assets/good_luck.mp3";
+import SuccessTag from "assets/success.png";
+import NotiTag from "assets/noti.png";
+
 import { useSelector } from "react-redux";
 import { RootState } from "redux/store";
 import { TAward } from "redux/api/iqr/iqr.response";
@@ -44,10 +47,10 @@ const MapAudio = new Map([
   ["", gl],
 ]);
 const MapLabel = new Map([
-  ["xemay", "Xe máy"],
-  ["topup", "Thẻ cào điện thoại"],
-  ["tulanh", "Tủ lạnh"],
-  ["loaJBL", "Loa JBL"],
+  ["xemay", "Xe máy Air Blade 125cc"],
+  ["topup", "Nạp tiền 10.000VND"],
+  ["tulanh", "Tủ lạnh Sharp 362L"],
+  ["loaJBL", "Loa JBL Partybox110"],
   ["", "Không trúng thưởng"],
 ]);
 const PresentScreen = () => {
@@ -112,32 +115,37 @@ const PresentScreen = () => {
       {type !== "" && (
         <img
           src={MapImage.get(type)}
-          className={`w-full -mt-10 mb-2 h-64 object-contain `}
+          className={`w-full -mt-4 mb-2 h-64 object-contain `}
           loading="eager"
           decoding="auto"
         />
       )}
 
       {type !== "" && (
-        <p className="text-[#f5ecdd] font-roboto text-xl font-bold text-center">{`Chúc mừng ${name} với số điện thoại ${phone} nhận được ${MapLabel.get(
+        <p className="text-[#f5ecdd] font-roboto text-xl font-bold text-center">{`Chúc mừng ${name} với số điện thoại ${phone} trúng ${MapLabel.get(
           award1 || award2
-        )} từ <Cơ Hội ${award1 ? "1" : "2"}>`}</p>
+        )} từ Cơ Hội ${award1 ? "1" : "2"}`}</p>
       )}
 
       {type === "" && (
-        <div>
-          <p className="text-[#f5ecdd] font-roboto text-3xl uppercase font-extrabold text-center whitespace-pre-line">{`Chúc bạn\nmay mắn lần sau`}</p>
-          <p className="text-[#f5ecdd] font-roboto text-xl font-extrabold text-center whitespace-pre-line">{`Hãy mua Nativo hoặc Vayego\nđể có cơ hội trúng thưởng!`}</p>
+        <div
+          className="!mt-14 bg-white p-5 rounded-2xl justify-center items-center flex flex-col gap-3 w-[95%] relative border-4 border-yellow-400 "
+          style={{ fontFamily: "helveticaneue" }}
+        >
+          <img src={NotiTag} className="absolute w-3/4 -top-10" />
+          <div className="pt-7">
+            <p className="text-black font-roboto text-3xl  font-extrabold text-center whitespace-pre-line">{`Chúc bạn\nmay mắn lần sau!`}</p>
+          </div>
+          <Button
+            className="py-3 !text-lg  text-white !font-bold !bg-[#FF2929] !font-roboto !rounded-full w-auto !mt-5"
+            onClick={onExit}
+            style={{ fontFamily: "helveticaneue" }}
+          >
+            Quét mã khác
+          </Button>
         </div>
       )}
-      {type === "" && (
-        <Button
-          className="py-3 w-56 !text-lg  text-white !font-bold !bg-[#be0000] !font-roboto !mt-6"
-          onClick={onExit}
-        >
-          Quyét mã khác
-        </Button>
-      )}
+
       <div className="w-full max-h-28 absolute bottom-0">
         <img src={Footer} className="w-full object-contain " />
         <img
@@ -164,28 +172,45 @@ const PresentScreen = () => {
           fr.pause();
           setOpenPopupCoupon(false);
         }}
+        modalStyle={{
+          backgroundColor: "transparent",
+        }}
       >
-        <div className="p-0 -mt-2 bg-white rounded-lg text-center">
-          <h2 className="text-2xl font-bold text-green-600 mb-4 font-roboto">
-            🎉 Chúc mừng! 🎉
-          </h2>
-          <p className="text-gray-700 mb-6 text-left text-xl font-roboto">
-            {`Chúc mừng ${name} với số điện thoại ${phone} nhận được ${MapLabel.get(
-              award1 || award2
-            )}. Vui lòng nhấn "Gửi phiếu cào" để xác thực và nhận quà`}
+        <div
+          className="bg-white px-4 pt-10 pb-5 rounded-2xl border-4 border-yellow-400 relative w-full"
+          style={{ fontFamily: "helveticaneue" }}
+        >
+          <img
+            src={SuccessTag}
+            className="w-3/4 absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
+          />
+
+          <p className="text-black pl-2 font-bold text-left text-lg">
+            Quý nhà nông: {name}
           </p>
-          <button
-            onClick={() => {
-              if (status === 1 || status === 3 || status === 0) {
-                onNavScan();
-              } else setOpenPopupCoupon(false);
-            }}
-            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition duration-200 text-lg font-roboto"
-          >
-            {status === 1 || status === 3 || status === 0
-              ? "Gửi hình phiếu cào"
-              : "Xác nhận"}
-          </button>
+          <p className="text-black pl-2 font-bold text-left text-lg ">
+            Số điện thoại: {phone}
+          </p>
+          <p className="text-black pl-2 font-bold text-left text-lg">
+            Trúng: {MapLabel.get(award1 || award2)}
+          </p>
+          <p className="text-black pl-2 font-bold text-left text-lg">
+            Cơ hội: {award1 ? "1" : award2 ? "2" : ""}
+          </p>
+          <div className="flex justify-center items-center">
+            <button
+              onClick={() => {
+                if (status === 1 || status === 3 || status === 0) {
+                  onNavScan();
+                } else setOpenPopupCoupon(false);
+              }}
+              className="px-4 py-2 bg-[#FF2929] hover:bg-red-600 text-white rounded-full transition duration-200 text-lg font-bold mt-3 "
+            >
+              {status === 1 || status === 3 || status === 0
+                ? "Gửi hình phiếu cào"
+                : "Xác nhận"}
+            </button>
+          </div>
         </div>
       </Modal>
     </div>

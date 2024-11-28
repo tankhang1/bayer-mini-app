@@ -13,21 +13,30 @@ export const iqrApi = createApi({
       query: (body) => ({
         url: "/zalo/e/process/code",
         method: "POST",
-        body,
+        body: {
+          ...body,
+          zalo_device_id: "",
+        },
       }),
     }),
     checkIqr: builder.mutation<TBaseRES<TUsingIqrRES>, TIqrREQ>({
       query: (body) => ({
         url: "/zalo/e/process/check",
         method: "POST",
-        body,
+        body: {
+          ...body,
+          zalo_device_id: "",
+        },
       }),
     }),
     confirmIqr: builder.mutation<TBaseRES<TUsingIqrRES>, TConfirmIqrREQ>({
       query: (body) => ({
         url: "/zalo/e/process/confirm",
         method: "POST",
-        body,
+        body: {
+          ...body,
+          zalo_device_id: "",
+        },
       }),
     }),
   }),

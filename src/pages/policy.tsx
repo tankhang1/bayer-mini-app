@@ -11,20 +11,7 @@ const PolicyScreen = () => {
   const onNavBack = () => {
     navigate(-1);
   };
-  const openUrlProgram = async () => {
-    try {
-      await openWebview({
-        url: "https://caonhanhtay@yis.vn",
-        config: {
-          style: "bottomSheet",
-          leftButton: "back",
-        },
-      });
-    } catch (error) {
-      // xử lý khi gọi api thất bại
-      console.log(error);
-    }
-  };
+
   return (
     <div
       className="w-full h-dvh bg-cover bg-no-repeat px-3 flex items-center flex-col py-10 gap-2"
@@ -38,11 +25,14 @@ const PolicyScreen = () => {
       <img src={Slogan} className="w-fit" />
       <div className="absolute w-full h-dvh bg-white/90 overflow-y-auto top-0">
         <div className="p-6  text-black">
-          <h1 className="text-xl font-black text-center text-red-600 mb-4">
+          <h1
+            className="text-xl font-black text-center text-red-600 mb-4"
+            style={{ fontFamily: "helveticaneue" }}
+          >
             PHIẾU ĐỒNG Ý THAM GIA CHƯƠNG TRÌNH & ĐỒNG Ý CHIA SẼ THÔNG TIN CÁ
             NHÂN
           </h1>
-          <div className="mb-4">
+          <div className="mb-4" style={{ fontFamily: "helveticaneue" }}>
             <h2 className="font-bold text-xl">1. Điều khoản và điều kiện:</h2>
             <p className="text-lg">
               Bằng cách nhấn vào phím “Đồng Ý” trên giao diện người dùng thông
@@ -60,18 +50,12 @@ const PolicyScreen = () => {
               </li>
               <li>
                 Tôi có quyền yêu cầu chỉnh sửa hoặc xóa thông tin bất kỳ lúc nào
-                bằng cách liên hệ qua email:{" "}
-                <span
-                  onClick={openUrlProgram}
-                  className="text-blue-400 underline"
-                >
-                  caonhanhtay@yis.vn
-                </span>{" "}
-                đường dây nóng của chương trình 19003209.
+                bằng cách liên hệ qua email: caonhanhtay@yis.vn đường dây nóng
+                của chương trình 19003209.
               </li>
             </ul>
           </div>
-          <div className="mb-3">
+          <div className="mb-3" style={{ fontFamily: "helveticaneue" }}>
             <h2 className="font-bold text-lg">2. Cam kết bảo mật thông tin:</h2>
             <p className="text-lg">
               Công ty TNHH Bayer Việt Nam (sau đây gọi là “Bayer”) hiểu rõ tầm
@@ -95,7 +79,7 @@ const PolicyScreen = () => {
               thông tin cá nhân cần sử lý sau.
             </p>
           </div>
-          <div className="mb-3">
+          <div className="mb-3" style={{ fontFamily: "helveticaneue" }}>
             <h2 className="font-bold text-lg">
               3.1. Các loại dữ liệu cần xử lý
             </h2>
@@ -119,7 +103,7 @@ const PolicyScreen = () => {
               Nhất, Nhì, Ba từ chương trình.
             </p>
           </div>
-          <div className="mb-3">
+          <div className="mb-3" style={{ fontFamily: "helveticaneue" }}>
             <h2 className="font-bold text-lg">3.2. Mục đích xử lý dữ liệu</h2>
             <p className="text-lg">Dữ liệu cá nhân của bạn được sử dụng để:</p>
             <ul className="list-disc pl-6 text-base custom-round-bullet">
@@ -139,7 +123,7 @@ const PolicyScreen = () => {
               <li>Phân tích và cải thiện chương trình khuyến mãi.</li>
             </ul>
           </div>
-          <div className="mb-3">
+          <div className="mb-3" style={{ fontFamily: "helveticaneue" }}>
             <h2 className="font-bold text-lg">
               3.3. Cách thức thu thập dữ liệu
             </h2>
@@ -155,7 +139,7 @@ const PolicyScreen = () => {
               </li>
             </ul>
           </div>
-          <div className="mb-3">
+          <div className="mb-3" style={{ fontFamily: "helveticaneue" }}>
             <h2 className="font-bold text-lg">
               3.4. Cơ sở pháp lý của việc xử lý
             </h2>
@@ -176,7 +160,7 @@ const PolicyScreen = () => {
               </li>
             </ul>
           </div>
-          <div className="mb-3">
+          <div className="mb-3" style={{ fontFamily: "helveticaneue" }}>
             <h2 className="font-bold text-lg">
               3.5. Liên hệ trực tiếp với Bayer
             </h2>
@@ -197,21 +181,12 @@ const PolicyScreen = () => {
               </li>
             </ul>
           </div>
-          <div>
-            <div className="text-center justify-center items-center w-1/2 ml-auto">
-              <p className="font-bold">Chữ ký xác nhận của Người tham gia:</p>
-              <p>(Ký tên và ghi rõ họ tên)</p>
-              <p className="text-center">...............................</p>
-              <p>
-                <span className="font-bold">Ngày:</span>.................
-              </p>
-            </div>
-          </div>
         </div>
         <div
-          className="py-3 w-56 flex items-center justify-center text-lg  text-white font-bold bg-[#be0000] rounded-3xl gap-2 mx-auto mb-5 "
+          className="py-3 w-56 flex items-center justify-center text-lg  text-white !font-bold bg-[#be0000] rounded-3xl gap-2 mx-auto mb-5 "
           role="button"
           onClick={onNavBack}
+          style={{ fontFamily: "helveticaneue" }}
         >
           <Icon icon="zi-arrow-left" />
           Quay lại

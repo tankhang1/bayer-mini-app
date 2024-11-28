@@ -7,8 +7,8 @@ import Speaker from "assets/speaker_1.png";
 import Topup from "assets/topup_1.png";
 import Driver from "assets/driver_1.png";
 import Fridge from "assets/fridge_1.png";
-import Oke from "assets/oke.webp";
-import Reject from "assets/reject.webp";
+import Oke from "assets/success.png";
+import Reject from "assets/noti.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Modal } from "zmp-ui";
 import { closeApp } from "zmp-sdk";
@@ -20,11 +20,15 @@ const FinishScreen = () => {
     navigate("/scan-screen");
   };
   const onExit = async () => {
-    try {
-      await closeApp({});
-    } catch (error) {
-      // xử lý khi gọi api thất bại
-      console.log(error);
+    if (state.status === 4 || state.status === 2) {
+      try {
+        await closeApp({});
+      } catch (error) {
+        // xử lý khi gọi api thất bại
+        console.log(error);
+      }
+    } else {
+      navigate(-1);
     }
   };
   React.useEffect(() => {
@@ -75,25 +79,34 @@ const FinishScreen = () => {
         onClose={() => {
           setOpenFinishConfirm(false);
         }}
-        modalStyle={{ padding: 0 }}
+        modalStyle={{
+          backgroundColor: "transparent",
+        }}
       >
-        <div className="bg-white rounded-lg text-center flex flex-col justify-center items-center gap-4 -mt-3">
+        <div
+          className="bg-white px-4 pt-10 pb-5 rounded-2xl border-4 border-yellow-400 relative w-full flex-col flex items-center justify-center gap-5"
+          style={{ fontFamily: "helveticaneue" }}
+        >
           <img
             src={state.status == 4 || state.status === 2 ? Oke : Reject}
-            className="w-20 object-contain"
+            className="w-3/4 absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
           />
-          <p className="text-gray-700 text-left text-lg">
+          <p
+            className="text-gray-700 text-left text-lg font-bold pt-6"
+            style={{ fontFamily: "helveticaneue" }}
+          >
             {state.status == 4 || state.status === 2
-              ? `Thông tin và bằng chứng trúng giải của quý nhà nông đã được tiếp
-            nhận. Tổng đài viên 19003209 sẽ chủ động liên hệ khi cần thiết để hỗ
-            trợ tốt nhất`
-              : `Chúng tôi chưa nhận bằng chứng trúng giải của Quý nhà nông. Vui lòng nhấn chụp lại!`}
+              ? "Đã gửi ảnh thành công"
+              : "Gửi ảnh không thành công!"}
           </p>
           <button
-            className="px-4 py-3 bg-[#be0000]  w-3/5 text-white rounded-lg font-bold transition duration-200"
+            className="px-6 py-3 bg-[#FF2929] w-auto text-white !rounded-full font-bold transition duration-200"
             onClick={onExit}
+            style={{ fontFamily: "helveticaneue" }}
           >
-            Quyét mã khác
+            {state.status == 4 || state.status === 2
+              ? "Quét mã khác"
+              : "Chụp lại"}
           </button>
         </div>
       </Modal>

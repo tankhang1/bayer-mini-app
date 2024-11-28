@@ -13,10 +13,9 @@ import {
   authorize,
   closeApp,
   getAccessToken,
-  getDeviceId,
-  getDeviceIdAsync,
   getLocation,
   getPhoneNumber,
+  getUserID,
   getUserInfo,
 } from "zmp-sdk";
 import { useNavigate } from "react-router-dom";
@@ -33,12 +32,13 @@ import { updateAward, updateInfo, updateStatus } from "redux/slices/appSlice";
 const SplashScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { deviceId, code } = useSelector((state: RootState) => state.app);
+  const { userId, code } = useSelector((state: RootState) => state.app);
   const [openModalReject, setOpenModalReject] = React.useState(false);
   const [openExceededMaximumRequest, setOpenExceededMaximumRequest] =
     React.useState(false);
   const [updateZaloInfo, { isLoading: isLoadingUpdateZalo }] =
     useUpdateZaloInfoMutation();
+  const [isLoadingProcess, setIsLoadingProcess] = React.useState(false);
   const [usingIqr, { isLoading: isUsingIqr }] = useUsingIqrMutation();
   const [messageError, setMessageError] = React.useState<
     Partial<{
@@ -62,7 +62,7 @@ const SplashScreen = () => {
         ...value,
         type: "api",
         isExit: true,
-        btnLabel: "Quyét mã khác",
+        btnLabel: "Quét mã khác",
       });
     }
     if (value.status === -1) {
@@ -80,7 +80,7 @@ const SplashScreen = () => {
         ...value,
         type: "api",
         isExit: true,
-        btnLabel: "Quyét mã khác",
+        btnLabel: "Quét mã khác",
       });
     }
     if (value.status === -3) {
@@ -91,12 +91,21 @@ const SplashScreen = () => {
         ...value,
         type: "api",
         isExit: true,
-        btnLabel: "Quyét mã khác",
+        btnLabel: "Quét mã khác",
       });
     }
     if (value.status === -5) {
       dispatch(updateAward(value.data));
       navigate("/present");
+    }
+    if (value.status === -10) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "api",
+        isExit: true,
+        btnLabel: "Quét mã khác",
+      });
     }
     if (value.status === 0) {
       dispatch(updateAward(value.data));
@@ -134,9 +143,13 @@ const SplashScreen = () => {
     }
   };
   const onUsingIqr = async () => {
+    console.log({
+      code: code,
+      zalo_user_id: userId,
+    });
     await usingIqr({
       code: code,
-      zalo_device_id: deviceId,
+      zalo_user_id: userId,
     })
       .unwrap()
       .then((value) => {
@@ -151,12 +164,13 @@ const SplashScreen = () => {
             error?.message ||
             "Đã có lỗi xảy ra, vui lòng liên hệ 19003209 để được hỗ trợ",
           isExit: true,
-          btnLabel: "Quyét mã khác",
+          btnLabel: "Quét mã khác",
         });
       });
   };
   const postZaloInfo = async () => {
     try {
+      setIsLoadingProcess(true);
       let zaloInfo = {
         access_token: "",
         avatar: "",
@@ -168,7 +182,7 @@ const SplashScreen = () => {
         is_sensitive: false,
         name: "",
         zalo_app_id: "",
-        zalo_device_id: "961875647980920338",
+        zalo_user_id: "",
       };
       const accessToken = await getAccessToken();
       zaloInfo.access_token = accessToken;
@@ -178,10 +192,10 @@ const SplashScreen = () => {
       const authorizeLocation = await authorize({
         scopes: ["scope.userLocation"],
       });
-      const deviceId = await getDeviceIdAsync();
+      const userId = await getUserID();
       zaloInfo = {
         ...zaloInfo,
-        zalo_device_id: deviceId,
+        zalo_user_id: userId,
       };
       if (authorizeInfo["scope.userInfo"]) {
         const userInfo = await getUserInfo();
@@ -212,6 +226,7 @@ const SplashScreen = () => {
           };
         });
       }
+      setIsLoadingProcess(false);
       if (zaloInfo) {
         await updateZaloInfo(zaloInfo)
           .unwrap()
@@ -220,7 +235,7 @@ const SplashScreen = () => {
               updateInfo({
                 name: value.data.name,
                 phone: value.data.phone,
-                deviceId: value.data.zalo_device_id,
+                userId: value.data.zalo_user_id,
               })
             );
             await onUsingIqr();
@@ -232,6 +247,7 @@ const SplashScreen = () => {
           });
       }
     } catch (error) {
+      setIsLoadingProcess(false);
       //@ts-expect-error no check
       if (error?.code === -203) {
         setOpenExceededMaximumRequest(true);
@@ -278,10 +294,10 @@ const SplashScreen = () => {
     >
       <img src={Logo} className="w-20 my-5" />
       <img src={Content_2} className="w-[100%] h-40 object-contain" />
-      <div className="relative w-full h-full z-20 -mt-6">
+      <div className="relative w-full h-full z-20">
         <img
           src={Content_3}
-          className="w-72 h-64 object-contain absolute top-[90px] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          className="w-56 h-56 object-contain absolute top-[90px] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         />
         <img
           src={Topup}

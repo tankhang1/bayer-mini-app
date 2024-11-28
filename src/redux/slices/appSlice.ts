@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TAward } from "redux/api/iqr/iqr.response";
 type TApp = {
-  deviceId: string;
+  userId: string;
   token: string;
   code: string;
   award1: string;
@@ -11,7 +11,7 @@ type TApp = {
   status: number;
 };
 const initalValues: TApp = {
-  deviceId: "",
+  userId: "",
   token: "",
   code: "",
   award1: "",
@@ -24,8 +24,8 @@ const appSlice = createSlice({
   name: "appSlice",
   initialState: initalValues,
   reducers: {
-    updateDeviceId: (state, action: PayloadAction<string>) => {
-      state.deviceId = action.payload;
+    updateUserId: (state, action: PayloadAction<string>) => {
+      state.userId = action.payload;
     },
     updateToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
@@ -45,16 +45,16 @@ const appSlice = createSlice({
     },
     updateInfo: (
       state,
-      action: PayloadAction<{ phone: string; name: string; deviceId: string }>
+      action: PayloadAction<{ phone: string; name: string; userId: string }>
     ) => {
       state.phone = action.payload.phone;
       state.name = action.payload.name;
-      state.deviceId = action.payload.deviceId;
+      state.userId = action.payload.userId;
     },
   },
 });
 export const {
-  updateDeviceId,
+  updateUserId,
   updateToken,
   updateCode,
   updateAward,

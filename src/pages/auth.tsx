@@ -1,15 +1,15 @@
 import * as React from "react";
 import Background_tmp from "assets/background_2.png";
 import Background from "assets/background.webp";
-import Content_3 from "assets/Nativo.png";
+import Content_3 from "assets/content_3.png";
 import Content_3_tmp from "assets/content_3.png";
 
 import Content_2 from "assets/content_2.png";
-import Footer from "assets/footer.webp";
+import Footer from "assets/footer.png";
 import Logo from "assets/logo.png";
-import Hotline from "assets/hotline.webp";
+import Hotline from "assets/hotline.png";
 import { useNavigate } from "react-router-dom";
-import { closeApp, getDeviceIdAsync, openPhone } from "zmp-sdk";
+import { closeApp, getUserID, openPhone } from "zmp-sdk";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -22,7 +22,7 @@ import { ACCOUNT } from "constants";
 import {
   updateAward,
   updateCode,
-  updateDeviceId,
+  updateUserId,
   updateInfo,
   updateStatus,
   updateToken,
@@ -31,19 +31,18 @@ import Reject from "assets/reject.webp";
 import { RootState } from "redux/store";
 import { TBaseRES } from "types";
 import { TUsingIqrRES } from "redux/api/iqr/iqr.response";
-import { useZaloCheckDeviceIdMutation } from "redux/api/zalo/zalo.api";
+import { useZaloCheckUserIdIdMutation } from "redux/api/zalo/zalo.api";
+import NotiTag from "assets/noti.png";
 
 const AuthScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { token, deviceId, code } = useSelector(
-    (state: RootState) => state.app
-  );
-  const [isDeviceIdExist, setIsDeviceIdExist] = React.useState(false);
+  const { token, userId, code } = useSelector((state: RootState) => state.app);
+  const [isUserIdExist, setIsUserIdExist] = React.useState(false);
   const [checkIqr, { isLoading: isLoadingCheckIqr }] = useCheckIqrMutation();
   const [usingIqr, { isLoading: isUsingIqr }] = useUsingIqrMutation();
-  const [checkDeviceId, { isLoading: isLoadingCheckDeviceId }] =
-    useZaloCheckDeviceIdMutation();
+  const [checkUserId, { isLoading: isLoadingCheckUserId }] =
+    useZaloCheckUserIdIdMutation();
   const [getAccessToken, { isLoading: isLoadingAccessToken }] =
     useGetAccessTokenMutation();
   const [isLink, setIsLink] = React.useState(true);
@@ -57,6 +56,7 @@ const AuthScreen = () => {
       btnLabel: string;
       message: string;
       navLink: string;
+      image_url?: string;
     }>
   >({
     type: "system",
@@ -66,16 +66,16 @@ const AuthScreen = () => {
   });
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const onSubmit = async () => {
-    if (isDeviceIdExist) {
+    if (isUserIdExist) {
       await onUsingIqr();
     } else {
       navigate("/splash-screen");
     }
   };
   const onSubmitCode = async () => {
-    if (isDeviceIdExist) {
-      dispatch(updateCode(iqrCode || ""));
-      await onUsingIqr(iqrCode, deviceId);
+    dispatch(updateCode(iqrCode || ""));
+    if (isUserIdExist) {
+      await onUsingIqr(iqrCode, userId);
     } else {
       navigate("/splash-screen");
     }
@@ -102,7 +102,7 @@ const AuthScreen = () => {
         ...value,
         type: "api",
         isExit: true,
-        btnLabel: "Quyét mã khác",
+        btnLabel: "Quét mã khác",
       });
     }
     if (value.status === -1) {
@@ -120,7 +120,7 @@ const AuthScreen = () => {
         ...value,
         type: "api",
         isExit: true,
-        btnLabel: "Quyét mã khác",
+        btnLabel: "Quét mã khác",
       });
     }
     if (value.status === -3) {
@@ -131,19 +131,28 @@ const AuthScreen = () => {
         ...value,
         type: "api",
         isExit: true,
-        btnLabel: "Quyét mã khác",
+        btnLabel: "Quét mã khác",
       });
     }
     if (value.status === -5) {
-      if (isDeviceIdExist) {
+      if (isUserIdExist) {
         dispatch(updateAward(value.data));
         navigate("/present");
       } else {
         navigate("/splash-screen");
       }
     }
+    if (value.status === -10) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "api",
+        isExit: true,
+        btnLabel: "Quét mã khác",
+      });
+    }
     if (value.status === 0) {
-      if (isDeviceIdExist) {
+      if (isUserIdExist) {
         dispatch(updateAward(value.data));
         navigate("/present");
       } else {
@@ -181,10 +190,10 @@ const AuthScreen = () => {
       navigate("/present");
     }
   };
-  const onCheckIqr = async (deviceId: string, code: string) => {
+  const onCheckIqr = async (userId: string, code: string) => {
     await checkIqr({
       code: code,
-      zalo_device_id: deviceId,
+      zalo_user_id: userId,
     })
       .unwrap()
       .then((value) => {
@@ -199,7 +208,7 @@ const AuthScreen = () => {
             error?.message ||
             "Đã có lỗi xảy ra, vui lòng liên hệ 19003209 để được hỗ trợ",
           isExit: true,
-          btnLabel: "Quyét mã khác",
+          btnLabel: "Quét mã khác",
         });
       });
   };
@@ -222,17 +231,18 @@ const AuthScreen = () => {
     if (code) {
       setIsLink(true);
       dispatch(updateCode(code || ""));
-      onCheckIqr(deviceId, code || "");
+      onCheckIqr(userId, code || "");
     } else {
       setIsLink(false);
     }
   };
-  const onGetDeviceId = async () => {
-    await getDeviceIdAsync()
-      .then(async (deviceId) => {
-        dispatch(updateDeviceId(deviceId));
-        await checkDeviceId({
-          zalo_device_id: deviceId,
+  const onGetUserId = async () => {
+    await getUserID({})
+      .then(async (userId) => {
+        console.log("userId", userId);
+        dispatch(updateUserId(userId));
+        await checkUserId({
+          zalo_user_id: userId,
         })
           .unwrap()
           .then((value) => {
@@ -241,11 +251,11 @@ const AuthScreen = () => {
                 updateInfo({
                   name: value.data.name,
                   phone: value.data.phone,
-                  deviceId: value.data.zalo_device_id,
+                  userId: value.data.zalo_user_id,
                 })
               );
-            if (value.status === 0) setIsDeviceIdExist(true);
-            else setIsDeviceIdExist(false);
+            if (value.status === 0) setIsUserIdExist(true);
+            else setIsUserIdExist(false);
           })
           .catch(() => {
             toast.error(
@@ -275,10 +285,10 @@ const AuthScreen = () => {
       }
     }
   };
-  const onUsingIqr = async (tmp_code?: string, tmp_deviceId?: string) => {
+  const onUsingIqr = async (tmp_code?: string, tmp_userId?: string) => {
     await usingIqr({
       code: tmp_code || code,
-      zalo_device_id: tmp_deviceId || deviceId,
+      zalo_user_id: tmp_userId || userId,
     })
       .unwrap()
       .then((value) => {
@@ -293,7 +303,7 @@ const AuthScreen = () => {
             error?.message ||
             "Đã có lỗi xảy ra, vui lòng liên hệ 19003209 để được hỗ trợ",
           isExit: true,
-          btnLabel: "Quyét mã khác",
+          btnLabel: "Quét mã khác",
         });
       });
   };
@@ -302,14 +312,14 @@ const AuthScreen = () => {
   }, []);
   React.useEffect(() => {
     if (token) {
-      onGetDeviceId();
+      onGetUserId();
     }
   }, [token]);
   React.useEffect(() => {
-    if (token && deviceId) {
+    if (token && userId) {
       onGetParams();
     }
-  }, [token, deviceId]);
+  }, [token, userId]);
   return (
     <div
       ref={containerRef}
@@ -324,9 +334,9 @@ const AuthScreen = () => {
       <img src={Logo} className="w-20 my-5" />
 
       <img src={Content_2} className="w-full max-h-40 object-contain" />
-      <img src={Content_3} className={`w-full object-contain`} />
+      <img src={Content_3} className={`w-full max-h-60 object-contain`} />
       {!isLink && (
-        <div className="w-dvw flex flex-col gap-5 justify-center items-center">
+        <div className="w-full flex flex-col gap-5 justify-center items-center ">
           <input
             className="py-5 mx-auto px-4 !w-3/4 !rounded-full"
             placeholder="Nhập mã trúng thưởng"
@@ -343,10 +353,11 @@ const AuthScreen = () => {
               loading={
                 isLoadingCheckIqr ||
                 isLoadingAccessToken ||
-                isLoadingCheckDeviceId ||
+                isLoadingCheckUserId ||
                 isUsingIqr
               }
               onClick={onSubmitCode}
+              style={{ fontFamily: "helveticaneue" }}
             >
               Đồng ý
             </Button>
@@ -355,6 +366,7 @@ const AuthScreen = () => {
                 className="text-white text-xs underline font-semibold text-center font-roboto"
                 role="button"
                 onClick={onNavPrivacyScreen}
+                style={{ fontFamily: "helveticaneue" }}
               >
                 Thể lệ tham gia
               </p>
@@ -363,6 +375,7 @@ const AuthScreen = () => {
                 className="text-white text-xs underline font-semibold  text-center font-roboto"
                 role="button"
                 onClick={onNavPolicyScreen}
+                style={{ fontFamily: "helveticaneue" }}
               >
                 Cam kết quyền riêng tư
               </p>
@@ -377,9 +390,10 @@ const AuthScreen = () => {
             loading={
               isLoadingCheckIqr ||
               isLoadingAccessToken ||
-              isLoadingCheckDeviceId ||
+              isLoadingCheckUserId ||
               isUsingIqr
             }
+            style={{ fontFamily: "helveticaneue" }}
             onClick={onSubmit}
           >
             Đồng ý
@@ -389,6 +403,7 @@ const AuthScreen = () => {
               className="text-white text-xs underline font-semibold text-center font-roboto"
               role="button"
               onClick={onNavPrivacyScreen}
+              style={{ fontFamily: "helveticaneue" }}
             >
               Thể lệ tham gia
             </p>
@@ -397,6 +412,7 @@ const AuthScreen = () => {
               className="text-white text-xs underline font-semibold  text-center font-roboto"
               role="button"
               onClick={onNavPolicyScreen}
+              style={{ fontFamily: "helveticaneue" }}
             >
               Cam kết quyền riêng tư
             </p>
@@ -419,28 +435,38 @@ const AuthScreen = () => {
       <Modal
         visible={openErrorPopup}
         onClose={() => setOpenErrorPopup(false)}
-        title={(<img src={Reject} className="w-20 h-20 mx-auto" />) as any}
+        modalStyle={{
+          backgroundColor: "transparent",
+        }}
       >
-        {messageError.type === "system" ? (
-          <p className="text-lg">{messageError.message}</p>
-        ) : (
-          messageError.message && (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: messageError.message,
-              }}
-            />
-          )
-        )}
+        <div className="bg-white px-10 pt-10 pb-5 rounded-2xl border-4 border-yellow-400 relative">
+          <img
+            src={NotiTag}
+            className="w-3/4 absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
+          />
+          {messageError.type === "system" ? (
+            <p className="text-lg py-6">{messageError.message}</p>
+          ) : (
+            messageError.message && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: messageError.message,
+                }}
+                className="py-6"
+              />
+            )
+          )}
 
-        <div className="flex items-center justify-between gap-2 mt-2">
-          <Button
-            variant="secondary"
-            className="!bg-red-400 !text-white w-full"
-            onClick={onPopupErrorClick}
-          >
-            {messageError.btnLabel || "Xác nhận"}
-          </Button>
+          <div className="flex items-center justify-center gap-2 mt-2">
+            <Button
+              variant="secondary"
+              className="!bg-[#FF2929] !font-bold !text-white w-auto"
+              style={{ fontFamily: "helveticaneue" }}
+              onClick={onPopupErrorClick}
+            >
+              {messageError.btnLabel || "Xác nhận"}
+            </Button>
+          </div>
         </div>
       </Modal>
     </div>
