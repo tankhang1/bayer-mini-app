@@ -7,8 +7,7 @@ import Speaker from "assets/speaker_1.png";
 import Topup from "assets/topup_1.png";
 import Driver from "assets/driver_1.png";
 import Fridge from "assets/fridge_1.png";
-import Oke from "assets/success.png";
-import Reject from "assets/noti.png";
+import Oke from "assets/noti.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Modal } from "zmp-ui";
 import { closeApp } from "zmp-sdk";
@@ -88,7 +87,7 @@ const FinishScreen = () => {
           style={{ fontFamily: "helveticaneue" }}
         >
           <img
-            src={state.status == 4 || state.status === 2 ? Oke : Reject}
+            src={Oke}
             className="w-3/4 absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
           />
           <p
