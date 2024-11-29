@@ -320,6 +320,7 @@ const AuthScreen = () => {
       onGetParams();
     }
   }, [token, userId]);
+
   return (
     <div
       ref={containerRef}
@@ -331,10 +332,10 @@ const AuthScreen = () => {
         backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
       }}
     >
-      <img src={Logo} className="w-20 my-5" />
+      <img src={Logo} className="max-w-20 max-h-[10%] my-5" />
 
-      <img src={Content_2} className="w-full max-h-40 object-contain" />
-      <img src={Content_3} className={`w-full max-h-60 object-contain`} />
+      <img src={Content_2} className="w-full max-h-[25%] object-contain" />
+      <img src={Content_3} className={`w-full max-h-[32%] object-contain`} />
       {!isLink && (
         <div className="w-full flex flex-col gap-5 justify-center items-center ">
           <input
@@ -349,7 +350,7 @@ const AuthScreen = () => {
           />
           <div className="flex justify-center items-center flex-col">
             <Button
-              className="py-3 w-56 !text-lg  text-white !font-bold !bg-[#be0000] !font-roboto"
+              className="py-3 w-56 !text-lg  text-white !font-bold !bg-[#FF2929] !font-roboto"
               loading={
                 isLoadingCheckIqr ||
                 isLoadingAccessToken ||
@@ -384,9 +385,9 @@ const AuthScreen = () => {
         </div>
       )}
       {isLink && (
-        <div className="flex justify-center items-center flex-col">
+        <div className="flex justify-center items-center flex-col mt-3">
           <Button
-            className="py-3 w-56 !text-lg  text-white !font-bold !bg-[#be0000] !font-roboto"
+            className="py-3 w-56 !text-lg  text-white !font-bold !bg-[#FF2929] !font-roboto"
             loading={
               isLoadingCheckIqr ||
               isLoadingAccessToken ||

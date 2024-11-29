@@ -237,7 +237,7 @@ Với nội dung: “Chuong trinh Nativo & Vayego, Cao Nhanh Tay-Trung Qua Ngay,
           </div>
         </div>
         <div
-          className="py-3 w-56 flex items-center justify-center text-lg  text-white font-bold bg-[#be0000] rounded-3xl gap-2 mx-auto mb-5 "
+          className="py-3 w-56 flex items-center justify-center text-lg  text-white font-bold bg-[#FF2929] rounded-3xl gap-2 mx-auto mb-5 "
           role="button"
           onClick={onNavBack}
         >

@@ -6,7 +6,6 @@ import Driver from "assets/driver.png";
 import Topup from "assets/topup.png";
 import Fridge from "assets/fridge.png";
 import Speaker from "assets/speaker.png";
-import Oke from "assets/oke.webp";
 import Hotline from "assets/hotline.png";
 import Reject from "assets/reject.webp";
 import { useNavigate } from "react-router-dom";
@@ -98,7 +97,6 @@ const PresentScreen = () => {
       }
     }
   }, [award1, award2]);
-
   return (
     <div
       className="w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col py-10 overflow-auto"
@@ -109,13 +107,13 @@ const PresentScreen = () => {
       // role="button"
       // onClick={onChangeType}
     >
-      <img src={Logo} className="w-20" />
-      <img src={Content_2} className="w-full h-40 object-contain" />
+      <img src={Logo} className="max-h-[10%] object-contain" />
+      <img src={Content_2} className="w-full h-[20%] object-contain" />
 
       {type !== "" && (
         <img
           src={MapImage.get(type)}
-          className={`w-full -mt-4 mb-2 h-64 object-contain `}
+          className={`w-full mb-2 h-[40%] object-contain `}
           loading="eager"
           decoding="auto"
         />

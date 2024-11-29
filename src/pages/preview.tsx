@@ -87,7 +87,7 @@ const PreviewScreen = () => {
         style={{ fontFamily: "helveticaneue" }}
       >
         <Button
-          className=" w-full py-3 px-4 !text-white !bg-[#be0000] !font-bold !text-xl"
+          className=" w-full py-3 px-4 !text-white !bg-[#FF2929] !font-bold !text-xl"
           onClick={onNavFinish}
           loading={isLoadingUpload || isLoadingConfirmIqr}
         >

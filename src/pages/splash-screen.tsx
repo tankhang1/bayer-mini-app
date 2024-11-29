@@ -292,34 +292,34 @@ const SplashScreen = () => {
         backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
       }}
     >
-      <img src={Logo} className="w-20 my-5" />
-      <img src={Content_2} className="w-[100%] h-40 object-contain" />
+      <img src={Logo} className="h-[10%] object-contain my-5" />
+      <img src={Content_2} className="w-[100%] h-[20%] object-contain" />
       <div className="relative w-full h-full z-20">
         <img
           src={Content_3}
-          className="w-56 h-56 object-contain absolute top-[90px] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          className="h-[32%] object-contain absolute top-[90px] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         />
         <img
           src={Topup}
-          className="w-36 h-36 object-contain absolute top-[25%]  left-[10%]"
+          className="h-[18%] object-contain absolute top-[30%]  left-[5%]"
           loading="eager"
           decoding="async"
         />
         <img
           src={Speaker}
-          className="w-32 h-32 object-contain absolute top-[35%] right-[10%]"
+          className="h-[25%] object-contain absolute top-[35%] right-[10%]"
           loading="eager"
           decoding="async"
         />
         <img
           src={Fridge}
-          className="w-44 h-44 object-contain absolute bottom-[18%] -left-0"
+          className="h-[33%] object-contain absolute bottom-[18%] -left-0"
           loading="eager"
           decoding="async"
         />
         <img
           src={Driver}
-          className="w-60 h-60 object-contain absolute  bottom-[0%] right-0"
+          className="h-[40%] object-contain absolute  bottom-[2%] right-0"
           loading="eager"
           decoding="async"
         />
@@ -335,7 +335,10 @@ const SplashScreen = () => {
         onClose={() => setOpenModalReject(false)}
         title={(<img src={Reject} className="w-20 h-20 mx-auto" />) as any}
       >
-        <p className="whitespace-pre-line">
+        <p
+          className="whitespace-pre-line"
+          style={{ fontFamily: "helveticaneue" }}
+        >
           {`Ứng dụng Bayer Việt Nam cần quyền truy cập vào thông tin cá nhân (họ tên, số điện thoại, vị trí) để: 
           1) Xác minh tính hợp lệ của người tham gia chương trình. 
           2) Hỗ trợ gửi thông báo trúng thưởng và thực hiện trao giải thưởng một cách chính xác. 
@@ -369,7 +372,10 @@ const SplashScreen = () => {
         onClose={() => setOpenExceededMaximumRequest(false)}
         title={(<img src={Reject} className="w-20 h-20 mx-auto" />) as any}
       >
-        <p className="whitespace-pre-line">
+        <p
+          className="whitespace-pre-line"
+          style={{ fontFamily: "helveticaneue" }}
+        >
           Bạn đã gửi quá số lần yêu cầu cho phép. Hệ thống chỉ cho phép tối đa 5
           yêu cầu, nhưng bạn đã gửi 6 yêu cầu. Vui lòng thoát app và quét lại.
         </p>

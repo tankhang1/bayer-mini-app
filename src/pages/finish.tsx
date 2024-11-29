@@ -5,9 +5,10 @@ import Content_2 from "assets/content_2.png";
 import Content_3 from "assets/content_3.png";
 import Speaker from "assets/speaker_1.png";
 import Topup from "assets/topup_1.png";
+import Noti from "assets/noti.png";
 import Driver from "assets/driver_1.png";
 import Fridge from "assets/fridge_1.png";
-import Oke from "assets/noti.png";
+import Road from "assets/road.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Modal } from "zmp-ui";
 import { closeApp } from "zmp-sdk";
@@ -41,38 +42,44 @@ const FinishScreen = () => {
         backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
       }}
     >
-      <img src={Logo} className="w-20 my-5" />
-      <img src={Content_2} className="w-[100%] h-40 object-contain" />
-      <div className="relative w-full h-full z-20 -mt-6">
+      <img src={Logo} className="h-[10%] object-contain my-5" />
+      <img src={Content_2} className="w-[100%] h-[20%] object-contain" />
+      <div className="relative w-full h-full z-20">
         <img
           src={Content_3}
-          className="w-72 h-64 object-contain absolute top-[90px] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          className="h-[32%] object-contain absolute top-[90px] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         />
         <img
           src={Topup}
-          className="w-36 h-36 object-contain absolute top-[25%]  left-[10%]"
+          className="h-[18%] object-contain absolute top-[30%]  left-[5%]"
           loading="eager"
           decoding="async"
         />
         <img
           src={Speaker}
-          className="w-44 h-44 object-contain absolute top-[30%] right-7"
+          className="h-[25%] object-contain absolute top-[35%] right-[10%]"
           loading="eager"
           decoding="async"
         />
         <img
           src={Fridge}
-          className="w-52 h-52 object-contain absolute bottom-[15%] -left-7"
+          className="h-[33%] object-contain absolute bottom-[18%] -left-0"
           loading="eager"
           decoding="async"
         />
         <img
           src={Driver}
-          className="w-60 h-60 object-contain absolute  bottom-[0%] right-0"
+          className="h-[40%] object-contain absolute  bottom-[2%] right-0"
           loading="eager"
           decoding="async"
         />
       </div>
+      <img
+        src={Road}
+        className="w-full object-contain absolute !bottom-0 right-0"
+        loading="eager"
+        decoding="async"
+      />
       <Modal
         visible={openFinishConfirm}
         onClose={() => {
@@ -87,7 +94,7 @@ const FinishScreen = () => {
           style={{ fontFamily: "helveticaneue" }}
         >
           <img
-            src={Oke}
+            src={Noti}
             className="w-3/4 absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
           />
           <p
