@@ -1,7 +1,7 @@
 import * as React from "react";
 import Background_tmp from "assets/background_2.png";
 import Background from "assets/background.webp";
-import Content_3 from "assets/content_3.png";
+import Content_3 from "assets/Nativo.png";
 import Content_3_tmp from "assets/content_3.png";
 
 import Content_2 from "assets/content_2.png";
@@ -166,7 +166,7 @@ const AuthScreen = () => {
         ...value,
         type: "api",
         isExit: false,
-        btnLabel: "Chụp phiếu trúng thưởng",
+        btnLabel: "Chụp phiếu thưởng",
         navLink: "/scan-screen",
       });
     }

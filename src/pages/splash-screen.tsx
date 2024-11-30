@@ -118,7 +118,7 @@ const SplashScreen = () => {
         ...value,
         type: "api",
         isExit: false,
-        btnLabel: "Chụp phiếu trúng thưởng",
+        btnLabel: "Chụp phiếu thưởng",
         navLink: "/scan-screen",
       });
     }
