@@ -145,6 +145,15 @@ const AuthScreen = () => {
         navigate("/splash-screen");
       }
     }
+    if (value.status === -9) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "api",
+        isExit: true,
+        btnLabel: "Quét mã khác",
+      });
+    }
     if (value.status === -10) {
       setOpenErrorPopup(true);
       setMessageError({
@@ -184,7 +193,7 @@ const AuthScreen = () => {
         ...value,
         type: "api",
         isExit: false,
-        btnLabel: "Chụp lại phiếu trúng thưởng",
+        btnLabel: "Chụp phiếu",
         navLink: "/scan-screen",
       });
     }

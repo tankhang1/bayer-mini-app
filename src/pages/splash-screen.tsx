@@ -98,6 +98,15 @@ const SplashScreen = () => {
       dispatch(updateAward(value.data));
       navigate("/present");
     }
+    if (value.status === -9) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "api",
+        isExit: true,
+        btnLabel: "Quét mã khác",
+      });
+    }
     if (value.status === -10) {
       setOpenErrorPopup(true);
       setMessageError({
@@ -133,7 +142,7 @@ const SplashScreen = () => {
         ...value,
         type: "api",
         isExit: false,
-        btnLabel: "Chụp lại phiếu trúng thưởng",
+        btnLabel: "Chụp phiếu",
         navLink: "/scan-screen",
       });
     }
