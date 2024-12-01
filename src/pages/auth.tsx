@@ -437,7 +437,7 @@ const AuthScreen = () => {
         </div>
       )}
       <Modal
-        visible={true}
+        visible={openErrorPopup}
         onClose={() => setOpenErrorPopup(false)}
         modalStyle={{
           backgroundColor: "transparent",
