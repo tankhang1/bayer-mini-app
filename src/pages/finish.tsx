@@ -106,9 +106,9 @@ const FinishScreen = () => {
               : "Gửi ảnh không thành công!"}
           </p>
           <button
-            className="px-6 py-3 bg-[#FF2929] w-auto text-white !rounded-full font-bold transition duration-200"
+            className="px-6 py-3 bg-[#FF2929] text-white !rounded-full font-bold transition duration-200 !whitespace-pre-line w-auto"
             onClick={onExit}
-            style={{ fontFamily: "helveticaneue" }}
+            style={{ fontFamily: "helveticaneue", lineHeight: "1" }}
           >
             {state.status == 4 || state.status === 2
               ? "Quét mã khác"

@@ -437,7 +437,7 @@ const AuthScreen = () => {
         </div>
       )}
       <Modal
-        visible={openErrorPopup}
+        visible={true}
         onClose={() => setOpenErrorPopup(false)}
         modalStyle={{
           backgroundColor: "transparent",
@@ -464,8 +464,8 @@ const AuthScreen = () => {
           <div className="flex items-center justify-center gap-2 mt-2">
             <Button
               variant="secondary"
-              className="!bg-[#FF2929] !font-bold !text-white w-auto"
-              style={{ fontFamily: "helveticaneue" }}
+              className="!bg-[#FF2929] !font-bold !text-white !whitespace-pre-line w-auto"
+              style={{ fontFamily: "helveticaneue", lineHeight: "1" }}
               onClick={onPopupErrorClick}
             >
               {messageError.btnLabel || "Xác nhận"}

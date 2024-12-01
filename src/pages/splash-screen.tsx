@@ -421,8 +421,9 @@ const SplashScreen = () => {
         <div className="flex items-center justify-between gap-2 mt-2">
           <Button
             variant="secondary"
-            className="!bg-red-400 !text-white w-full"
+            className="!bg-red-400 !text-white !whitespace-pre-line w-auto"
             onClick={onPopupErrorClick}
+            style={{ fontFamily: "helveticaneue", lineHeight: "1" }}
           >
             {messageError.btnLabel || "Xác nhận"}
           </Button>

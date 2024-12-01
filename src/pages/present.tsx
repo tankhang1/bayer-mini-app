@@ -135,9 +135,9 @@ const PresentScreen = () => {
             <p className="text-black font-roboto text-3xl  font-extrabold text-center whitespace-pre-line">{`Chúc bạn\nmay mắn lần sau!`}</p>
           </div>
           <Button
-            className="py-3 !text-lg  text-white !font-bold !bg-[#FF2929] !font-roboto !rounded-full w-auto !mt-5"
+            className="py-3 !text-lg  text-white !font-bold !bg-[#FF2929]  !rounded-full w-auto !mt-5  !whitespace-pre-line"
             onClick={onExit}
-            style={{ fontFamily: "helveticaneue" }}
+            style={{ fontFamily: "helveticaneue", lineHeight: "1" }}
           >
             Quét mã khác
           </Button>
@@ -202,7 +202,8 @@ const PresentScreen = () => {
                   onNavScan();
                 } else setOpenPopupCoupon(false);
               }}
-              className="px-4 py-2 bg-[#FF2929] hover:bg-red-600 text-white rounded-full transition duration-200 text-lg font-bold mt-3 "
+              className="px-4 py-2 bg-[#FF2929] hover:bg-red-600 text-white rounded-full transition duration-200 text-lg font-bold mt-3 !whitespace-pre-line w-auto"
+              style={{ fontFamily: "helveticaneue", lineHeight: "1" }}
             >
               {status === 1 || status === 3 || status === 0
                 ? "Gửi hình phiếu cào"
