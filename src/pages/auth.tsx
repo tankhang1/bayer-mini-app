@@ -8,7 +8,7 @@ import Content_2 from "assets/content_2.png";
 import Footer from "assets/footer.png";
 import Logo from "assets/logo.png";
 import Hotline from "assets/hotline.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { closeApp, getUserID, openPhone } from "zmp-sdk";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,7 @@ import {
   useCheckIqrMutation,
   useUsingIqrMutation,
 } from "redux/api/iqr/iqr.api";
-import { Button, Input, Modal } from "zmp-ui";
+import { Box, Button, Checkbox, Icon, Input, Modal, Sheet, Text } from "zmp-ui";
 import { useGetAccessTokenMutation } from "redux/api/auth/auth.api";
 import { ACCOUNT } from "constants";
 import {
@@ -27,8 +27,8 @@ import {
   updateStatus,
   updateToken,
 } from "redux/slices/appSlice";
-import Reject from "assets/reject.webp";
 import { RootState } from "redux/store";
+import Logo1 from "assets/logo_1.png";
 import { TBaseRES } from "types";
 import { TUsingIqrRES } from "redux/api/iqr/iqr.response";
 import { useZaloCheckUserIdIdMutation } from "redux/api/zalo/zalo.api";
@@ -49,6 +49,9 @@ const AuthScreen = () => {
   const [isFocused, setIsFocused] = React.useState(false);
   const [iqrCode, setIqrCode] = React.useState("");
   const [openErrorPopup, setOpenErrorPopup] = React.useState(false);
+  const [openPermissionPopup, setOpenPermissionPopup] = React.useState(false);
+  const [isPermitPrivacy, setIsPermitPrivacy] = React.useState(false);
+  const [isPermitPolicy, setIsPermitPolicy] = React.useState(false);
   const [messageError, setMessageError] = React.useState<
     Partial<{
       type: "system" | "api";
@@ -69,7 +72,7 @@ const AuthScreen = () => {
     if (isUserIdExist) {
       await onUsingIqr();
     } else {
-      navigate("/splash-screen");
+      setOpenPermissionPopup(true);
     }
   };
   const onSubmitCode = async () => {
@@ -77,7 +80,7 @@ const AuthScreen = () => {
     if (isUserIdExist) {
       await onUsingIqr(iqrCode, userId);
     } else {
-      navigate("/splash-screen");
+      setOpenPermissionPopup(true);
     }
   };
   const onNavPolicyScreen = () => {
@@ -470,6 +473,100 @@ const AuthScreen = () => {
           </div>
         </div>
       </Modal>
+      <Sheet
+        visible={openPermissionPopup}
+        onClose={() => setOpenPermissionPopup(false)}
+        autoHeight
+        mask
+        handler
+        swipeToClose
+      >
+        <Box p={4} className="custom-bottom-sheet" flex flexDirection="column">
+          <Box className="bottom-sheet-cover">
+            <img
+              alt="Bottom Sheet"
+              src={Logo1}
+              className="w-12 h-12 object-contain mx-auto"
+            />
+          </Box>
+          <Box my={4}>
+            <Text.Title className="text-center">
+              Cho phép chia sẻ thông tin để phục vụ quá trình tham gia chương
+              trình
+            </Text.Title>
+          </Box>
+          <Box className="bottom-sheet-body" style={{ overflowY: "auto" }}>
+            <Box className="flex flex-row items-center gap-3">
+              <Box>
+                <Checkbox
+                  size="small"
+                  label={`Tôi đồng ý cho phép Chương trình nhận các thông tin từ tài khoản
+              Zalo (bao gồm tên và ảnh đại diện) theo điều khoản sử dụng của
+              Zalo`}
+                  value={""}
+                  checked={isPermitPrivacy}
+                  onChange={() => setIsPermitPrivacy(!isPermitPrivacy)}
+                />
+                <div className="flex items-center gap-1 justify-end">
+                  <p
+                    className="text-blue-500 text-sm"
+                    onClick={onNavPrivacyScreen}
+                  >
+                    Điều khoản sử dụng
+                  </p>
+                  <Icon icon="zi-chevron-right" className="text-blue-500" />
+                </div>
+              </Box>
+              <Checkbox
+                size="small"
+                label="Tôi đã đọc và đồng ý cho phép chia sẻ thông tin
+tới chương trình theo điều khoản sử dụng của
+chương trình khuyến mãi
+"
+                value={""}
+                checked={isPermitPolicy}
+                onChange={() => setIsPermitPolicy(!isPermitPolicy)}
+              />
+              <div className="flex items-center gap-1 justify-end mb-4">
+                <p
+                  className="text-blue-500 text-sm"
+                  onClick={onNavPrivacyScreen}
+                >
+                  Thể lệ tham gia
+                </p>
+                <Icon icon="zi-chevron-right" className="text-blue-500" />
+              </div>
+            </Box>
+          </Box>
+          <Box flex flexDirection="row" mt={1}>
+            <Box style={{ flex: 1 }} pr={1}>
+              <Button
+                fullWidth
+                variant="secondary"
+                onClick={() => {
+                  setOpenPermissionPopup(false);
+                }}
+              >
+                Để sau
+              </Button>
+            </Box>
+            <Box style={{ flex: 1 }} pl={1}>
+              <Button
+                fullWidth
+                onClick={() => {
+                  setOpenPermissionPopup(false);
+                  navigate("/splash-screen");
+                }}
+                disabled={
+                  isPermitPolicy === true && isPermitPrivacy ? false : true
+                }
+              >
+                Cho phép
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      </Sheet>
     </div>
   );
 };
