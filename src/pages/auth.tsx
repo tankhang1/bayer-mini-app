@@ -94,7 +94,7 @@ const AuthScreen = () => {
       phoneNumber: "19003209",
     }).catch((e) => {
       toast.error(
-        "Không thể mở thông tin số hotline, vui lòng thực hiện thủ công"
+        "Không thể mở thông tin số hotline, vui lòng thực hiện thủ công!"
       );
     });
   };
@@ -178,7 +178,7 @@ const AuthScreen = () => {
         ...value,
         type: "api",
         isExit: false,
-        btnLabel: "Chụp phiếu thưởng",
+        btnLabel: "Chụp phiếu",
         navLink: "/scan-screen",
       });
     }
@@ -218,9 +218,9 @@ const AuthScreen = () => {
           type: "api",
           message:
             error?.message ||
-            "Đã có lỗi xảy ra, vui lòng liên hệ 19003209 để được hỗ trợ",
+            "Tương tác bị gián đoạn, vui lòng liên hệ 19003209 để được hỗ trợ!",
           isExit: true,
-          btnLabel: "Quét mã khác",
+          btnLabel: "Thoát",
         });
       });
   };
@@ -232,7 +232,7 @@ const AuthScreen = () => {
       })
       .catch(() => {
         toast.error(
-          "Hệ thống đang bị gián đoạn. Vui lòng liên hệ 19003209 để được hỗ trợ. Xin lỗi quý khách hàng vì sự bất tiện này"
+          "Tương tác bị gián đoạn, vui lòng liên hệ 19003209 để được hỗ trợ. Xin lỗi quý khách hàng vì sự bất tiện này!"
         );
       });
   };
@@ -271,13 +271,13 @@ const AuthScreen = () => {
           })
           .catch(() => {
             toast.error(
-              "Hệ thống đang bị gián đoạn. Vui lòng liên hệ 19003209 để được hỗ trợ. Xin lỗi quý khách hàng vì sự bất tiện này"
+              "Tương tác bị gián đoạn, vui lòng liên hệ 19003209 để được hỗ trợ. Xin lỗi quý khách hàng vì sự bất tiện này!"
             );
           });
       })
       .catch(() => {
         toast.error(
-          "Hệ thống đang bị gián đoạn. Vui lòng liên hệ 19003209 để được hỗ trợ. Xin lỗi quý khách hàng vì sự bất tiện này"
+          "Tương tác bị gián đoạn, vui lòng liên hệ 19003209 để được hỗ trợ. Xin lỗi quý khách hàng vì sự bất tiện này!"
         );
       });
   };
@@ -288,7 +288,7 @@ const AuthScreen = () => {
         success() {},
         fail: () =>
           toast.info(
-            "Vui lòng nhấn dấu 'X' trên cùng bên trái để tắt ứng dụng"
+            "Vui lòng nhấn dấu 'X' trên cùng bên trái để tắt ứng dụng!"
           ),
       });
     } else {
@@ -298,6 +298,10 @@ const AuthScreen = () => {
     }
   };
   const onUsingIqr = async (tmp_code?: string, tmp_userId?: string) => {
+    console.log({
+      code: tmp_code || code,
+      zalo_user_id: tmp_userId || userId,
+    });
     await usingIqr({
       code: tmp_code || code,
       zalo_user_id: tmp_userId || userId,
@@ -313,9 +317,9 @@ const AuthScreen = () => {
           type: "api",
           message:
             error?.message ||
-            "Đã có lỗi xảy ra, vui lòng liên hệ 19003209 để được hỗ trợ",
+            "Tương tác bị gián đoạn, vui lòng liên hệ 19003209 để được hỗ trợ!",
           isExit: true,
-          btnLabel: "Quét mã khác",
+          btnLabel: "Thoát",
         });
       });
   };
@@ -447,7 +451,7 @@ const AuthScreen = () => {
       )}
       <Modal
         visible={openErrorPopup}
-        onClose={() => setOpenErrorPopup(false)}
+        onClose={() => {}}
         modalStyle={{
           backgroundColor: "transparent",
         }}
