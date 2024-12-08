@@ -191,15 +191,15 @@ const ScanScreen = () => {
           </p>
           <p className="text-black font-medium text-sm">
             <span className="font-bold">Bước 2:</span> Nhấn vào biểu tượng
-            “camera” chụp rõ nét phiếu trúng thưởng
+            “camera” chụp rõ nét phiếu trúng thưởng.
           </p>
           <p className="text-black font-medium text-sm">
             <span className="font-bold">Bước 3:</span> Kiểm tra hình và nhấn
-            phím “Xác nhận” để gửi hình bằng chứng trúng giải
+            phím “Xác nhận” để gửi hình bằng chứng trúng giải.
           </p>
           <p className="text-black font-medium text-sm">
             Gọi tổng đài chương trình khi cần hỗ trợ{" "}
-            <span className="font-bold">19003209</span>
+            <span className="font-bold">19003209</span>.
           </p>
         </div>
       </div>

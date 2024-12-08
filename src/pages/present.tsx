@@ -83,14 +83,14 @@ const PresentScreen = () => {
       setType(award1 as TAward);
       setTimeout(() => {
         setOpenPopupCoupon(true);
-      }, 1500);
+      }, 2500);
     } else {
       if (award2) {
         MapAudio.get(award2)?.play();
         setType(award2 as TAward);
         setTimeout(() => {
           setOpenPopupCoupon(true);
-        }, 1500);
+        }, 2500);
       } else {
         MapAudio.get("")?.play();
         setType("");
