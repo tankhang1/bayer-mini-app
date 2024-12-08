@@ -72,7 +72,7 @@ const PrivacyScreen = () => {
             <h2 className="font-bold text-xl">5. Cơ cấu giải thưởng:</h2>
 
             <p className="text-lg">
-              Tổng giá trị giải thưởng lên đến hơn 5,4 tỷ đồng, bao gồm:
+              Tổng giá trị giải thưởng lên đến hơn 5,5 tỷ đồng, bao gồm:
             </p>
             <ul className="list-disc pl-6 text-base custom-round-bullet">
               <li>
@@ -140,7 +140,7 @@ const PrivacyScreen = () => {
                 nhắn thương hiệu “Bayer VN” xác thực trúng giải qua số điện
                 thoại đã chia sẽ trước đó.
                 <p className="whitespace-pre-line">
-                  {`Với nội dung: “Chuong trinh Nativo & Vayego, Cao Nhanh Tay-Trung Qua Ngay, xac nhan MASO <1234G6789> nhan duoc CH1: <Tên phần quà> Chi tiet goi 19003209.
+                  {`Với nội dung: Chuong trinh Cao Nhanh Tay - Trung Qua Ngay, xac nhan MASO <12KTU3> nhan duoc <CH1>:<Ten giai thuong>. Chi tiet goi 19003209.
 Riêng với, các giải nhất, nhì, ba, trong vòng 24h kể từ gửi bằng chứng trúng giải, khách hàng sẽ được trổng đài chương trình liên hệ và xác thực các thông tin như:
 -	Họ tên người trúng giải
 -	Địa chỉ trao giải
@@ -169,7 +169,7 @@ Riêng với, các giải nhất, nhì, ba, trong vòng 24h kể từ gửi bằ
               </li>
               <li className="whitespace-pre-line">
                 {`Bước 3: Theo hướng dẫn hệ thống và chụp hình ảnh phiếu cào trúng giải gửi về chương trình và nhận tin nhắn thương hiệu xác thực trúng giải qua tin nhắn thương hiệu “Bayer VN”             
-Với nội dung: “Chuong trinh Nativo & Vayego, Cao Nhanh Tay-Trung Qua Ngay, xac nhan MASO <1234G6789> nhan duoc CH2: <Tên phần quà> Chi tiet goi 19003209.
+Với nội dung: Chuong trinh Cao Nhanh Tay - Trung Qua Ngay, xac nhan MASO <12KTU3> nhan duoc <CH1>:<Ten giai thuong>. Chi tiet goi 19003209.
 `}
               </li>
             </ul>
