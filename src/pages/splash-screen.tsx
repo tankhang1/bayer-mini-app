@@ -171,7 +171,7 @@ const SplashScreen = () => {
           type: "api",
           message:
             error?.message ||
-            "Đã có lỗi xảy ra, vui lòng liên hệ 19003209 để được hỗ trợ",
+            "Đã có lỗi xảy ra, vui lòng liên hệ 19003209 để được hỗ trợ!",
           isExit: true,
           btnLabel: "Quét mã khác",
         });
@@ -251,7 +251,7 @@ const SplashScreen = () => {
           })
           .catch(() => {
             toast.error(
-              "Đã có lỗi xảy ra, vui lòng liên hệ 19003209 để được hỗ trợ"
+              "Đã có lỗi xảy ra, vui lòng liên hệ 19003209 để được hỗ trợ!"
             );
           });
       }
@@ -269,7 +269,7 @@ const SplashScreen = () => {
   const onCloseApp = async () => {
     await closeApp({
       fail: () =>
-        toast.info("Vui lòng nhấn dấu 'X' trên cùng bên trái để tắt ứng dụng"),
+        toast.info("Vui lòng nhấn dấu 'X' trên cùng bên trái để tắt ứng dụng!"),
     });
   };
   const onPopupErrorClick = async () => {
@@ -279,7 +279,7 @@ const SplashScreen = () => {
         success() {},
         fail: () =>
           toast.info(
-            "Vui lòng nhấn dấu 'X' trên cùng bên trái để tắt ứng dụng"
+            "Vui lòng nhấn dấu 'X' trên cùng bên trái để tắt ứng dụng!"
           ),
       });
     } else {
@@ -412,7 +412,7 @@ const SplashScreen = () => {
       </Modal>
       <Modal
         visible={openErrorPopup}
-        onClose={() => setOpenErrorPopup(false)}
+        onClose={() => {}}
         title={(<img src={Reject} className="w-20 h-20 mx-auto" />) as any}
       >
         {messageError.type === "system" ? (

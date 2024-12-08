@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, Icon, Page } from "zmp-ui";
 import api, {
-  chooseImage,
   FacingMode,
   PhotoFormat,
   PhotoFrame,
@@ -48,26 +47,6 @@ const ScanScreen = () => {
 
   const changeFlip = async () => {
     await cameraRef.current?.flip();
-  };
-
-  const handleChooseImage = async () => {
-    try {
-      const { filePaths, tempFiles } = await chooseImage({
-        sourceType: ["album", "camera"],
-        cameraType: "back",
-        count: 1,
-      });
-      guide.pause();
-      navigate("/preview", {
-        state: {
-          previewImage: filePaths[0],
-          type: "blob",
-        },
-      });
-    } catch (error) {
-      startStreaming();
-      console.log(error);
-    }
   };
 
   const onRequestCameraPermission = async () => {
@@ -187,7 +166,7 @@ const ScanScreen = () => {
           </p>
           <p className="text-black font-medium text-sm">
             <span className="font-bold">Bước 1:</span> Đưa camera gần và canh
-            chỉnh phiếu trúng giải vào trong phạp vi ô vuông màu trắng.
+            chỉnh phiếu trúng giải vào trong phạm vi ô vuông màu trắng.
           </p>
           <p className="text-black font-medium text-sm">
             <span className="font-bold">Bước 2:</span> Nhấn vào biểu tượng
