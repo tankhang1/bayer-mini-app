@@ -42,9 +42,7 @@ const PrivacyScreen = () => {
           <div className="mb-4">
             <h2 className="font-bold text-xl">2. Thời gian áp dụng: </h2>
 
-            <p className="text-lg">
-              Từ ngày 1/12/2024 đến hết ngày 31/03/2025.{" "}
-            </p>
+            <p className="text-lg">Từ nay đến hết ngày 31/03/2025. </p>
           </div>
           <div className="mb-4">
             <h2 className="font-bold text-xl">3. Phạm vi áp dụng:</h2>
@@ -190,7 +188,7 @@ Với nội dung: Chuong trinh Cao Nhanh Tay - Trung Qua Ngay, xac nhan MASO <12
               <li>
                 Giải thưởng của giải Nhất, Nhì, Ba sẽ được trao trong vòng 30
                 ngày kể từ ngày công bố kết quả trên trang web Bayer Khoa Học
-                Cây Trồng https://bit.ly/CaoNhanhTay
+                Cây Trồng https://caonhanhtay.vn
               </li>
               <li>
                 Giải khuyến khích – Nạp tiền điện thoại 10,000 đ, Quý nhà nông
@@ -231,7 +229,7 @@ Với nội dung: Chuong trinh Cao Nhanh Tay - Trung Qua Ngay, xac nhan MASO <12
             <p className="text-lg">Mọi thắc mắc, vui lòng liên hệ:</p>
             <ul className="list-disc pl-6 text-base custom-round-bullet">
               <li>Hotline: 19003209</li>
-              <li>Website công bố kết quả: https://bit.ly/CaoNhanhTay</li>
+              <li>Website công bố kết quả: https://caonhanhtay.vn</li>
             </ul>
             <p className="text-lg">Chúc quý khách hàng may mắn!</p>
           </div>
