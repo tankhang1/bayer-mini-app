@@ -1,3 +1,5 @@
+import { BASE_NO_AUTH_URL } from "constants";
+
 export const uploadBase64Image = async (
   base64: string,
   fileName: string
@@ -25,7 +27,7 @@ export const uploadBase64Image = async (
 
     // Send FormData via HTTP POST
     const response = await fetch(
-      `https://reactive.yis.vn/upload-files/bayer/${fileName}`,
+      `${BASE_NO_AUTH_URL}/upload-files/bayer/${fileName}`,
       {
         method: "POST",
         body: formData,
@@ -63,7 +65,7 @@ export const uploadBlob = async (
 
     // Upload the file using fetch
     const uploadResponse = await fetch(
-      `https://reactive.yis.vn/upload-files/bayer/${fileName}`,
+      `${BASE_NO_AUTH_URL}/upload-files/bayer/${fileName}`,
       {
         method: "POST",
         body: formData,

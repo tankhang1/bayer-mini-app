@@ -1,3 +1,4 @@
+import { BASE_NO_AUTH_URL } from "constants";
 import dayjs from "dayjs";
 import { generateUUID } from "hooks/generateUUID";
 import { uploadBase64Image, uploadBlob } from "hooks/uploadFile";
@@ -29,7 +30,7 @@ const PreviewScreen = () => {
     await confirmIqr({
       code: code,
       zalo_user_id: userId,
-      image_confirm: `https://reactive.yis.vn/${code}.jpg`,
+      image_confirm: `${BASE_NO_AUTH_URL}/${code}.jpg`,
     })
       .unwrap()
       .then((value) => {
