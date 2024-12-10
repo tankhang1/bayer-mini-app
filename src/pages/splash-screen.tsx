@@ -427,7 +427,7 @@ const SplashScreen = () => {
           )
         )}
 
-        <div className="flex items-center justify-between gap-2 mt-2">
+        <div className="flex items-center justify-center gap-2 mt-2">
           <Button
             variant="secondary"
             className="!bg-red-400 !text-white !whitespace-pre-line w-auto"
