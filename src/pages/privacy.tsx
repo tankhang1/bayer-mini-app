@@ -129,14 +129,14 @@ const PrivacyScreen = () => {
               <li>
                 Bước 3: Sử dụng ứng dụng Zalo, tiến hành quét mã Qr trên phiếu
                 trúng thưởng và làm theo hướng dẫn hệ thống: “Đồng ý” thể lệ và
-                điều kiện khi tham gia chương trình; cho phép chia sẽ thông tin
+                điều kiện khi tham gia chương trình; cho phép chia sẻ thông tin
                 số điện thoại, địa chỉ tỉnh của Quý nhà nông. Tiếp theo, hệ
                 thống tự động xác nhận kết quả trúng thưởng của Quý nhà nông
                 nhận được và yêu cầu Quý nhà nông tiến hành chụp hình ảnh phiếu
                 cào trúng giải gửi về chương trình. Sau khi thực hiện gửi hình
                 bằng chứng trúng giải. Quý nhà nông trúng giải sẽ nhận được tin
                 nhắn thương hiệu “Bayer VN” xác thực trúng giải qua số điện
-                thoại đã chia sẽ trước đó.
+                thoại đã chia sẻ trước đó.
                 <p className="whitespace-pre-line">
                   {`Với nội dung: Chuong trinh Cao Nhanh Tay - Trung Qua Ngay, xac nhan MASO <12KTU3> nhan duoc <CH1>:<Ten giai thuong>. Chi tiet goi 19003209.
 Riêng với, các giải nhất, nhì, ba, trong vòng 24h kể từ gửi bằng chứng trúng giải, khách hàng sẽ được trổng đài chương trình liên hệ và xác thực các thông tin như:

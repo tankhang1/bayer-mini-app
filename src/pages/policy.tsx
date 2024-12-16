@@ -29,7 +29,7 @@ const PolicyScreen = () => {
             className="text-xl font-black text-center text-red-600 mb-4"
             style={{ fontFamily: "helveticaneue" }}
           >
-            PHIẾU ĐỒNG Ý THAM GIA CHƯƠNG TRÌNH & ĐỒNG Ý CHIA SẼ THÔNG TIN CÁ
+            PHIẾU ĐỒNG Ý THAM GIA CHƯƠNG TRÌNH & ĐỒNG Ý CHIA SẺ THÔNG TIN CÁ
             NHÂN
           </h1>
 
