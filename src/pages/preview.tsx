@@ -50,8 +50,16 @@ const PreviewScreen = () => {
     navigate(-1);
   };
   return (
-    <div className="w-full h-full">
-      <img src={state.previewImage} className="w-full h-dvh object-cover" />
+    <div className="w-full h-full bg-black">
+      <img
+        src={state.previewImage}
+        style={{
+          width: "100vw",
+          height: "100vh",
+          objectFit: "contain",
+          backgroundColor: "transparent",
+        }}
+      />
       <div className="absolute top-5 left-4 flex gap-1 flex-col">
         <div
           className="flex items-center gap-3"

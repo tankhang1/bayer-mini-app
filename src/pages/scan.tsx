@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Button, Icon, Page } from "zmp-ui";
+import { Box, Button, Icon, Modal, Page } from "zmp-ui";
 import api, {
+  checkZaloCameraPermission,
   FacingMode,
+  openPermissionSetting,
   PhotoFormat,
   PhotoFrame,
   PhotoQuality,
@@ -10,19 +12,20 @@ import api, {
 } from "zmp-sdk";
 import { useNavigate } from "react-router-dom";
 import GuideAudio from "assets/guide.mp3";
+import NotiTag from "assets/noti.png";
+
 const guide = new Audio(GuideAudio);
 
 const ScanScreen = () => {
   const navigate = useNavigate();
+  const [openedPermissionCamera, setOpenedPermissionCamera] = useState(false);
   const cameraRef = useRef<ZMACamera | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [data, setData] = useState("");
-  const [isPermitCamera, setIsPermitCamera] = useState(false);
   const takePhoto = () => {
     const result: PhotoFrame = cameraRef.current?.takePhoto({
-      quality: PhotoQuality.NORMAL,
+      quality: PhotoQuality.HIGH,
       format: PhotoFormat.JPEG,
-      minScreenshotHeight: 1000,
+      minScreenshotHeight: 800,
     });
     if (result) {
       guide.pause();
@@ -33,31 +36,43 @@ const ScanScreen = () => {
         },
       });
     } else {
-      console.log("No data");
+      onRequestCameraPermission();
     }
   };
   const startStreaming = async () => {
+    console.log("start stream");
     try {
       const camera = cameraRef.current;
       await camera?.start();
     } catch (error) {
-      console.error("Failed to start camera stream:", error);
+      setOpenedPermissionCamera(true);
     }
   };
-
+  const onOpenSetting = async () => {
+    openPermissionSetting();
+  };
   const changeFlip = async () => {
     await cameraRef.current?.flip();
   };
 
   const onRequestCameraPermission = async () => {
     try {
-      const result = await requestCameraPermission();
+      const cameraStatus = await requestCameraPermission({});
+      console.log("1", cameraStatus);
+      setOpenedPermissionCamera(false);
 
-      setIsPermitCamera(result.userAllow);
+      if (cameraStatus.userAllow) {
+        startStreaming();
+      } else {
+        setOpenedPermissionCamera(true);
+      }
     } catch (error) {
-      // xử lý khi gọi api thất bại
-      console.log(error);
+      setOpenedPermissionCamera(true);
     }
+  };
+  const onConfirmOpenSettingCamera = () => {
+    setOpenedPermissionCamera(false);
+    openPermissionSetting();
   };
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -85,20 +100,17 @@ const ScanScreen = () => {
   }, []);
 
   useEffect(() => {
-    const handleFocus = () => {
-      startStreaming();
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        onRequestCameraPermission();
+      } else {
+        cameraRef.current?.stop();
+      }
     };
-
-    const handleBlur = () => {
-      cameraRef.current?.stop();
-    };
-
-    window.addEventListener("focus", handleFocus);
-    window.addEventListener("blur", handleBlur);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      window.removeEventListener("focus", handleFocus);
-      window.removeEventListener("blur", handleBlur);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
   useEffect(() => {
@@ -121,14 +133,13 @@ const ScanScreen = () => {
           webkit-playsinline="true"
         />
 
-        <div className="absolute top-0 w-full px-3 pt-24 bg-drop">
+        <div className="absolute top-0 w-full h-full px-3 pt-24 bg-drop">
           <p className="text-white font-bold text-center">
             Chụp hình phiếu trúng thưởng
           </p>
-          <div
-            className="border-2 border-gray-200 rounded-2xl"
-            style={{ height: "35dvh" }}
-          />
+          <div className="border-2 border-gray-200 rounded-2xl !h-[35%] relative">
+            <div className="border-2 border-gray-200 rounded-xl !h-[30%] w-[30%] absolute bottom-10 left-10" />
+          </div>
         </div>
       </Box>
 
@@ -150,6 +161,12 @@ const ScanScreen = () => {
           onClick={takePhoto}
         >
           <Icon icon="zi-camera" size={28} style={{ color: "white" }} />
+        </button>
+        <button
+          className=" bg-gray-500 p-2 rounded-full transform transition-transform duration-200 ease-in-out active:scale-90"
+          onClick={onOpenSetting}
+        >
+          <Icon icon="zi-setting" size={28} style={{ color: "white" }} />
         </button>
       </div>
 
@@ -182,6 +199,34 @@ const ScanScreen = () => {
           </p>
         </div>
       </div>
+      <Modal
+        visible={openedPermissionCamera}
+        onClose={() => {}}
+        modalStyle={{
+          backgroundColor: "transparent",
+        }}
+      >
+        <div className="bg-white px-10 pt-10 pb-5 rounded-2xl border-4 border-yellow-400 relative">
+          <img
+            src={NotiTag}
+            className="w-3/4 absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
+          />
+          <p className="text-lg py-6 text-center">
+            Quý nhà nông vui lòng nhấn “Đồng ý” để bật quyền sử dụng camera nhằm
+            chụp bằng chứng trúng giải.
+          </p>
+          <div className="flex items-center justify-center gap-2 mt-2">
+            <Button
+              variant="secondary"
+              className="!bg-[#FF2929] !font-bold !text-white !whitespace-pre-line w-auto"
+              style={{ fontFamily: "helveticaneue", lineHeight: "1" }}
+              onClick={onConfirmOpenSettingCamera}
+            >
+              Đồng ý
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </Page>
   );
 };
