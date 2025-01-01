@@ -33,6 +33,7 @@ import { TBaseRES } from "types";
 import { TUsingIqrRES } from "redux/api/iqr/iqr.response";
 import { useZaloCheckUserIdIdMutation } from "redux/api/zalo/zalo.api";
 import NotiTag from "assets/noti.png";
+import { TZaloCheckRES } from "redux/api/zalo/zalo.response";
 
 const AuthScreen = () => {
   const navigate = useNavigate();
@@ -202,6 +203,29 @@ const AuthScreen = () => {
       navigate("/present");
     }
   };
+  const onMapZaloError = (value: TZaloCheckRES) => {
+    if (value.status === 0) {
+      if (value.data !== null)
+        dispatch(
+          updateInfo({
+            name: value.data.name,
+            phone: value.data.phone,
+            userId: value.data.zalo_user_id,
+          })
+        );
+      if (value.status === 0) setIsUserIdExist(true);
+      else setIsUserIdExist(false);
+    }
+    if (value.status === -9) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "api",
+        isExit: true,
+        btnLabel: "Quét mã khác",
+      });
+    }
+  };
   const onCheckIqr = async (userId: string, code: string) => {
     await checkIqr({
       code: code,
@@ -257,18 +281,7 @@ const AuthScreen = () => {
           zalo_user_id: userId,
         })
           .unwrap()
-          .then((value) => {
-            if (value.data !== null)
-              dispatch(
-                updateInfo({
-                  name: value.data.name,
-                  phone: value.data.phone,
-                  userId: value.data.zalo_user_id,
-                })
-              );
-            if (value.status === 0) setIsUserIdExist(true);
-            else setIsUserIdExist(false);
-          })
+          .then((value) => onMapZaloError(value))
           .catch(() => {
             toast.error(
               "Tương tác bị gián đoạn, vui lòng liên hệ 19003209 để được hỗ trợ. Xin lỗi quý khách hàng vì sự bất tiện này!"

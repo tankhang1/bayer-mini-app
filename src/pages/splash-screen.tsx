@@ -28,6 +28,7 @@ import { RootState } from "redux/store";
 import { TBaseRES } from "types";
 import { TUsingIqrRES } from "redux/api/iqr/iqr.response";
 import { updateAward, updateInfo, updateStatus } from "redux/slices/appSlice";
+import { TZaloRES } from "redux/api/zalo/zalo.response";
 
 const SplashScreen = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const SplashScreen = () => {
   const [usingIqr, { isLoading: isUsingIqr }] = useUsingIqrMutation();
   const [messageError, setMessageError] = React.useState<
     Partial<{
-      type: "system" | "api";
+      type: "system" | "api" | "zalo";
       isExit: boolean;
       btnLabel: string;
       message: string;
@@ -151,6 +152,36 @@ const SplashScreen = () => {
       navigate("/present");
     }
   };
+  const onMapZaloError = async (value: TZaloRES) => {
+    if (value.status === 0) {
+      dispatch(
+        updateInfo({
+          name: value.data.name,
+          phone: value.data.phone,
+          userId: value.data.zalo_user_id,
+        })
+      );
+      await onUsingIqr();
+    }
+    if (value.status === -9) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "api",
+        isExit: true,
+        btnLabel: "Quét mã khác",
+      });
+    }
+    if (value.status === -11) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "zalo",
+        isExit: false,
+        btnLabel: "Xác nhận",
+      });
+    }
+  };
   const onUsingIqr = async () => {
     console.log({
       code: code,
@@ -239,16 +270,7 @@ const SplashScreen = () => {
       if (zaloInfo) {
         await updateZaloInfo(zaloInfo)
           .unwrap()
-          .then(async (value) => {
-            dispatch(
-              updateInfo({
-                name: value.data.name,
-                phone: value.data.phone,
-                userId: value.data.zalo_user_id,
-              })
-            );
-            await onUsingIqr();
-          })
+          .then(async (value) => onMapZaloError(value))
           .catch(() => {
             toast.error(
               "Đã có lỗi xảy ra, vui lòng liên hệ 19003209 để được hỗ trợ!"
@@ -283,7 +305,9 @@ const SplashScreen = () => {
           ),
       });
     } else {
-      if (messageError.navLink) {
+      if (messageError.type === "zalo") {
+        postZaloInfo();
+      } else if (messageError.navLink) {
         navigate(messageError.navLink);
       }
     }
