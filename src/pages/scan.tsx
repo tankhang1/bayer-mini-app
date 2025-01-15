@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, Icon, Modal, Page } from "zmp-ui";
 import api, {
   checkZaloCameraPermission,
+  chooseImage,
   FacingMode,
   openPermissionSetting,
   PhotoFormat,
@@ -28,6 +29,7 @@ const ScanScreen = () => {
       minScreenshotHeight: 800,
     });
     if (result) {
+      console.log("result", result);
       guide.pause();
       navigate("/preview", {
         state: {
@@ -51,9 +53,9 @@ const ScanScreen = () => {
   const onOpenSetting = async () => {
     openPermissionSetting();
   };
-  const changeFlip = async () => {
-    await cameraRef.current?.flip();
-  };
+  // const changeFlip = async () => {
+  //   await cameraRef.current?.flip();
+  // };
 
   const onRequestCameraPermission = async () => {
     try {
@@ -69,6 +71,29 @@ const ScanScreen = () => {
     } catch (error) {
       setOpenedPermissionCamera(true);
     }
+  };
+  const handleChooseImage = async () => {
+    await chooseImage({
+      sourceType: ["camera"],
+      cameraType: "back",
+      count: 1,
+    }).then(async (value) => {
+      const response = await fetch(value.filePaths[0]);
+      const blob = await response.blob();
+
+      // Read the blob as Base64
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        guide.pause();
+        navigate("/preview", {
+          state: {
+            previewImage: reader.result,
+            type: "base64",
+          },
+        });
+      };
+      reader.readAsDataURL(blob); // Read as data URL (Base64)
+    });
   };
   const onConfirmOpenSettingCamera = () => {
     setOpenedPermissionCamera(false);
@@ -138,27 +163,22 @@ const ScanScreen = () => {
             Chụp hình phiếu trúng thưởng
           </p>
           <div className="border-2 border-gray-200 rounded-2xl !h-[35%] relative">
-            <div className="border-2 border-gray-200 rounded-xl !h-[30%] w-[30%] absolute bottom-10 left-10" />
+            <div className="border-2 border-gray-200 rounded-xl !h-[30%] w-[30%] absolute bottom-10 right-10" />
           </div>
         </div>
       </Box>
 
       <div className="absolute z-20 top-6 right-5 flex items-center gap-2">
-        <button
+        {/*<button
           className=" bg-gray-500 p-2 rounded-full transform transition-transform duration-200 ease-in-out active:scale-90"
           onClick={changeFlip}
         >
           <Icon icon="zi-auto" size={28} style={{ color: "white" }} />
-        </button>
-        {/* <button
-          className=" bg-gray-500 p-2 rounded-full transform transition-transform duration-200 ease-in-out active:scale-90"
-          onClick={handleChooseImage}
-        >
-          <Icon icon="zi-gallery" size={28} style={{ color: "white" }} />
-        </button> */}
+        </button>*/}
+
         <button
           className=" bg-gray-500 p-2 rounded-full transform transition-transform duration-200 ease-in-out active:scale-90"
-          onClick={takePhoto}
+          onClick={handleChooseImage}
         >
           <Icon icon="zi-camera" size={28} style={{ color: "white" }} />
         </button>
