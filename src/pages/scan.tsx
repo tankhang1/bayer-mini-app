@@ -97,7 +97,6 @@ const ScanScreen = () => {
   };
   const onConfirmOpenSettingCamera = () => {
     setOpenedPermissionCamera(false);
-    openPermissionSetting();
   };
   useEffect(() => {
     const videoElement = videoRef.current;

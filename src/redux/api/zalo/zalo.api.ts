@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithAuth } from "redux/middlewares/baseQueryWithAuth";
-import { TZaloCheckREQ, TZaloREQ } from "./zalo.request";
+import { TZaloCheckREQ, TZaloInfoManualREQ, TZaloREQ } from "./zalo.request";
 import { TZaloCheckRES, TZaloRES } from "./zalo.response";
 
 export const zaloApi = createApi({
@@ -18,6 +18,13 @@ export const zaloApi = createApi({
         },
       }),
     }),
+    updateZaloInfoManual: builder.mutation<TZaloRES, TZaloInfoManualREQ>({
+      query: (body) => ({
+        url: "/zalo/update-manual",
+        method: "POST",
+        body,
+      }),
+    }),
     zaloCheckUserIdId: builder.mutation<TZaloCheckRES, TZaloCheckREQ>({
       query: (body) => ({
         url: "/zalo/check",
@@ -31,5 +38,8 @@ export const zaloApi = createApi({
   }),
 });
 
-export const { useUpdateZaloInfoMutation, useZaloCheckUserIdIdMutation } =
-  zaloApi;
+export const {
+  useUpdateZaloInfoMutation,
+  useZaloCheckUserIdIdMutation,
+  useUpdateZaloInfoManualMutation,
+} = zaloApi;

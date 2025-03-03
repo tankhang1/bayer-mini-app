@@ -19,9 +19,22 @@ import {
   getUserInfo,
 } from "zmp-sdk";
 import { useNavigate } from "react-router-dom";
-import { Button, Modal, Spinner } from "zmp-ui";
+import {
+  Box,
+  Button,
+  Input,
+  Modal,
+  Select,
+  Sheet,
+  Spinner,
+  Stack,
+  Text,
+} from "zmp-ui";
 import { toast } from "react-toastify";
-import { useUpdateZaloInfoMutation } from "redux/api/zalo/zalo.api";
+import {
+  useUpdateZaloInfoManualMutation,
+  useUpdateZaloInfoMutation,
+} from "redux/api/zalo/zalo.api";
 import { useUsingIqrMutation } from "redux/api/iqr/iqr.api";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "redux/store";
@@ -29,6 +42,8 @@ import { TBaseRES } from "types";
 import { TUsingIqrRES } from "redux/api/iqr/iqr.response";
 import { updateAward, updateInfo, updateStatus } from "redux/slices/appSlice";
 import { TZaloRES } from "redux/api/zalo/zalo.response";
+import { useGetListProvinceQuery } from "redux/api/meta/meta.api";
+const { Option } = Select;
 
 const SplashScreen = () => {
   const navigate = useNavigate();
@@ -41,9 +56,15 @@ const SplashScreen = () => {
     useUpdateZaloInfoMutation();
   const [isLoadingProcess, setIsLoadingProcess] = React.useState(false);
   const [usingIqr, { isLoading: isUsingIqr }] = useUsingIqrMutation();
+  const { data: listProvinces, isLoading: isLoadingListProvince } =
+    useGetListProvinceQuery();
+  const [errorCounter, setErrorCounter] = React.useState(0);
+  const [updateManualZaloInfo, { isLoading: isLoadingUpdateManualZaloInfo }] =
+    useUpdateZaloInfoManualMutation();
+
   const [messageError, setMessageError] = React.useState<
     Partial<{
-      type: "system" | "api" | "zalo";
+      type: "system" | "api" | "zalo" | "zalo-manual";
       isExit: boolean;
       btnLabel: string;
       message: string;
@@ -54,6 +75,19 @@ const SplashScreen = () => {
     message: "",
     isExit: false,
     btnLabel: "Xác nhận",
+  });
+  const [openManualForm, setOpenManualForm] = React.useState(false);
+
+  const [manualForm, setManualForm] = React.useState<{
+    province_code: string;
+    province: string;
+    name: string;
+    phone: string;
+  }>({
+    name: "",
+    phone: "",
+    province_code: "",
+    province: "",
   });
   const [openErrorPopup, setOpenErrorPopup] = React.useState(false);
   const onMapError = (value: TBaseRES<TUsingIqrRES>) => {
@@ -151,6 +185,9 @@ const SplashScreen = () => {
       dispatch(updateAward(value.data));
       navigate("/present");
     }
+    if (value.status === 406) {
+      setOpenManualForm(true);
+    }
   };
   const onMapZaloError = async (value: TZaloRES) => {
     if (value.status === 0) {
@@ -179,6 +216,15 @@ const SplashScreen = () => {
         type: "zalo",
         isExit: false,
         btnLabel: "Xác nhận",
+      });
+    }
+    if (value.status === 406) {
+      setOpenErrorPopup(true);
+      setMessageError({
+        ...value,
+        type: "zalo-manual",
+        isExit: false,
+        btnLabel: "Nhập lại thông tin",
       });
     }
   };
@@ -278,6 +324,7 @@ const SplashScreen = () => {
           });
       }
     } catch (error) {
+      setErrorCounter(errorCounter + 1);
       setIsLoadingProcess(false);
       //@ts-expect-error no check
       if (error?.code === -203) {
@@ -307,10 +354,34 @@ const SplashScreen = () => {
     } else {
       if (messageError.type === "zalo") {
         postZaloInfo();
-      } else if (messageError.navLink) {
+      } else if (messageError.type === "zalo-manual") {
+        setOpenManualForm(true);
+      }
+      if (messageError.navLink) {
         navigate(messageError.navLink);
       }
     }
+  };
+  const onUpdateManualZaloInfo = async () => {
+    setOpenManualForm(false);
+    await updateManualZaloInfo({
+      ...manualForm,
+      zalo_app_id: "1403968996472527032",
+      zalo_user_id: userId,
+    })
+      .unwrap()
+      .then(async (value) => {
+        onMapZaloError(value);
+      })
+      .catch((error) => {
+        setOpenErrorPopup(true);
+        setMessageError({
+          message: error.data.message,
+          type: "zalo-manual",
+          isExit: false,
+          btnLabel: "Nhập lại thông tin",
+        });
+      });
   };
   React.useEffect(() => {
     setTimeout(() => {
@@ -378,15 +449,33 @@ const SplashScreen = () => {
           Việc cấp quyền giúp chúng tôi đảm bảo quyền lợi của bạn và tối ưu hóa trải nghiệm khi tham gia chương trình. Bayer cam kết bảo mật thông tin và sử dụng theo đúng mục đích được công bố."`}
         </p>
         <div className="flex items-center justify-between gap-2 mt-2">
-          <Button
-            className="w-full"
-            onClick={() => {
-              postZaloInfo();
-              setOpenModalReject(false);
-            }}
-          >
-            Xin quyền
-          </Button>
+          {errorCounter < 2 ? (
+            <Button
+              className="w-full"
+              onClick={() => {
+                postZaloInfo();
+                setOpenModalReject(false);
+              }}
+            >
+              Xin quyền
+            </Button>
+          ) : (
+            <Button
+              className="w-full"
+              onClick={() => {
+                setManualForm({
+                  name: "",
+                  phone: "",
+                  province: "",
+                  province_code: "",
+                });
+                setOpenManualForm(true);
+                setOpenModalReject(false);
+              }}
+            >
+              Nhập thông tin
+            </Button>
+          )}
           <Button
             variant="secondary"
             className="!bg-red-400 !text-white w-full"
@@ -400,6 +489,108 @@ const SplashScreen = () => {
           </Button>
         </div>
       </Modal>
+      <Sheet
+        visible={openManualForm}
+        onClose={() => {}}
+        autoHeight
+        mask
+        handler
+        swipeToClose
+      >
+        <Box p={4} className="custom-bottom-sheet" flex flexDirection="column">
+          <Box className="bottom-sheet-cover">
+            <img
+              alt="Bottom Sheet"
+              src={Logo}
+              className="w-12 h-12 object-contain mx-auto"
+            />
+          </Box>
+          <Box my={4}>
+            <Text.Title className="text-center">Nhập thông xác thực</Text.Title>
+          </Box>
+          <Box className="bottom-sheet-body" style={{ overflowY: "auto" }}>
+            <Stack space="0.125rem">
+              <Input
+                placeholder="Ví dụ: Nguyễn Văn B"
+                label="Tên khách hàng"
+                className="w-full"
+                onChange={(e) =>
+                  setManualForm({ ...manualForm, name: e.target.value })
+                }
+                value={manualForm.name}
+              />
+              <Input
+                placeholder="Ví dụ: 09xxxxx"
+                label="Số điện thoại"
+                className="w-full"
+                type="number"
+                onChange={(e) =>
+                  setManualForm({ ...manualForm, phone: e.target.value })
+                }
+                value={manualForm.phone}
+              />
+              <Select
+                label="Chọn tỉnh thành"
+                placeholder="VD: Hồ chí minh ( HM )"
+                defaultValue={manualForm.province_code}
+                onChange={(value) => {
+                  if (value) {
+                    setManualForm({
+                      ...manualForm,
+                      province_code: value as string,
+                    });
+                  }
+                }}
+                closeOnSelect
+              >
+                {listProvinces &&
+                  listProvinces.map((province, index) => (
+                    <Option
+                      value={province.code}
+                      title={province.name}
+                      key={index}
+                    />
+                  ))}
+              </Select>
+            </Stack>
+          </Box>
+
+          <Box flex flexDirection="row" mt={1}>
+            <Box style={{ flex: 1 }} pr={1}>
+              <Button
+                fullWidth
+                variant="secondary"
+                onClick={() => {
+                  setManualForm({
+                    name: "",
+                    phone: "",
+                    province_code: "",
+                    province: "",
+                  });
+                  setOpenManualForm(false);
+                }}
+              >
+                Để sau
+              </Button>
+            </Box>
+            <Box style={{ flex: 1 }} pl={1}>
+              <Button
+                fullWidth
+                onClick={onUpdateManualZaloInfo}
+                disabled={
+                  !(
+                    manualForm.name &&
+                    manualForm.phone &&
+                    manualForm.province_code
+                  )
+                }
+              >
+                Cho phép
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      </Sheet>
       <Modal
         visible={openExceededMaximumRequest}
         onClose={() => setOpenExceededMaximumRequest(false)}
@@ -426,7 +617,14 @@ const SplashScreen = () => {
           </Button>
         </div>
       </Modal>
-      <Modal visible={isLoadingUpdateZalo || isUsingIqr}>
+      <Modal
+        visible={
+          isLoadingUpdateZalo ||
+          isUsingIqr ||
+          isLoadingUpdateManualZaloInfo ||
+          isLoadingListProvince
+        }
+      >
         <div className="flex flex-col justify-center items-center">
           <Spinner />
           <p className="text-center">
