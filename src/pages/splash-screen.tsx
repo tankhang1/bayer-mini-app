@@ -265,7 +265,7 @@ const SplashScreen = () => {
         code_get_phone: "",
         code_hash: "",
         followed_oa: false,
-        is_sensitive: false,
+        sensitive: false,
         name: "",
         zalo_app_id: "",
         zalo_user_id: "",
@@ -291,7 +291,7 @@ const SplashScreen = () => {
             followed_oa: userInfo.userInfo.followedOA || false,
             avatar: userInfo.userInfo.avatar,
             name: userInfo.userInfo.name,
-            is_sensitive: userInfo.userInfo.isSensitive ?? false,
+            sensitive: userInfo.userInfo.isSensitive ?? false,
           };
         }
       }

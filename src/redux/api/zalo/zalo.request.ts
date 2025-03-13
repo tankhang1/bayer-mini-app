@@ -6,7 +6,7 @@ export type TZaloREQ = {
   code_get_phone: string;
   code_hash: string;
   followed_oa: boolean;
-  is_sensitive: boolean;
+  sensitive: boolean;
   name: string;
   zalo_app_id: string;
   zalo_user_id: string;
