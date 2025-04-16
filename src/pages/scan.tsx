@@ -22,14 +22,22 @@ const ScanScreen = () => {
   const [openedPermissionCamera, setOpenedPermissionCamera] = useState(false);
   const cameraRef = useRef<ZMACamera | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const takePhoto = () => {
-    const result: PhotoFrame = cameraRef.current?.takePhoto({
+  const [focusing, setFocusing] = useState(false);
+  const [videoKey, setVideoKey] = useState(Date.now());
+  const [focusPoint, setFocusPoint] = useState<{ x: number; y: number } | null>(
+    null
+  );
+  const takePhoto = async () => {
+    if (!cameraRef.current) return;
+    setFocusing(true);
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    setFocusing(false);
+    const result = cameraRef.current?.takePhoto({
       quality: PhotoQuality.HIGH,
       format: PhotoFormat.JPEG,
-      minScreenshotHeight: 800,
+      minScreenshotHeight: 2560,
     });
     if (result) {
-      console.log("result", result);
       guide.pause();
       navigate("/preview", {
         state: {
@@ -45,6 +53,8 @@ const ScanScreen = () => {
     console.log("start stream");
     try {
       const camera = cameraRef.current;
+      camera?.stop();
+      await new Promise((resolve) => setTimeout(resolve, 500));
       await camera?.start();
     } catch (error) {
       setOpenedPermissionCamera(true);
@@ -98,6 +108,16 @@ const ScanScreen = () => {
   const onConfirmOpenSettingCamera = () => {
     setOpenedPermissionCamera(false);
   };
+  const handleTapFocus = async (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setFocusPoint({ x, y });
+    setTimeout(() => setFocusPoint(null), 500);
+    cameraRef.current?.stop();
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    cameraRef.current?.start();
+  };
   useEffect(() => {
     const videoElement = videoRef.current;
     if (!videoElement) {
@@ -108,8 +128,8 @@ const ScanScreen = () => {
       cameraRef.current = api.createCameraContext({
         videoElement: videoElement,
         mediaConstraints: {
-          width: 1920, // High resolution for better quality
-          height: 1300, // Maintain a full-screen aspect ratio
+          width: 1920,
+          height: 1080,
           facingMode: FacingMode.BACK,
           audio: false,
           mirrored: false,
@@ -124,17 +144,25 @@ const ScanScreen = () => {
   }, []);
 
   useEffect(() => {
-    const handleVisibilityChange = () => {
+    const handleFocus = async () => {
+      console.log("Focus focus");
+      cameraRef.current?.stop();
+      setVideoKey(Date.now());
+    };
+    const handleBlur = () => {
+      cameraRef.current?.stop();
+    };
+    const handleVisibilityChange = async () => {
       if (document.visibilityState === "visible") {
         onRequestCameraPermission();
-      } else {
-        cameraRef.current?.stop();
       }
     };
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
+    window.addEventListener("focus", handleFocus);
+    window.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("blur", handleBlur);
     return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener("blur", handleBlur);
     };
   }, []);
   useEffect(() => {
@@ -143,20 +171,42 @@ const ScanScreen = () => {
   }, []);
   return (
     <Page className="w-full h-full">
-      <Box className="w-full h-full">
-        <video
-          style={{
-            width: "100vw",
-            height: "60vh",
-            objectFit: "cover",
-            backgroundColor: "transparent",
-          }}
-          ref={videoRef}
-          muted
-          playsInline
-          webkit-playsinline="true"
-        />
-
+      <Box className="w-full h-full" onClick={handleTapFocus}>
+        <div className="relative w-full h-[60vh] overflow-hidden animate-fade-in active:cursor-crosshair">
+          <div
+            key={videoKey}
+            className="absolute inset-0 w-full h-full animate-fade-in"
+          >
+            <video
+              ref={videoRef}
+              className="w-full h-full object-cover bg-transparent"
+              muted
+              playsInline
+              style={{
+                visibility: focusing ? "hidden" : "visible",
+                transition: "visibility 0.3s ease",
+              }}
+              webkit-playsinline="true"
+              autoPlay
+              preload="auto"
+            />
+          </div>
+        </div>
+        {focusPoint && (
+          <div
+            className="absolute border-2 border-white rounded-full w-12 h-12 animate-ping"
+            style={{
+              top: focusPoint.y - 24,
+              left: focusPoint.x - 24,
+              pointerEvents: "none",
+            }}
+          />
+        )}
+        {focusing && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 z-40">
+            <p className="text-white text-lg font-semibold">Đang lấy nét...</p>
+          </div>
+        )}
         <div className="absolute top-0 w-full h-full px-3 pt-24 bg-drop">
           <p className="text-white font-bold text-center">
             Chụp hình phiếu trúng thưởng

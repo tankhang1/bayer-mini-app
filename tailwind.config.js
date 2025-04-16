@@ -1,13 +1,13 @@
+// tailwind.config.js
 module.exports = {
-  purge: {
-    enabled: true,
-    content: ["./src/**/*.{js,jsx,ts,tsx,vue}"],
-  },
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx,vue}"],
   theme: {
     extend: {
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],
+        helveticaneue: ["helveticaneue", "sans-serif"],
       },
     },
   },
+  plugins: [],
 };

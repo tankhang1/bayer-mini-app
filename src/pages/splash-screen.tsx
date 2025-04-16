@@ -1,7 +1,7 @@
 import * as React from "react";
 import Background from "assets/background.webp";
 import Logo from "assets/logo.png";
-import Content_2 from "assets/content_2.png";
+import Content_2 from "assets/content_2.webp";
 import Content_3 from "assets/content_3.png";
 import Speaker from "assets/speaker_1.png";
 import Topup from "assets/topup_1.png";

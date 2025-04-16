@@ -1,13 +1,11 @@
 import * as React from "react";
-import Background_tmp from "assets/background_2.png";
 import Background from "assets/background.webp";
-import Content_3 from "assets/Nativo.png";
-import Content_3_tmp from "assets/content_3.png";
+import Content_3 from "assets/Nativo.webp";
 
-import Content_2 from "assets/content_2.png";
-import Footer from "assets/footer.png";
+import Content_2 from "assets/content_2.webp";
+import Footer from "assets/footer.webp";
 import Logo from "assets/logo.png";
-import Hotline from "assets/hotline.png";
+import Hotline from "assets/hotline.webp";
 import { Link, useNavigate } from "react-router-dom";
 import { closeApp, getUserID, openPhone } from "zmp-sdk";
 import { toast } from "react-toastify";
@@ -68,7 +66,14 @@ const AuthScreen = () => {
     isExit: false,
     btnLabel: "Xác nhận",
   });
+  const contentImageHeight = window.innerHeight < 700 ? 200 : 384;
+  const content2Height = window.innerHeight < 700 ? 120 : 200;
   const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const isLoading =
+    isLoadingCheckIqr ||
+    isLoadingAccessToken ||
+    isLoadingCheckUserId ||
+    isUsingIqr;
   const onSubmit = async () => {
     if (isUserIdExist) {
       await onUsingIqr();
@@ -336,6 +341,37 @@ const AuthScreen = () => {
         });
       });
   };
+  const SharedButtonBlock = () => (
+    <div className="flex justify-center items-center flex-col">
+      <Button
+        className="py-3 w-56 text-lg text-white !font-bold !bg-[#FF2929] font-roboto"
+        loading={isLoading}
+        onClick={isLink ? onSubmit : onSubmitCode}
+        style={{ fontFamily: "helveticaneue" }}
+      >
+        Đồng ý
+      </Button>
+      <div className="flex items-center gap-3 mt-3">
+        <p
+          className="text-white text-xs underline font-semibold text-center font-roboto"
+          role="button"
+          onClick={onNavPrivacyScreen}
+          style={{ fontFamily: "helveticaneue" }}
+        >
+          Thể lệ tham gia
+        </p>
+        <div className="w-[1px] h-4 bg-white" />
+        <p
+          className="text-white text-xs underline font-semibold text-center font-roboto"
+          role="button"
+          onClick={onNavPolicyScreen}
+          style={{ fontFamily: "helveticaneue" }}
+        >
+          Cam kết quyền riêng tư
+        </p>
+      </div>
+    </div>
+  );
   React.useEffect(() => {
     onGetAccessToken();
   }, []);
@@ -354,17 +390,38 @@ const AuthScreen = () => {
     <div
       ref={containerRef}
       className={`w-full h-dvh bg-cover bg-no-repeat px-5 flex items-center flex-col overflow-auto transition-all duration-300 ${
-        isFocused && "pb-32"
+        isFocused ? "pb-32" : ""
       }`}
       style={{
         backgroundImage: `url(${Background})`,
-        backgroundSize: "100% 100%", // This will make the background image fill the div without repeating
+        backgroundSize: "100% 100%",
       }}
     >
-      <img src={Logo} className="max-w-20 max-h-[10%] my-5" />
+      <img
+        src={Logo}
+        width={80}
+        height={80}
+        className="my-5"
+        loading="eager"
+        alt="Logo"
+      />
 
-      <img src={Content_2} className="w-full max-h-[25%] object-contain" />
-      <img src={Content_3} className={`w-full max-h-[32%] object-contain`} />
+      <img
+        src={Content_2}
+        width={800}
+        height={content2Height}
+        className="w-full object-contain"
+        loading="lazy"
+        alt="Content 2"
+      />
+      <img
+        src={Content_3}
+        width={800}
+        height={contentImageHeight}
+        className={`w-full object-contain`}
+        loading="eager"
+        alt="Content 3"
+      />
       {!isLink && (
         <div className="w-full flex flex-col gap-5 justify-center items-center ">
           <input
@@ -377,88 +434,31 @@ const AuthScreen = () => {
             defaultValue={iqrCode}
             onChange={(e) => setIqrCode(e.target.value)}
           />
-          <div className="flex justify-center items-center flex-col">
-            <Button
-              className="py-3 w-56 !text-lg  text-white !font-bold !bg-[#FF2929] !font-roboto"
-              loading={
-                isLoadingCheckIqr ||
-                isLoadingAccessToken ||
-                isLoadingCheckUserId ||
-                isUsingIqr
-              }
-              onClick={onSubmitCode}
-              style={{ fontFamily: "helveticaneue" }}
-            >
-              Đồng ý
-            </Button>
-            <div className="flex items-center gap-3 mt-3">
-              <p
-                className="text-white text-xs underline font-semibold text-center font-roboto"
-                role="button"
-                onClick={onNavPrivacyScreen}
-                style={{ fontFamily: "helveticaneue" }}
-              >
-                Thể lệ tham gia
-              </p>
-              <div className="w-[1px] h-4 bg-white  " />
-              <p
-                className="text-white text-xs underline font-semibold  text-center font-roboto"
-                role="button"
-                onClick={onNavPolicyScreen}
-                style={{ fontFamily: "helveticaneue" }}
-              >
-                Cam kết quyền riêng tư
-              </p>
-            </div>
-          </div>
+          <SharedButtonBlock />
         </div>
       )}
-      {isLink && (
-        <div className="flex justify-center items-center flex-col mt-3">
-          <Button
-            className="py-3 w-56 !text-lg  text-white !font-bold !bg-[#FF2929] !font-roboto"
-            loading={
-              isLoadingCheckIqr ||
-              isLoadingAccessToken ||
-              isLoadingCheckUserId ||
-              isUsingIqr
-            }
-            style={{ fontFamily: "helveticaneue" }}
-            onClick={onSubmit}
-          >
-            Đồng ý
-          </Button>
-          <div className="flex items-center gap-3 mt-3">
-            <p
-              className="text-white text-xs underline font-semibold text-center font-roboto"
-              role="button"
-              onClick={onNavPrivacyScreen}
-              style={{ fontFamily: "helveticaneue" }}
-            >
-              Thể lệ tham gia
-            </p>
-            <div className="w-[1px] h-4 bg-white  " />
-            <p
-              className="text-white text-xs underline font-semibold  text-center font-roboto"
-              role="button"
-              onClick={onNavPolicyScreen}
-              style={{ fontFamily: "helveticaneue" }}
-            >
-              Cam kết quyền riêng tư
-            </p>
-          </div>
-        </div>
-      )}
+      {isLink && <SharedButtonBlock />}
       <div className="h-full" />
 
       {isLink && (
         <div className="w-full max-h-28 absolute bottom-0">
-          <img src={Footer} className="w-full object-contain " />
+          <img
+            src={Footer}
+            className="w-full object-contain "
+            loading="lazy"
+            alt="Footer"
+            width={800}
+            height={100}
+          />
           <img
             src={Hotline}
+            width={144}
+            height={40}
             className=" w-36 absolute bottom-3 right-2 object-contain"
             role="button"
             onClick={onClickHotline}
+            loading="lazy"
+            alt="Hotline"
           />
         </div>
       )}
@@ -472,7 +472,11 @@ const AuthScreen = () => {
         <div className="bg-white px-10 pt-10 pb-5 rounded-2xl border-4 border-yellow-400 relative">
           <img
             src={NotiTag}
+            width={240}
+            height={60}
             className="w-3/4 absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
+            alt="Notification Tag"
+            loading="lazy"
           />
           {messageError.type === "system" ? (
             <p className="text-lg py-6">{messageError.message}</p>
@@ -510,9 +514,12 @@ const AuthScreen = () => {
         <Box p={4} className="custom-bottom-sheet" flex flexDirection="column">
           <Box className="bottom-sheet-cover">
             <img
-              alt="Bottom Sheet"
               src={Logo1}
+              width={48}
+              height={48}
               className="w-12 h-12 object-contain mx-auto"
+              alt="Bottom Sheet Logo"
+              loading="lazy"
             />
           </Box>
           <Box my={4}>

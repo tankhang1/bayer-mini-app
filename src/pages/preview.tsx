@@ -54,10 +54,9 @@ const PreviewScreen = () => {
       <img
         src={state.previewImage}
         style={{
-          width: "100vw",
-          height: "100vh",
           objectFit: "contain",
-          backgroundColor: "transparent",
+          maxWidth: "100%",
+          height: "auto", // giữ nguyên tỷ lệ ảnh
         }}
       />
       <div className="absolute top-5 left-4 flex gap-1 flex-col">

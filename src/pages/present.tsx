@@ -1,16 +1,16 @@
 import * as React from "react";
 import Background from "assets/background.webp";
-import Content_2 from "assets/content_2.png";
+import Content_2 from "assets/content_2.webp";
 import Logo from "assets/logo.png";
 import Driver from "assets/driver.png";
 import Topup from "assets/topup.png";
 import Fridge from "assets/fridge.png";
 import Speaker from "assets/speaker.png";
-import Hotline from "assets/hotline.png";
+import Hotline from "assets/hotline.webp";
 import Reject from "assets/reject.webp";
 import { useNavigate } from "react-router-dom";
 
-import Footer from "assets/footer.png";
+import Footer from "assets/footer.webp";
 import { Button, Icon, Modal } from "zmp-ui";
 import { closeApp, openPhone } from "zmp-sdk";
 import ConsolationPrize from "assets/consolation_prize.mp3";
