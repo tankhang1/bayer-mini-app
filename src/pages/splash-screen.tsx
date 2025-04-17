@@ -273,11 +273,11 @@ const SplashScreen = () => {
       const accessToken = await getAccessToken();
       zaloInfo.access_token = accessToken;
       const authorizeInfo = await authorize({
-        scopes: ["scope.userInfo", "scope.userPhonenumber"],
+        scopes: ["scope.userLocation", "scope.userPhonenumber"],
       });
-      const authorizeLocation = await authorize({
-        scopes: ["scope.userLocation"],
-      });
+      // const authorizeLocation = await authorize({
+      //   scopes: ["scope.userLocation"],
+      // });
       const userId = await getUserID();
       zaloInfo = {
         ...zaloInfo,
@@ -304,7 +304,7 @@ const SplashScreen = () => {
           };
         });
       }
-      if (authorizeLocation["scope.userLocation"]) {
+      if (authorizeInfo["scope.userLocation"]) {
         await getLocation().then((value) => {
           zaloInfo = {
             ...zaloInfo,

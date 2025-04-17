@@ -441,7 +441,7 @@ const AuthScreen = () => {
       <div className="h-full" />
 
       {isLink && (
-        <div className="w-full max-h-28 absolute bottom-0">
+        <div className="w-full max-h-28 absolute bottom-0 z-50">
           <img
             src={Footer}
             className="w-full object-contain "
